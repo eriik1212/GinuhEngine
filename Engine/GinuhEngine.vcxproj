@@ -47,11 +47,16 @@
       <SDLCheck>false</SDLCheck>
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalIncludeDirectories>$(SolutionDir)\ExternalLibraries;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WINDOWS_IGNORE_PACKING_MISMATCH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <AdditionalLibraryDirectories>$(SolutionDir)\ExternalLibraries;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -75,10 +80,20 @@
   <ItemGroup>
     <ClInclude Include="Application.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="ExternalLibraries\imgui\imconfig.h" />
+    <ClInclude Include="ExternalLibraries\imgui\imgui.h" />
+    <ClInclude Include="ExternalLibraries\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="ExternalLibraries\imgui\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="ExternalLibraries\imgui\imgui_impl_sdl.h" />
+    <ClInclude Include="ExternalLibraries\imgui\imgui_internal.h" />
+    <ClInclude Include="ExternalLibraries\imgui\imstb_rectpack.h" />
+    <ClInclude Include="ExternalLibraries\imgui\imstb_textedit.h" />
+    <ClInclude Include="ExternalLibraries\imgui\imstb_truetype.h" />
     <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="ModuleCamera3D.h" />
+    <ClInclude Include="ModuleMenus.h" />
     <ClInclude Include="ModulePhysics3D.h" />
     <ClInclude Include="ModuleRenderer3D.h" />
     <ClInclude Include="p2List.h" />
@@ -95,6 +110,13 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Color.cpp" />
+    <ClCompile Include="ExternalLibraries\imgui\imgui.cpp" />
+    <ClCompile Include="ExternalLibraries\imgui\imgui_demo.cpp" />
+    <ClCompile Include="ExternalLibraries\imgui\imgui_draw.cpp" />
+    <ClCompile Include="ExternalLibraries\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="ExternalLibraries\imgui\imgui_impl_sdl.cpp" />
+    <ClCompile Include="ExternalLibraries\imgui\imgui_tables.cpp" />
+    <ClCompile Include="ExternalLibraries\imgui\imgui_widgets.cpp" />
     <ClCompile Include="glmath.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="log.cpp" />
@@ -102,6 +124,7 @@
     <ClCompile Include="ModuleAudio.cpp" />
     <ClCompile Include="ModuleCamera3D.cpp" />
     <ClCompile Include="ModuleInput.cpp" />
+    <ClCompile Include="ModuleMenus.cpp" />
     <ClCompile Include="ModulePhysics3D.cpp" />
     <ClCompile Include="ModuleRenderer3D.cpp" />
     <ClCompile Include="ModuleSceneIntro.cpp" />

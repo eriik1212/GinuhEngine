@@ -1,3 +1,7 @@
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_opengl3.h"
+#include "imgui/imgui_impl_sdl.h"
+
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleRenderer3D.h"
@@ -98,6 +102,10 @@ bool ModuleRenderer3D::Init()
 
 	// Projection matrix for
 	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
+
+	// Init ImGui (SDL&OpenGL)
+	ImGui_ImplSDL2_InitForOpenGL(App->window->window, context);
+	ImGui_ImplOpenGL3_Init("#version 120");
 
 	return ret;
 }

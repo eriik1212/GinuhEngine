@@ -12,9 +12,7 @@ Erik Martin ([eriik1212](https://github.com/eriik1212))
 * [JSON Parser](https://github.com/json-parser/json-parser) 1.1.0
 * [MathGeoLib](https://github.com/juj/MathGeoLib) 1.15
 
-## License: MIT License
-
-MIT License
+## MIT License
 
 Copyright (c) 2022 Erik Martín Garzón
 

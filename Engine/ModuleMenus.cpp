@@ -95,8 +95,33 @@ void ModuleMenus::MenuAbout()
 {
 	if (ImGui::Begin("About", 0, ImGuiWindowFlags_MenuBar))
 	{
-		ImGui::Text("GinuhEngine");
+		
+		//Header
+		ImGui::Text("Ginuh Engine");
+		
+		//About us
+		ImGui::Text("A new open source 3D Game Engine made by two students at CITM:");
 		ImGui::Text("");
+		ImGui::Text("David Boces");
+		ImGui::Text("Erik Martin");
+		ImGui::Text(""); //Intro
+
+		//Libraries
+		ImGui::Text("3rd Party Libraries used:");
+		ImGui::BulletText("SDL 2.24.0.0");
+		ImGui::BulletText("Glew 2.1.0.0");
+		ImGui::BulletText("ImGui 1.88");
+		ImGui::BulletText("JSON Parser 1.1.0");
+		ImGui::BulletText("MathGeoLib 1.15");
+		ImGui::Text("");
+
+		//License
+		ImGui::Text("License:");
+		ImGui::Text("");
+		ImGui::Text("MIT License");
+		ImGui::Text("");
+		ImGui::Text("Copyright (c) 2022 Erik Martin Garzon");
+		ImGui::Text("Permission is hereby granted, free of charge, to any person obtaining a copy\nof this softwareand associated documentation files(the 'Software'), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and /or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions :\n\nThe above copyright noticeand this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.");
 	}
 	ImGui::End();
 

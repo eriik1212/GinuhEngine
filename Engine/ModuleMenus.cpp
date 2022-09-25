@@ -55,6 +55,11 @@ update_status ModuleMenus::PostUpdate(float dt)
 
 		}
 
+		if (ImGui::MenuItem("About"))
+		{
+			aboutVisible = !aboutVisible;
+		}
+
 		if (ImGui::MenuItem("Exit"))
 		{
 			return UPDATE_STOP;
@@ -65,8 +70,11 @@ update_status ModuleMenus::PostUpdate(float dt)
 
 	ImGui::End();
 
+	if (aboutVisible) MenuAbout();
+
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
 
 	return UPDATE_CONTINUE;
 }
@@ -81,4 +89,15 @@ bool ModuleMenus::CleanUp()
 	ImGui::DestroyContext();
 
 	return true;
+}
+
+void ModuleMenus::MenuAbout()
+{
+	if (ImGui::Begin("About", 0, ImGuiWindowFlags_MenuBar))
+	{
+		ImGui::Text("GinuhEngine");
+		ImGui::Text("");
+	}
+	ImGui::End();
+
 }

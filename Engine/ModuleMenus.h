@@ -14,6 +14,10 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
+private:
+	bool aboutVisible = false;
+	void MenuAbout();
+
 };
 
 #endif

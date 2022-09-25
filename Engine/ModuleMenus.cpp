@@ -40,20 +40,46 @@ update_status ModuleMenus::PostUpdate(float dt)
 
 	if (ImGui::BeginMenuBar())
 	{
-		if (ImGui::BeginMenu("Options"))
+		if (ImGui::BeginMenu("Configuration"))
 		{
-			if (ImGui::MenuItem("Sound"))
+			if (ImGui::BeginMenu("Window"))
 			{
+				if (ImGui::Checkbox("FullScreen", &fullscreen))
+				{
+					if (fullscreen)	SDL_SetWindowFullscreen(App->window->window, SDL_WINDOW_FULLSCREEN); //FULLSCREEN ENABLED
+					else SDL_SetWindowFullscreen(App->window->window, !SDL_WINDOW_FULLSCREEN); //FULLSCREEN DISABLED
+
+				}
+				if (!fullscreen) //RESIZABLE, BORDER AND SIZE OPTIONS ONLY APPEARS IF IT IS IN WINDOW MODE
+				{
+					if (ImGui::Checkbox("Resizable", &resizable))
+					{
+						if (resizable)	SDL_SetWindowResizable(App->window->window, SDL_TRUE); //RESIZABLE ENABLED
+						else SDL_SetWindowResizable(App->window->window, SDL_FALSE);//RESIZABLE DISABLED
+
+					}
+					ImGui::SameLine();
+					if (ImGui::Checkbox("Borderless", &borderless))
+					{
+						if (borderless)	SDL_SetWindowBordered(App->window->window, SDL_FALSE); //BORDERLESS ENABLED
+						else SDL_SetWindowBordered(App->window->window, SDL_TRUE); //BORDERLESS DISABLED
+
+					}
+					ImGui::SliderInt("Width", &screen_width, 720, 1920);
+					ImGui::SliderInt("Height", &screen_height, 560, 1080);
+
+					SDL_SetWindowSize(App->window->window, screen_width, screen_height);
+				}
+				
+
+				ImGui::EndMenu();
 
 			}
 
-			if (ImGui::MenuItem("Graphics"))
-			{
-
-			}
 			ImGui::EndMenu();
 
 		}
+
 
 		if (ImGui::MenuItem("About"))
 		{

@@ -18,6 +18,14 @@ private:
 	bool aboutVisible = false;
 	void MenuAbout();
 
+	//OPTIONS
+	bool fullscreen = WIN_FULLSCREEN;
+	bool resizable = WIN_RESIZABLE;
+	bool borderless = WIN_BORDERLESS;
+	bool full_desk = WIN_FULLSCREEN_DESKTOP;
+	int screen_width = SCREEN_WIDTH;
+	int screen_height = SCREEN_HEIGHT;
+
 };
 
 #endif

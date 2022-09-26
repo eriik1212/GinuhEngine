@@ -17,6 +17,9 @@ public:
 private:
 	bool aboutVisible = false;
 	void MenuAbout();
+	
+	bool hardwareVisible = false;
+	void MenuHardware();
 
 	//OPTIONS
 	bool fullscreen = WIN_FULLSCREEN;
@@ -25,6 +28,9 @@ private:
 	bool full_desk = WIN_FULLSCREEN_DESKTOP;
 	int screen_width = SCREEN_WIDTH;
 	int screen_height = SCREEN_HEIGHT;
+	float screen_brightness = 1;
+
+	void OpenLink(const char* url);
 
 };
 

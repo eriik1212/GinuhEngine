@@ -6,6 +6,8 @@
 #include "Application.h"
 #include "ModuleMenus.h"
 
+#include <Windows.h>
+
 ModuleMenus::ModuleMenus(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 }
@@ -34,7 +36,7 @@ update_status ModuleMenus::PostUpdate(float dt)
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
 
-	ImGui::Begin("GinuhEngine",0, ImGuiWindowFlags_MenuBar);
+	ImGui::Begin("GinuhEngine", 0, ImGuiWindowFlags_MenuBar);
 	ImGui::Text("Welcome to this fantastic engine!");
 
 
@@ -65,10 +67,13 @@ update_status ModuleMenus::PostUpdate(float dt)
 						else SDL_SetWindowBordered(App->window->window, SDL_TRUE); //BORDERLESS DISABLED
 
 					}
+					ImGui::SliderFloat("Brightness", &screen_brightness, 0.0f, 1.0f);
 					ImGui::SliderInt("Width", &screen_width, 720, 1920);
 					ImGui::SliderInt("Height", &screen_height, 560, 1080);
 
 					SDL_SetWindowSize(App->window->window, screen_width, screen_height);
+					SDL_SetWindowBrightness(App->window->window, screen_brightness);
+
 				}
 				
 
@@ -80,6 +85,11 @@ update_status ModuleMenus::PostUpdate(float dt)
 
 		}
 
+		if (ImGui::MenuItem("Hardware"))
+		{
+			hardwareVisible = !hardwareVisible;
+
+		}
 
 		if (ImGui::MenuItem("About"))
 		{
@@ -121,25 +131,76 @@ void ModuleMenus::MenuAbout()
 {
 	if (ImGui::Begin("About", 0, ImGuiWindowFlags_MenuBar))
 	{
-		
+		ImGui::SetWindowSize(ImVec2(600.0f, 600.0f));
+
 		//Header
 		ImGui::Text("Ginuh Engine");
 		
 		//About us
 		ImGui::Text("A new open source 3D Game Engine made by two students at CITM:");
 		ImGui::Text("");
-		ImGui::Text("David Boces");
-		ImGui::Text("Erik Martin");
+		if (ImGui::Button("David Boces", ImVec2(100, 20)))
+		{
+			OpenLink("https://github.com/VoZeS");
+
+		}
+		if (ImGui::Button("Erik Martin", ImVec2(100, 20)))
+		{
+			OpenLink("https://github.com/eriik1212");
+
+
+		}
 		ImGui::Text(""); //Intro
 
 		//Libraries
 		ImGui::Text("3rd Party Libraries used:");
-		ImGui::BulletText("SDL 2.24.0.0");
-		ImGui::BulletText("Glew 2.1.0.0");
-		ImGui::BulletText("ImGui 1.88");
-		ImGui::BulletText("JSON Parser 1.1.0");
-		ImGui::BulletText("MathGeoLib 1.15");
-		ImGui::Text("");
+		//------------------------------------------------------ LIBRARIES AND WEB
+		//---------------------------------------- SDL
+		ImGui::Bullet();
+		if (ImGui::Button("SDL"))
+		{
+			OpenLink("https://www.libsdl.org/");
+		}
+		ImGui::SameLine();
+		ImGui::Text("v. 2.24.0.0");
+
+		//---------------------------------------- GLEW
+		ImGui::Bullet();
+		if (ImGui::Button("Glew"))
+		{
+			OpenLink("http://glew.sourceforge.net/");
+		}
+		ImGui::SameLine();
+		ImGui::Text("v. 2.1.0.0");
+		
+		//---------------------------------------- IMGUI
+		ImGui::Bullet();
+		if (ImGui::Button("ImGui"))
+		{
+			OpenLink("https://github.com/ocornut/imgui");
+		}
+		ImGui::SameLine();
+		ImGui::Text("v. 1.88");
+
+		//---------------------------------------- JSON PARSER
+		ImGui::Bullet();
+		if (ImGui::Button("JSON Parser"))
+		{
+			OpenLink("https://www.json.org/json-en.html");
+		}
+		ImGui::SameLine();
+		ImGui::Text("v. 1.1.0");
+
+		//---------------------------------------- JSON PARSER
+		ImGui::Bullet();
+		if (ImGui::Button("MathGeoLib"))
+		{
+			OpenLink("https://github.com/juj/MathGeoLib");
+		}
+		ImGui::SameLine();
+		ImGui::Text("v. 1.15");
+
+		ImGui::Text(""); //Intro
 
 		//License
 		ImGui::Text("License:");
@@ -150,5 +211,18 @@ void ModuleMenus::MenuAbout()
 		ImGui::Text("Permission is hereby granted, free of charge, to any person obtaining a copy\nof this softwareand associated documentation files(the 'Software'), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and /or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions :\n\nThe above copyright noticeand this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.");
 	}
 	ImGui::End();
+
+}
+
+void ModuleMenus::MenuHardware()
+{
+
+	// ERIK HAZ TU MAGIA PICHON
+
+}
+
+void ModuleMenus::OpenLink(const char* url)
+{
+	ShellExecuteA(0, "open", url, 0, 0, 0);
 
 }

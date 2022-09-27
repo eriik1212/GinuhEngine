@@ -5,7 +5,8 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleRenderer3D.h"
-#include "SDL\include\SDL_opengl.h"
+#include "Glew/include/glew.h"
+#include "SDL/include/SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
@@ -77,7 +78,8 @@ bool ModuleRenderer3D::Init()
 			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
 			ret = false;
 		}
-		
+
+
 		GLfloat LightModelAmbient[] = {0.0f, 0.0f, 0.0f, 1.0f};
 		glLightModelfv(GL_LIGHT_MODEL_AMBIENT, LightModelAmbient);
 		
@@ -107,6 +109,9 @@ bool ModuleRenderer3D::Init()
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, context);
 	ImGui_ImplOpenGL3_Init("#version 120");
 
+	/*glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();*/
+
 	return ret;
 }
 
@@ -125,13 +130,83 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	for(uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
 
+	/*Color c = App->camera->background;
+	glClearColor(c.r, c.g, c.b, c.a);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadMatrixf(App->camera->GetViewMatrix());*/
+
 	return UPDATE_CONTINUE;
 }
 
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
+	glBegin(GL_TRIANGLES);  // draw a cube with 12 triangles
+
+	// bottom face =================
+	glVertex3f(1.0f, 0.0f, 0.0f);	// v2
+	glVertex3f(0.0f, 0.0f, 1.0f);	// v1
+	glVertex3f(0.0f, 0.0f, 0.0f);	// v0
+
+	glVertex3f(1.0f, 0.0f, 0.0f);	// v2
+	glVertex3f(1.0f, 0.0f, 1.0f);	// v3
+	glVertex3f(0.0f, 0.0f, 1.0f);	// v1
+
+	// front face =================
+	glVertex3f(1.0f, 0.0f, 0.0f);	// v2
+	glVertex3f(0.0f, 0.0f, 0.0f);	// v0
+	glVertex3f(0.0f, 1.0f, 0.0f);	// v4
+
+	
+	glVertex3f(1.0f, 0.0f, 0.0f);	// v2
+	glVertex3f(0.0f, 1.0f, 0.0f);	// v4
+	glVertex3f(1.0f, 1.0f, 0.0f);	// v5
+
+	
+	// right face ===================
+	glVertex3f(1.0f, 0.0f, 0.0f);	// v2
+	glVertex3f(1.0f, 1.0f, 0.0f);	// v5
+	glVertex3f(1.0f, 1.0f, 1.0f);	// v6
+
+
+	glVertex3f(1.0f, 0.0f, 1.0f);	// v3
+	glVertex3f(1.0f, 0.0f, 0.0f);	// v2
+	glVertex3f(1.0f, 1.0f, 1.0f);	// v6
+
+	// back face ===================
+	glVertex3f(1.0f, 1.0f, 1.0f);	// v6
+	glVertex3f(0.0f, 0.0f, 1.0f);	// v1
+	glVertex3f(1.0f, 0.0f, 1.0f);	// v3
+
+	glVertex3f(1.0f, 1.0f, 1.0f);	// v6
+	glVertex3f(0.0f, 1.0f, 1.0f);	// v7
+	glVertex3f(0.0f, 0.0f, 1.0f);	// v1
+
+	// left face ===================
+	glVertex3f(0.0f, 1.0f, 1.0f);	// v7
+	glVertex3f(0.0f, 0.0f, 0.0f);	// v0
+	glVertex3f(0.0f, 0.0f, 1.0f);	// v1
+
+	glVertex3f(0.0f, 1.0f, 1.0f);	// v7
+	glVertex3f(0.0f, 1.0f, 0.0f);	// v4
+	glVertex3f(0.0f, 0.0f, 0.0f);	// v0
+
+	// top face ===================
+	glVertex3f(1.0f, 1.0f, 1.0f);	// v6
+	glVertex3f(1.0f, 1.0f, 0.0f);	// v5
+	glVertex3f(0.0f, 1.0f, 0.0f);	// v4
+
+
+	glVertex3f(0.0f, 1.0f, 0.0f);	// v4	
+	glVertex3f(0.0f, 1.0f, 1.0f);	// v7
+	glVertex3f(1.0f, 1.0f, 1.0f);	// v6
+
+
+		glEnd();
+
 	SDL_GL_SwapWindow(App->window->window);
+	
 	return UPDATE_CONTINUE;
 }
 

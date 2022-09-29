@@ -142,69 +142,6 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
-	glBegin(GL_TRIANGLES);  // draw a cube with 12 triangles
-
-	// bottom face =================
-	glVertex3f(1.0f, 0.0f, 0.0f);	// v2
-	glVertex3f(0.0f, 0.0f, 1.0f);	// v1
-	glVertex3f(0.0f, 0.0f, 0.0f);	// v0
-
-	glVertex3f(1.0f, 0.0f, 0.0f);	// v2
-	glVertex3f(1.0f, 0.0f, 1.0f);	// v3
-	glVertex3f(0.0f, 0.0f, 1.0f);	// v1
-
-	// front face =================
-	glVertex3f(1.0f, 0.0f, 0.0f);	// v2
-	glVertex3f(0.0f, 0.0f, 0.0f);	// v0
-	glVertex3f(0.0f, 1.0f, 0.0f);	// v4
-
-	
-	glVertex3f(1.0f, 0.0f, 0.0f);	// v2
-	glVertex3f(0.0f, 1.0f, 0.0f);	// v4
-	glVertex3f(1.0f, 1.0f, 0.0f);	// v5
-
-	
-	// right face ===================
-	glVertex3f(1.0f, 0.0f, 0.0f);	// v2
-	glVertex3f(1.0f, 1.0f, 0.0f);	// v5
-	glVertex3f(1.0f, 1.0f, 1.0f);	// v6
-
-
-	glVertex3f(1.0f, 0.0f, 1.0f);	// v3
-	glVertex3f(1.0f, 0.0f, 0.0f);	// v2
-	glVertex3f(1.0f, 1.0f, 1.0f);	// v6
-
-	// back face ===================
-	glVertex3f(1.0f, 1.0f, 1.0f);	// v6
-	glVertex3f(0.0f, 0.0f, 1.0f);	// v1
-	glVertex3f(1.0f, 0.0f, 1.0f);	// v3
-
-	glVertex3f(1.0f, 1.0f, 1.0f);	// v6
-	glVertex3f(0.0f, 1.0f, 1.0f);	// v7
-	glVertex3f(0.0f, 0.0f, 1.0f);	// v1
-
-	// left face ===================
-	glVertex3f(0.0f, 1.0f, 1.0f);	// v7
-	glVertex3f(0.0f, 0.0f, 0.0f);	// v0
-	glVertex3f(0.0f, 0.0f, 1.0f);	// v1
-
-	glVertex3f(0.0f, 1.0f, 1.0f);	// v7
-	glVertex3f(0.0f, 1.0f, 0.0f);	// v4
-	glVertex3f(0.0f, 0.0f, 0.0f);	// v0
-
-	// top face ===================
-	glVertex3f(1.0f, 1.0f, 1.0f);	// v6
-	glVertex3f(1.0f, 1.0f, 0.0f);	// v5
-	glVertex3f(0.0f, 1.0f, 0.0f);	// v4
-
-
-	glVertex3f(0.0f, 1.0f, 0.0f);	// v4	
-	glVertex3f(0.0f, 1.0f, 1.0f);	// v7
-	glVertex3f(1.0f, 1.0f, 1.0f);	// v6
-
-
-		glEnd();
-
 	SDL_GL_SwapWindow(App->window->window);
 	
 	return UPDATE_CONTINUE;

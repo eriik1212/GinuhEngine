@@ -30,6 +30,8 @@ private:
 	int screen_height = SCREEN_HEIGHT;
 	float screen_brightness = 1;
 
+	bool hardwareActive = true;
+
 	void OpenLink(const char* url);
 
 };

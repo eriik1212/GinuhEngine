@@ -107,6 +107,7 @@ update_status ModuleMenus::PostUpdate(float dt)
 	ImGui::End();
 
 	if (aboutVisible) MenuAbout();
+	if (hardwareVisible) MenuHardware();
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -217,7 +218,162 @@ void ModuleMenus::MenuAbout()
 void ModuleMenus::MenuHardware()
 {
 
-	// ERIK HAZ TU MAGIA PICHON
+	// MAGIA EN CAMINO CAPO****************************************************************
+	if (ImGui::Begin("Hardware", 0, ImGuiWindowFlags_MenuBar))
+	{
+		ImGui::SetWindowSize(ImVec2(450.0f, 300.0f));
+
+		//Header
+		if (ImGui::Checkbox("Active", &hardwareActive))
+		{
+			if (hardwareActive)
+			{
+				//Aqui ha de fer algo pero encara no se exactament que
+			}
+			else
+			{
+				//Demanar al miquel a veure que vol dir aques checkbox
+			}
+
+		}
+		
+		//SDL Version
+		SDL_version version;
+		SDL_GetVersion(&version);
+
+		ImGui::Text("SDL Version:");
+		ImGui::SameLine();
+		ImGui::TextColored({ 255,255,0,20 }, "%u.%u.%u", version.major, version.minor, version.patch);
+
+		
+
+		//CPU
+		
+		//Cache
+		
+		int SDL_GetCPUCount(void); //Aquest retorna el numero de nuclis del cpu.
+		int SDL_GetCPUCacheLineSize(void); //Aquest retorna el tamany de la primera linea de cache de la CPU
+
+
+		ImGui::Text("CPUs:");
+		ImGui::SameLine();
+		ImGui::TextColored({ 255,255,0,20 }, "%d", SDL_GetCPUCount());
+
+		//Ram del sistema
+		int SDL_GetSystemRAM(void); //Aquesta retorna la cantitat de ram de la que disposem
+
+		ImGui::Text("System RAM:");
+		ImGui::SameLine();
+		ImGui::TextColored({ 255,255,0,20 }, "%dGb", SDL_GetSystemRAM()/1000);
+
+		//Caps--------------------------------
+		ImGui::Text("Caps:");
+		
+
+		//Initiation of parameters
+
+		SDL_bool SDL_Has3DNow(void);
+		SDL_bool SDL_HasAltiVec(void);
+		SDL_bool SDL_HasAVX(void);
+		SDL_bool SDL_HasAVX2(void);
+		SDL_bool SDL_HasMMX(void);
+		SDL_bool SDL_HasRDTSC(void);
+		SDL_bool SDL_HasSSE(void);
+		SDL_bool SDL_HasSSE2(void);
+		SDL_bool SDL_HasSSE3(void);
+		SDL_bool SDL_HasSSE41(void);
+		SDL_bool SDL_HasSSE42(void);
+
+
+
+
+		//3dNow
+		
+
+		if (SDL_Has3DNow())
+		{
+			ImGui::SameLine();
+			ImGui::TextColored({ 255,255,0,20 }, "3DNow!");
+		}
+		
+		//AltiVec
+
+		if (SDL_HasAltiVec())
+		{
+			ImGui::SameLine();
+			ImGui::TextColored({ 255,255,0,20 }, "AltiVec");
+		}
+
+
+		//AVX
+		if (SDL_HasAVX())
+		{
+			ImGui::SameLine();
+			ImGui::TextColored({ 255,255,0,20 }, "AVX");
+		}
+
+		//AVX2
+		if (SDL_HasAVX2())
+		{
+			ImGui::SameLine();
+			ImGui::TextColored({ 255,255,0,20 }, "AVX2");
+		}
+		//MMX
+		if (SDL_HasMMX())
+		{
+			ImGui::SameLine();
+			ImGui::TextColored({ 255,255,0,20 }, "MMX");
+		}
+		//RDTSC
+		if (SDL_HasRDTSC())
+		{
+			ImGui::SameLine();
+			ImGui::TextColored({ 255,255,0,20 }, "RDTSC");
+		}
+		//SSE
+		if (SDL_HasSSE())
+		{
+			ImGui::SameLine();
+			ImGui::TextColored({ 255,255,0,20 }, "SSE");
+		}
+		//SSE2
+		if (SDL_HasSSE2())
+		{
+			ImGui::SameLine();
+			ImGui::TextColored({ 255,255,0,20 }, "SSE2");
+		}
+		//SSE3
+		if (SDL_HasSSE3())
+		{
+			ImGui::SameLine();
+			ImGui::TextColored({ 255,255,0,20 }, "SSE3");
+		}
+		//SSE41
+		if (SDL_HasSSE41())
+		{
+			ImGui::SameLine();
+			ImGui::TextColored({ 255,255,0,20 }, "SSE41");
+		}
+		//SSE42
+		if (SDL_HasSSE42())
+		{
+			ImGui::SameLine();
+			ImGui::TextColored({ 255,255,0,20 }, "SSE42");
+		}
+
+		//GPU
+		const char* SDL_GetCurrentVideoDriver(void);
+		ImGui::Text("Brand:");
+		ImGui::SameLine();
+		ImGui::TextColored({ 255,255,0,20 }, "%s", SDL_GetCurrentVideoDriver());
+
+		
+
+
+
+
+	}
+	ImGui::End();
 
 }
 

@@ -14,12 +14,15 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
+	bool pOpen_config = true,
+		pOpen_about = true;;
+
 private:
 	bool aboutVisible = false;
 	void MenuAbout();
-	
-	bool hardwareVisible = false;
-	void MenuHardware();
+
+	bool configVisible = false;
+	void MenuConfig();
 
 	//OPTIONS
 	bool fullscreen = WIN_FULLSCREEN;

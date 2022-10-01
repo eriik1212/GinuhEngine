@@ -3,8 +3,19 @@
 #include "Globals.h"
 
 #include "SDL/include/SDL.h"
+#include "PhysFS/include/physfs.h"
+
 #pragma comment( lib, "SDL/libx86/SDL2.lib" )
 #pragma comment( lib, "SDL/libx86/SDL2main.lib" )
+
+/*#pragma comment( lib, "Assimp/libx86/assimp.lib")
+#pragma comment( lib, "Assimp/libx86/zlibstatic.lib")
+
+#pragma comment( lib, "DevIL/libx86/DevIL.lib")
+#pragma comment( lib, "DevIL/libx86/ILU.lib")
+#pragma comment( lib, "DevIL/libx86/ILUT.lib")
+
+#pragma comment( lib, "PhysFS/libx86/physfs.lib")*/
 
 enum main_states
 {
@@ -22,7 +33,7 @@ int main(int argc, char ** argv)
 	int main_return = EXIT_FAILURE;
 	main_states state = MAIN_CREATION;
 	Application* App = NULL;
-
+	
 	while (state != MAIN_EXIT)
 	{
 		switch (state)

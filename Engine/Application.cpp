@@ -8,6 +8,7 @@ Application::Application()
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
 	menus = new ModuleMenus(this);
+	loader = new ModuleFileLoader(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -17,6 +18,9 @@ Application::Application()
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
+
+	//Files Loader
+	AddModule(loader);
 
 	//ImGui Module
 	AddModule(menus);

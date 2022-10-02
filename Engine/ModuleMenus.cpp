@@ -30,6 +30,16 @@ bool ModuleMenus::Init()
 	return ret;
 }
 
+update_status ModuleMenus::PreUpdate(float dt)
+{
+	//SDL_UpdateWindowSurface(App->window->window);
+
+	//screen_width = App->window->screen_surface->w;
+	//screen_height = App->window->screen_surface->h;
+
+	return UPDATE_CONTINUE;
+}
+
 // PostUpdate present buffer to screen
 update_status ModuleMenus::PostUpdate(float dt)
 {
@@ -219,17 +229,19 @@ void ModuleMenus::MenuConfig()
 
 					}
 					ImGui::SliderFloat("Brightness", &screen_brightness, 0.300f, 1.000f);
+
+					SDL_SetWindowBrightness(App->window->window, screen_brightness);
+
 					ImGui::SliderInt("Width", &screen_width, 720, 1920);
 					ImGui::SliderInt("Height", &screen_height, 560, 1080);
 
 					SDL_SetWindowSize(App->window->window, screen_width, screen_height);
-					SDL_SetWindowBrightness(App->window->window, screen_brightness);
 
 				}
 				if (ImGui::Checkbox("Vsync", &vsync))
 				{
-					if (vsync)	SDL_RenderSetVSync(App->renderer3D->renderer, 1); //VSYNC ENABLED
-					else SDL_RenderSetVSync(App->renderer3D->renderer,0); //VSYNC DISABLED
+					if (vsync)	SDL_GL_SetSwapInterval(1); //VSYNC ENABLED
+					else SDL_GL_SetSwapInterval(0); //VSYNC DISABLED
 				}
 				if (ImGui::Checkbox("Lights", &lights))
 				{

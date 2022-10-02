@@ -110,11 +110,6 @@ bool ModuleRenderer3D::Init()
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, context);
 	ImGui_ImplOpenGL3_Init("#version 120");
 
-	renderer = SDL_CreateRenderer(App->window->window, 0, 0);
-
-	if (VSYNC == true)	SDL_RenderSetVSync(renderer, 1); //VSYNC ENABLED
-	else SDL_RenderSetVSync(renderer, 0);	//VSYNC DISABLED
-
 	/*glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();*/
 
@@ -148,6 +143,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
+
 	SDL_GL_SwapWindow(App->window->window);
 	
 	return UPDATE_CONTINUE;
@@ -163,9 +159,9 @@ bool ModuleRenderer3D::CleanUp()
 		SDL_GL_DeleteContext(context);
 	}
 
-	if (renderer != NULL)
+	//if (renderer != NULL)
 	{
-		SDL_DestroyRenderer(renderer);
+	//	SDL_DestroyRenderer(renderer);
 	}
 
 	return true;

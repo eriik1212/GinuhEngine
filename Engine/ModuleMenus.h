@@ -15,7 +15,8 @@ public:
 	bool CleanUp();
 
 	bool pOpen_config = true,
-		pOpen_about = true;;
+		pOpen_about = true,
+		pOpen_console = true;
 
 private:
 	bool aboutVisible = false;
@@ -24,6 +25,9 @@ private:
 	bool configVisible = false;
 	void MenuConfig();
 
+	bool consoleVisible = false;
+	void MenuConsole();
+
 	//OPTIONS
 	bool fullscreen = WIN_FULLSCREEN;
 	bool resizable = WIN_RESIZABLE;
@@ -31,6 +35,8 @@ private:
 	bool full_desk = WIN_FULLSCREEN_DESKTOP;
 	int screen_width = SCREEN_WIDTH;
 	int screen_height = SCREEN_HEIGHT;
+	bool vsync = VSYNC;
+	bool lights = true;
 	float screen_brightness = 1;
 
 	bool hardwareActive = true;

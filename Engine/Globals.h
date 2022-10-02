@@ -35,5 +35,5 @@ enum update_status
 #define WIN_RESIZABLE false
 #define WIN_BORDERLESS false
 #define WIN_FULLSCREEN_DESKTOP false
-#define VSYNC true
+#define VSYNC false
 #define TITLE "GINUH ENGINE"

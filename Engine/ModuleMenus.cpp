@@ -1,6 +1,7 @@
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_impl_sdl.h"
 #include "ImGui/imgui_impl_opengl3.h"
+#include "Glew/include/glew.h"
 
 #include "Globals.h"
 #include "Application.h"
@@ -39,7 +40,6 @@ update_status ModuleMenus::PostUpdate(float dt)
 	ImGui::Begin("GinuhEngine", 0, ImGuiWindowFlags_MenuBar);
 	ImGui::Text("Welcome to this fantastic engine!");
 
-
 	if (ImGui::BeginMenuBar())
 	{
 		if (ImGui::MenuItem("Configuration"))
@@ -57,6 +57,11 @@ update_status ModuleMenus::PostUpdate(float dt)
 			aboutVisible = !aboutVisible;
 		}
 
+		if (ImGui::MenuItem("Console")) 
+		{
+			consoleVisible = !consoleVisible;
+		}
+
 		if (ImGui::MenuItem("Exit"))
 		{
 			return UPDATE_STOP;
@@ -69,6 +74,7 @@ update_status ModuleMenus::PostUpdate(float dt)
 
 	if (configVisible) MenuConfig();
 	if (aboutVisible) MenuAbout();
+	if (consoleVisible) MenuConsole();
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -176,7 +182,7 @@ void ModuleMenus::MenuAbout()
 		}
 		ImGui::End();
 		
-		if (pOpen_about == NULL) aboutVisible = !aboutVisible; // Window is closed so function "MenuAbout()" stop being called
+		if (pOpen_about == NULL) aboutVisible = !aboutVisible; // Window is closed so function "MenuAbout()" stops being called
 	}
 	
 }
@@ -212,7 +218,7 @@ void ModuleMenus::MenuConfig()
 						else SDL_SetWindowBordered(App->window->window, SDL_TRUE); //BORDERLESS DISABLED
 
 					}
-					ImGui::SliderFloat("Brightness", &screen_brightness, 0.0f, 1.0f);
+					ImGui::SliderFloat("Brightness", &screen_brightness, 0.300f, 1.000f);
 					ImGui::SliderInt("Width", &screen_width, 720, 1920);
 					ImGui::SliderInt("Height", &screen_height, 560, 1080);
 
@@ -220,11 +226,23 @@ void ModuleMenus::MenuConfig()
 					SDL_SetWindowBrightness(App->window->window, screen_brightness);
 
 				}
+				if (ImGui::Checkbox("Vsync", &vsync))
+				{
+					if (vsync)	SDL_RenderSetVSync(App->renderer3D->renderer, 1); //VSYNC ENABLED
+					else SDL_RenderSetVSync(App->renderer3D->renderer,0); //VSYNC DISABLED
+				}
+				if (ImGui::Checkbox("Lights", &lights))
+				{
+					
+					if (lights)	glEnable(GL_LIGHTING); //LIGHTS ENABLED
+					else 	glDisable(GL_LIGHTING); //LIGHTS DISABLED
+
+				}
 			}
 			if (ImGui::CollapsingHeader("Hardware"))
 			{
 
-					//Header
+				//Header
 				if (ImGui::Checkbox("Active", &hardwareActive))
 				{
 					if (hardwareActive)
@@ -373,8 +391,17 @@ void ModuleMenus::MenuConfig()
 
 		ImGui::End();
 
-		if (pOpen_config == NULL) configVisible = !configVisible; // Window is closed so function "MenuConfig()" stop being called
+		if (pOpen_config == NULL) configVisible = !configVisible; // Window is closed so function "MenuConfig()" stops being called
 	}
+}
+
+void ModuleMenus::MenuConsole()
+{
+	if (pOpen_console)
+	{
+		ImGui::ShowDebugLogWindow(&pOpen_console); //For now, *******************CHANGE IN A FUTURE**************************
+	}
+	if (pOpen_console == NULL) consoleVisible = !consoleVisible; // Window is closed so function "MenuConsole()" stops being called
 }
 
 void ModuleMenus::OpenLink(const char* url)

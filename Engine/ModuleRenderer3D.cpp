@@ -100,6 +100,7 @@ bool ModuleRenderer3D::Init()
 		lights[0].Active(true);
 		glEnable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
+
 	}
 
 	// Projection matrix for
@@ -108,6 +109,11 @@ bool ModuleRenderer3D::Init()
 	// Init ImGui (SDL&OpenGL)
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, context);
 	ImGui_ImplOpenGL3_Init("#version 120");
+
+	renderer = SDL_CreateRenderer(App->window->window, 0, 0);
+
+	if (VSYNC == true)	SDL_RenderSetVSync(renderer, 1); //VSYNC ENABLED
+	else SDL_RenderSetVSync(renderer, 0);	//VSYNC DISABLED
 
 	/*glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();*/
@@ -152,7 +158,15 @@ bool ModuleRenderer3D::CleanUp()
 {
 	LOG("Destroying 3D Renderer");
 
-	SDL_GL_DeleteContext(context);
+	if (context != NULL)
+	{
+		SDL_GL_DeleteContext(context);
+	}
+
+	if (renderer != NULL)
+	{
+		SDL_DestroyRenderer(renderer);
+	}
 
 	return true;
 }

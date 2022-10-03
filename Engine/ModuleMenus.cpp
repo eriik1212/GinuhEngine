@@ -3,6 +3,7 @@
 #include "ImGui/imgui_impl_opengl3.h"
 #include "Glew/include/glew.h"
 
+#include "Primitive.h"
 
 #include "Globals.h"
 #include "Application.h"
@@ -33,10 +34,6 @@ bool ModuleMenus::Init()
 
 update_status ModuleMenus::PreUpdate(float dt)
 {
-	//SDL_UpdateWindowSurface(App->window->window);
-
-	//screen_width = App->window->screen_surface->w;
-	//screen_height = App->window->screen_surface->h;
 
 	return UPDATE_CONTINUE;
 }
@@ -232,6 +229,7 @@ void ModuleMenus::MenuConfig()
 		if (ImGui::Begin("Configuration", &pOpen_config))
 		{
 			ImGui::SetWindowSize(ImVec2(450.0f, 300.0f));
+			ImGui::TextColored(ImVec4(155, 155, 0, 255), "OPTIONS");
 
 			if (ImGui::CollapsingHeader("Window"))
 			{
@@ -256,28 +254,68 @@ void ModuleMenus::MenuConfig()
 						else SDL_SetWindowBordered(App->window->window, SDL_TRUE); //BORDERLESS DISABLED
 
 					}
-					ImGui::SliderFloat("Brightness", &screen_brightness, 0.300f, 1.000f);
 
-					SDL_SetWindowBrightness(App->window->window, screen_brightness);
+					if (ImGui::SliderInt("Width", &screen_width, 720, 1920) ||
+						ImGui::SliderInt("Height", &screen_height, 560, 1080))
+					{
+						SDL_SetWindowSize(App->window->window, screen_width, screen_height);
+					}
 
-					ImGui::SliderInt("Width", &screen_width, 720, 1920);
-					ImGui::SliderInt("Height", &screen_height, 560, 1080);
-
-					SDL_SetWindowSize(App->window->window, screen_width, screen_height);
 
 				}
+			}
+			if (ImGui::CollapsingHeader("Visual"))
+			{
 				if (ImGui::Checkbox("Vsync", &vsync))
 				{
 					if (vsync)	SDL_GL_SetSwapInterval(1); //VSYNC ENABLED
 					else SDL_GL_SetSwapInterval(0); //VSYNC DISABLED
 				}
+
+				if (ImGui::SliderFloat("Brightness", &screen_brightness, 0.300f, 1.000f))
+				{
+					SDL_SetWindowBrightness(App->window->window, screen_brightness);
+
+				}
+
 				if (ImGui::Checkbox("Lights", &lights))
 				{
-					
+
 					if (lights)	glEnable(GL_LIGHTING); //LIGHTS ENABLED
 					else 	glDisable(GL_LIGHTING); //LIGHTS DISABLED
 
 				}
+				ImGui::SameLine();
+				if (ImGui::Checkbox("Depth Test", &depth_test))
+				{
+					if (depth_test)	glEnable(GL_DEPTH_TEST); //DEPTH TEST ENABLED
+					else 	glDisable(GL_DEPTH_TEST); //DEPTH TEST DISABLED
+				}
+				if (ImGui::Checkbox("Cull Face", &cull_face))
+				{
+					if (cull_face)	glEnable(GL_CULL_FACE); //CULL FACE ENABLED
+					else 	glDisable(GL_CULL_FACE); //CULL FACE  DISABLED
+				}
+				ImGui::SameLine();
+				if (ImGui::Checkbox("Color Material", &color_material))
+				{
+					if (color_material)	glEnable(GL_COLOR_MATERIAL); //COLOR MATERIAL ENABLED
+					else 	glDisable(GL_COLOR_MATERIAL); //COLOR MATERIAL  DISABLED
+				}
+				ImGui::SameLine();
+				if (ImGui::Checkbox("Texture 2D", &texture2D))
+				{
+					if (texture2D)	glEnable(GL_COLOR_MATERIAL); //TEXTURE 2D ENABLED
+					else 	glDisable(GL_COLOR_MATERIAL); //TEXTURE 2D DISABLED
+				}
+				if (ImGui::Checkbox("Wireframe View", &wireframe_view))
+				{
+					if (wireframe_view)	App->scene_intro->wireframe = true; //WIREFRAME VIEW ENABLED
+					else 		App->scene_intro->wireframe = false; //WIREFRAME VIEW DISABLED
+					
+					// Updated in "ModuleSceneIntro -> Update()"
+				}
+				
 			}
 			if (ImGui::CollapsingHeader("Hardware"))
 			{

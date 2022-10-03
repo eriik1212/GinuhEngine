@@ -41,6 +41,10 @@ update_status ModuleSceneIntro::Update(float dt)
 	p.axis = true;
 	p.Render();
 
+	// Wireframe View
+	if (wireframe)		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	else		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
 	// ------------------------------------------------------------------- DRAW CUBE IN DIRECT MODE
 	{
 		/*glBegin(GL_TRIANGLES);  // draw a cube with 12 triangles

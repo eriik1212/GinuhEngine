@@ -14,4 +14,6 @@ public:
 	bool CleanUp();
 
 public:
+	bool wireframe = false;
+
 };

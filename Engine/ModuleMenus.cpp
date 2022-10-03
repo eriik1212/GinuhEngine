@@ -3,6 +3,7 @@
 #include "ImGui/imgui_impl_opengl3.h"
 #include "Glew/include/glew.h"
 
+
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleMenus.h"
@@ -171,7 +172,7 @@ void ModuleMenus::MenuAbout()
 			ImGui::SameLine();
 			ImGui::Text("v. 1.1.0");
 
-			//---------------------------------------- JSON PARSER
+			//---------------------------------------- MATHGEOLIB
 			ImGui::Bullet();
 			if (ImGui::Button("MathGeoLib"))
 			{
@@ -179,6 +180,33 @@ void ModuleMenus::MenuAbout()
 			}
 			ImGui::SameLine();
 			ImGui::Text("v. 1.15");
+
+			//---------------------------------------- MATHGEOLIB
+			ImGui::Bullet();
+			if (ImGui::Button("Assimp"))
+			{
+				OpenLink("https://github.com/assimp/assimp");
+			}
+			ImGui::SameLine();
+			ImGui::Text("v. 3.1.1");
+
+			//---------------------------------------- MATHGEOLIB
+			ImGui::Bullet();
+			if (ImGui::Button("DeviL"))
+			{
+				OpenLink("https://github.com/DentonW/DevIL");
+			}
+			ImGui::SameLine();
+			ImGui::Text("v. 1.8.0");
+
+			//---------------------------------------- MATHGEOLIB
+			ImGui::Bullet();
+			if (ImGui::Button("PhysFS"))
+			{
+				OpenLink("https://github.com/icculus/physfs");
+			}
+			ImGui::SameLine();
+			ImGui::Text("v. 3.0.2");
 
 			ImGui::Text(""); //Intro
 
@@ -397,7 +425,7 @@ void ModuleMenus::MenuConfig()
 				ImGui::Text("Brand:");
 				ImGui::SameLine();
 				ImGui::TextColored({ 255,255,0,20 }, "%s", SDL_GetCurrentVideoDriver());
-
+				
 			}
 		}
 
@@ -411,7 +439,21 @@ void ModuleMenus::MenuConsole()
 {
 	if (pOpen_console)
 	{
-		ImGui::ShowDebugLogWindow(&pOpen_console); //For now, *******************CHANGE IN A FUTURE**************************
+		//ImGui::ShowDebugLogWindow(&pOpen_console); //For now, *******************CHANGE IN A FUTURE**************************
+		int fps = 0;
+
+		//Header
+		ImGui::InputText("App Name", "Ginuh Engine", 10);
+		ImGui::InputText("Organisation", "UPC CITM", 10);
+		ImGui::SliderInt("Max FPS", &fps, 0, 120);
+		
+
+		ImGui::Text("Limit Framerate: ");
+
+		char sizure[20];
+		//ImGui::PlotHistogram("Framerate", &fps, 15, 0, sizure, 0.0f, 100.0f, ImVec2(310, 100));
+
+		
 	}
 	if (pOpen_console == NULL) consoleVisible = !consoleVisible; // Window is closed so function "MenuConsole()" stops being called
 }

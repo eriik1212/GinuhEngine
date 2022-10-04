@@ -18,7 +18,9 @@ ModuleSceneIntro::~ModuleSceneIntro()
 // Load assets
 bool ModuleSceneIntro::Start()
 {
-	LOG("Loading Intro assets");
+	//LOG("Loading Intro assets");
+	App->menus->my_log.AddLog("Loading Intro assets");
+
 	bool ret = true;
 
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
@@ -29,7 +31,8 @@ bool ModuleSceneIntro::Start()
 // Load assets
 bool ModuleSceneIntro::CleanUp()
 {
-	LOG("Unloading Intro scene");
+	//LOG("Unloading Intro scene");
+	App->menus->my_log.AddLog("Unloading Intro scene");
 
 	return true;
 }

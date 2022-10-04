@@ -57,7 +57,9 @@ bool Application::Init()
 	}
 
 	// After all Init calls we call Start() in all modules
-	LOG("Application Start --------------");
+	//LOG("Application Start --------------");
+	menus->my_log.AddLog("Application Start --------------");
+
 	item = list_modules.getFirst();
 
 	while(item != NULL && ret == true)

@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include "Application.h"
 #include "Globals.h"
+#include "ModuleMenus.h"
+#include "Module.h"
 
 #include "SDL/include/SDL.h"
 #include "PhysFS/include/physfs.h"
@@ -29,7 +31,7 @@ enum main_states
 int main(int argc, char ** argv)
 {
 	LOG("Starting game '%s'...", TITLE);
-
+	
 	int main_return = EXIT_FAILURE;
 	main_states state = MAIN_CREATION;
 	Application* App = NULL;
@@ -40,23 +42,31 @@ int main(int argc, char ** argv)
 		{
 		case MAIN_CREATION:
 
-			LOG("-------------- Application Creation --------------");
 			App = new Application();
 			state = MAIN_START;
+			//LOG("-------------- Application Creation --------------");
+			App->menus->my_log.AddLog(("-------------- Application Creation --------------"));
+			
 			break;
 
 		case MAIN_START:
 
-			LOG("-------------- Application Init --------------");
+			//LOG("-------------- Application Init --------------");
+			App->menus->my_log.AddLog("-------------- Application Init --------------");
+
 			if (App->Init() == false)
 			{
-				LOG("Application Init exits with ERROR");
+				//LOG("Application Init exits with ERROR");
+				App->menus->my_log.AddLog("Application Init exits with ERROR");
+
 				state = MAIN_EXIT;
 			}
 			else
 			{
 				state = MAIN_UPDATE;
-				LOG("-------------- Application Update --------------");
+				//LOG("-------------- Application Update --------------");
+				App->menus->my_log.AddLog("-------------- Application Update --------------");
+
 			}
 
 			break;
@@ -67,7 +77,9 @@ int main(int argc, char ** argv)
 
 			if (update_return == UPDATE_ERROR)
 			{
-				LOG("Application Update exits with ERROR");
+				//LOG("Application Update exits with ERROR");
+				App->menus->my_log.AddLog("Application Update exits with ERROR");
+
 				state = MAIN_EXIT;
 			}
 
@@ -78,10 +90,14 @@ int main(int argc, char ** argv)
 
 		case MAIN_FINISH:
 
-			LOG("-------------- Application CleanUp --------------");
+			//LOG("-------------- Application CleanUp --------------");
+			App->menus->my_log.AddLog("-------------- Application CleanUp --------------");
+
 			if (App->CleanUp() == false)
 			{
-				LOG("Application CleanUp exits with ERROR");
+				//LOG("Application CleanUp exits with ERROR");
+				App->menus->my_log.AddLog("Application CleanUp exits with ERROR");
+
 			}
 			else
 				main_return = EXIT_SUCCESS;
@@ -92,8 +108,10 @@ int main(int argc, char ** argv)
 
 		}
 	}
-
+	//LOG("Exiting game '%s'...\n", TITLE);
+	App->menus->my_log.AddLog(("Exiting game '%s'...", TITLE));
 	delete App;
-	LOG("Exiting game '%s'...\n", TITLE);
+	
+
 	return main_return;
 }

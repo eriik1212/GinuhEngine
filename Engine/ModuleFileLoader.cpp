@@ -54,7 +54,8 @@ update_status ModuleFileLoader::PostUpdate(float dt)
 // Called before quitting
 bool ModuleFileLoader::CleanUp()
 {
-	LOG("Destroying Module");
+	//LOG("Destroying Module");
+	App->menus->my_log.AddLog("Destroying Module");
 
 	aiDetachAllLogStreams();
 

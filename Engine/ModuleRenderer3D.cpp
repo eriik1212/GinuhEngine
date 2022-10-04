@@ -24,22 +24,29 @@ ModuleRenderer3D::~ModuleRenderer3D()
 // Called before render is available
 bool ModuleRenderer3D::Init()
 {
-	LOG("Creating 3D Renderer context");
+	//LOG("Creating 3D Renderer context");
+	App->menus->my_log.AddLog("Creating 3D Renderer context");
+
 	bool ret = true;
 	
 	//Create context
 	context = SDL_GL_CreateContext(App->window->window);
 	if(context == NULL)
 	{
-		LOG("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
+		//LOG("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
+		App->menus->my_log.AddLog(("OpenGL context could not be created! SDL_Error: %s", SDL_GetError()));
+
 		ret = false;
 	}
 	
 	if(ret == true)
 	{
 		//Use Vsync
-		if(VSYNC && SDL_GL_SetSwapInterval(1) < 0)
-			LOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
+		if (VSYNC && SDL_GL_SetSwapInterval(1) < 0)
+		{
+			//LOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
+			App->menus->my_log.AddLog(("Warning: Unable to set VSync! SDL Error: %s", SDL_GetError()));
+		}
 
 		//Initialize Projection Matrix
 		glMatrixMode(GL_PROJECTION);
@@ -50,6 +57,8 @@ bool ModuleRenderer3D::Init()
 		if(error != GL_NO_ERROR)
 		{
 			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
+			App->menus->my_log.AddLog("Error initializing OpenGL");
+
 			ret = false;
 		}
 
@@ -62,6 +71,8 @@ bool ModuleRenderer3D::Init()
 		if(error != GL_NO_ERROR)
 		{
 			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
+			App->menus->my_log.AddLog("Error initializing OpenGL");
+
 			ret = false;
 		}
 		
@@ -151,7 +162,9 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 // Called before quitting
 bool ModuleRenderer3D::CleanUp()
 {
-	LOG("Destroying 3D Renderer");
+	//LOG("Destroying 3D Renderer");
+	App->menus->my_log.AddLog("Destroying 3D Renderer");
+
 
 	if (context != NULL)
 	{

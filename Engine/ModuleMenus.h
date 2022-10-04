@@ -1,6 +1,8 @@
 #ifndef __ModuleMenus_H__
 #define __ModuleMenus_H__
 
+#include <vector>
+
 #include "Module.h"
 #include "Globals.h"
 #include "ImGui/imgui.h"
@@ -33,7 +35,7 @@ struct AppLog
 
             }
         }
-           
+
         ScrollToBottom = true;
 
 
@@ -94,8 +96,9 @@ public:
 		pOpen_about = true,
 		pOpen_console = true;
 
-	AppLog my_log;
+	bool vsync = VSYNC;
 
+  AppLog my_log;
 private:
 	bool aboutVisible = false;
 	void MenuAbout();
@@ -116,7 +119,7 @@ private:
 	int screen_height = SCREEN_HEIGHT;
 
 	//visual
-	bool vsync = VSYNC;
+
 	bool lights = true;
 	bool depth_test = true;
 	bool cull_face = true;
@@ -128,6 +131,16 @@ private:
 	bool hardwareActive = true;
 
 	void OpenLink(const char* url);
+	void PushLog(std::vector<float>* Log, float toPush);
+
+	//FPS
+
+	std::vector<float> fpsLog;
+	std::vector<float> timeLog;
+
+
+
+
 
 };
 

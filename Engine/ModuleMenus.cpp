@@ -4,6 +4,7 @@
 #include "Glew/include/glew.h"
 
 #include "Primitive.h"
+#include "Application.h"
 
 #include "Globals.h"
 #include "Application.h"
@@ -40,7 +41,11 @@ update_status ModuleMenus::PreUpdate(float dt)
 
 update_status ModuleMenus::Update(float dt)
 {
+	float FPS = floorf(App->GetFrameRate());
+	float MS = (App->GetDt() * 1000.f);
 
+	PushLog(&fpsLog, FPS);
+	PushLog(&timeLog, MS);
 
 	return UPDATE_CONTINUE;
 }
@@ -72,7 +77,7 @@ update_status ModuleMenus::PostUpdate(float dt)
 			aboutVisible = !aboutVisible;
 		}
 
-		if (ImGui::MenuItem("Console")) 
+		if (ImGui::MenuItem("Console"))
 		{
 			pOpen_console = true; // Window can close
 
@@ -222,14 +227,14 @@ void ModuleMenus::MenuAbout()
 			ImGui::Text("");
 			ImGui::Text("MIT License");
 			ImGui::Text("");
-			ImGui::Text("Copyright (c) 2022 Erik Martin Garzon");
+			ImGui::Text("Copyright (c) 2022 Erik Martin Garzon & David Boces Obis");
 			ImGui::Text("Permission is hereby granted, free of charge, to any person obtaining a copy\nof this softwareand associated documentation files(the 'Software'), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and /or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions :\n\nThe above copyright noticeand this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.");
 		}
 		ImGui::End();
-		
+
 		if (pOpen_about == NULL) aboutVisible = !aboutVisible; // Window is closed so function "MenuAbout()" stops being called
 	}
-	
+
 }
 
 void ModuleMenus::MenuConfig()
@@ -246,13 +251,16 @@ void ModuleMenus::MenuConfig()
 				//Header
 				ImGui::InputText("App Name", "Ginuh Engine", 10);
 				ImGui::InputText("Organisation", "UPC CITM", 10);
-				//ImGui::SliderInt("Max FPS", &fps, 0, 120);
+				ImGui::SliderInt("Max FPS", &App->limitFPS, 1, 165);
 
 
 				ImGui::Text("Limit Framerate: ");
 
-				char sizure[20];
-				//ImGui::PlotHistogram("Framerate", &fps, 15, 0, sizure, 0.0f, 100.0f, ImVec2(310, 100));
+				char title[25];
+				sprintf_s(title, 25, "Framerate %1.f", fpsLog[fpsLog.size() - 1]);
+				ImGui::PlotHistogram("##framerate", &fpsLog[0],fpsLog.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
+				sprintf_s(title, 25, "Milliseconds %0.f", timeLog[timeLog.size() - 1]);
+				ImGui::PlotHistogram("##milliseconds", &timeLog[0], timeLog.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
 
 
 
@@ -437,10 +445,10 @@ void ModuleMenus::MenuConfig()
 						my_log.AddLog("Wireframe View Disabled");
 
 					}
-					
+
 					// Updated in "ModuleSceneIntro -> Update()"
 				}
-				
+
 			}
 			if (ImGui::CollapsingHeader("Hardware"))
 			{
@@ -588,7 +596,7 @@ void ModuleMenus::MenuConfig()
 				ImGui::Text("Brand:");
 				ImGui::SameLine();
 				ImGui::TextColored({ 255,255,0,20 }, "%s", SDL_GetCurrentVideoDriver());
-				
+
 			}
 		}
 
@@ -604,7 +612,7 @@ void ModuleMenus::MenuConsole()
 	{
 		my_log.Draw("Console", &pOpen_console);
 	}
-	if (pOpen_console == NULL) 
+	if (pOpen_console == NULL)
 	{
 		consoleVisible = !consoleVisible; // Window is closed so function "MenuConsole()" stops being called
 	}
@@ -613,5 +621,18 @@ void ModuleMenus::MenuConsole()
 void ModuleMenus::OpenLink(const char* url)
 {
 	ShellExecuteA(0, "open", url, 0, 0, 0);
+
+}
+
+void ModuleMenus::PushLog(std::vector<float>* Log, float toPush) //Function to keep actualizing the ms and fps Log
+{
+
+	if (Log->size() > 100)
+	{
+		Log->erase(Log->begin());
+		Log->push_back(toPush);
+	}
+	else Log->push_back(toPush);
+
 
 }

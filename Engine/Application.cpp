@@ -80,6 +80,12 @@ void Application::PrepareUpdate()
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
+	//We make the update stops x time to keep a frecuency of actualization
+	Uint32 lastFrameMs = ms_timer.Read();
+	float timeToWait = (1000.f / (float)limitFPS) - (float)lastFrameMs;
+	SDL_Delay(static_cast<Uint32>(fabs(timeToWait)));
+
+
 }
 
 // Call PreUpdate, Update and PostUpdate on all modules

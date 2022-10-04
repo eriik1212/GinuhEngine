@@ -1,6 +1,8 @@
 #ifndef __ModuleMenus_H__
 #define __ModuleMenus_H__
 
+#include <vector>
+
 #include "Module.h"
 #include "Globals.h"
 
@@ -19,6 +21,8 @@ public:
 	bool pOpen_config = true,
 		pOpen_about = true,
 		pOpen_console = true;
+
+	bool vsync = VSYNC;
 
 private:
 	bool aboutVisible = false;
@@ -40,7 +44,7 @@ private:
 	int screen_height = SCREEN_HEIGHT;
 
 	//visual
-	bool vsync = VSYNC;
+	
 	bool lights = true;
 	bool depth_test = true;
 	bool cull_face = true;
@@ -52,7 +56,17 @@ private:
 	bool hardwareActive = true;
 
 	void OpenLink(const char* url);
+	void PushLog(std::vector<float>* Log, float toPush);
 
+	//FPS 
+	
+	std::vector<float> fpsLog;
+	std::vector<float> timeLog;
+	
+
+
+
+	
 };
 
 #endif

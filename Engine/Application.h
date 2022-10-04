@@ -38,6 +38,13 @@ public:
 	update_status Update();
 	bool CleanUp();
 
+	//utils
+	float GetDt() const { return dt; }
+	float GetFrameRate()const { return 1.f / dt; }
+
+	int limitFPS=60;
+	int screenAct;
+
 private:
 
 	void AddModule(Module* mod);

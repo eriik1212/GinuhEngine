@@ -38,6 +38,13 @@ update_status ModuleMenus::PreUpdate(float dt)
 	return UPDATE_CONTINUE;
 }
 
+update_status ModuleMenus::Update(float dt)
+{
+
+
+	return UPDATE_CONTINUE;
+}
+
 // PostUpdate present buffer to screen
 update_status ModuleMenus::PostUpdate(float dt)
 {
@@ -231,6 +238,22 @@ void ModuleMenus::MenuConfig()
 			ImGui::SetWindowSize(ImVec2(450.0f, 300.0f));
 			ImGui::TextColored(ImVec4(155, 155, 0, 255), "OPTIONS");
 
+			if (ImGui::CollapsingHeader("Application"))
+			{
+				//Header
+				ImGui::InputText("App Name", "Ginuh Engine", 10);
+				ImGui::InputText("Organisation", "UPC CITM", 10);
+				ImGui::SliderInt("Max FPS", &fps, 0, 120);
+
+
+				ImGui::Text("Limit Framerate: ");
+
+				char sizure[20];
+				//ImGui::PlotHistogram("Framerate", &fps, 15, 0, sizure, 0.0f, 100.0f, ImVec2(310, 100));
+
+
+
+			}
 			if (ImGui::CollapsingHeader("Window"))
 			{
 				if (ImGui::Checkbox("FullScreen", &fullscreen))
@@ -477,19 +500,11 @@ void ModuleMenus::MenuConsole()
 {
 	if (pOpen_console)
 	{
-		//ImGui::ShowDebugLogWindow(&pOpen_console); //For now, *******************CHANGE IN A FUTURE**************************
-		int fps = 0;
-
-		//Header
-		ImGui::InputText("App Name", "Ginuh Engine", 10);
-		ImGui::InputText("Organisation", "UPC CITM", 10);
-		ImGui::SliderInt("Max FPS", &fps, 0, 120);
+		ImGui::ShowDebugLogWindow(&pOpen_console); //For now, *******************CHANGE IN A FUTURE**************************
 		
 
-		ImGui::Text("Limit Framerate: ");
-
-		char sizure[20];
-		//ImGui::PlotHistogram("Framerate", &fps, 15, 0, sizure, 0.0f, 100.0f, ImVec2(310, 100));
+		
+		
 
 		
 	}

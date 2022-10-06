@@ -249,9 +249,11 @@ void ModuleMenus::MenuConfig()
 			if (ImGui::CollapsingHeader("Application"))
 			{
 				//Header
-				ImGui::InputText("App Name", "Ginuh Engine", 10);
-				ImGui::InputText("Organisation", "UPC CITM", 10);
+				ImGui::LabelText( "Ginuh Engine", "App Name:");
+				ImGui::LabelText( "UPC CITM", "Organisation:");
 				ImGui::SliderInt("Max FPS", &App->limitFPS, 1, 165);
+				
+				
 
 
 				ImGui::Text("Limit Framerate: ");

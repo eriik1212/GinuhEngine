@@ -39,7 +39,7 @@ update_status ModuleFileLoader::PreUpdate(float dt)
 update_status ModuleFileLoader::Update(float dt)
 {
 
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)	LoadFile();
+	//if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)	LoadFile("C:/Users/david/OneDrive/Escritorio/baker_house/BakerHouse.fbx", &newMesh);
 
 	return UPDATE_CONTINUE;
 }
@@ -62,11 +62,9 @@ bool ModuleFileLoader::CleanUp()
 	return true;
 }
 
-void ModuleFileLoader::LoadFile()
+void ModuleFileLoader::LoadFile(const char* file_path, MeshData* ourMesh)
 {
 	// ************************************ STAND BY ************************************
-
-	/*const char* file_path = "C:/Users/david/OneDrive/Escritorio/baker_house/BakerHouse.fbx";
 
 	const aiScene* scene = aiImportFile(file_path, aiProcessPreset_TargetRealtime_MaxQuality);
 
@@ -75,19 +73,40 @@ void ModuleFileLoader::LoadFile()
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array
 		aiReleaseImport(scene);
 
-		aiMesh* houseMesh = new aiMesh;
+		for (int i = 0; i < scene->mNumMeshes; i++)
+		{
+			// copy vertices
+			ourMesh->num_vertex = scene->mMeshes[i]->mNumVertices;
+			ourMesh->vertex = new float[ourMesh->num_vertex * 3];
+			memcpy(ourMesh->vertex, scene->mMeshes[i]->mVertices, sizeof(float) * ourMesh->num_vertex * 3);
+			LOG("New mesh with %d vertices", ourMesh->num_vertex);
 
-		// copy vertices
-		houseMesh->mNumVertices = scene->mMeshes[0]->mNumVertices;
-		//houseMesh->mVertices = new float[houseMesh->mNumVertices * 3];
-		memcpy(houseMesh->mVertices, scene->mMeshes[0]->mVertices, sizeof(float) * houseMesh->mNumVertices * 3);
-		LOG("New mesh with %d vertices", houseMesh->mNumVertices);
+			// copy faces
+			if (scene->mMeshes[i]->HasFaces())
+			{
+				ourMesh->num_index = scene->mMeshes[i]->mNumFaces * 3;
+				ourMesh->index = new uint[ourMesh->num_index]; // assume each face is a triangle
+				for (uint i = 0; i < scene->mMeshes[i]->mNumFaces; ++i)
+				{
+					if (scene->mMeshes[i]->mFaces[i].mNumIndices != 3)
+					{
+						LOG("WARNING, geometry face with != 3 indices!");
+					}
+					else
+					{
+						memcpy(&ourMesh->index[i * 3], scene->mMeshes[i]->mFaces[i].mIndices, 3 * sizeof(uint));
+					}
+				}
+			}
+
+		}
+		
 	}
 	else
 	{
 		LOG("Error loading scene % s", file_path);
 	}
-	*/
+	
 	
 
 }

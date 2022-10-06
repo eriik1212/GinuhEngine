@@ -16,4 +16,6 @@ public:
 public:
 	bool wireframe = false;
 
+private:
+
 };

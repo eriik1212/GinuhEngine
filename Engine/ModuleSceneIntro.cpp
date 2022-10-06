@@ -25,6 +25,8 @@ bool ModuleSceneIntro::Start()
 
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
+
+
 	return ret;
 }
 
@@ -34,12 +36,16 @@ bool ModuleSceneIntro::CleanUp()
 	//LOG("Unloading Intro scene");
 	App->menus->my_log.AddLog("Unloading Intro scene");
 
+
+	App->menus->my_log.AddLog("Deleting FrameBuffer");
+
 	return true;
 }
 
 // Update: draw background
 update_status ModuleSceneIntro::Update(float dt)
 {
+
 	Plane p(0, 1, 0, 0);
 	p.axis = true;
 	p.Render();
@@ -255,6 +261,9 @@ update_status ModuleSceneIntro::Update(float dt)
 		// deactivate vertex arrays after drawing
 		glDisableClientState(GL_VERTEX_ARRAY);
 		
+		//FrameBuffer
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 	}
 
 	return UPDATE_CONTINUE;

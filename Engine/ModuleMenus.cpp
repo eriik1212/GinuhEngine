@@ -94,6 +94,17 @@ update_status ModuleMenus::PostUpdate(float dt)
 
 	ImGui::End();
 
+	// --------------------------------------------------------------------------- WINDOW SCENE
+	ImGui::Begin("Scene");
+	ImGui::BeginChild("", ImVec2(SCREEN_WIDTH, SCREEN_HEIGHT));
+
+	ImVec2 wsize = ImGui::GetWindowSize();
+
+	ImGui::Image((ImTextureID)App->renderer3D->textureColorbuffer, wsize, ImVec2(0, 1), ImVec2(1, 0));
+
+	ImGui::EndChild();
+	ImGui::End();
+
 	if (configVisible) MenuConfig();
 	if (aboutVisible) MenuAbout();
 	if (consoleVisible) MenuConsole();
@@ -243,7 +254,7 @@ void ModuleMenus::MenuConfig()
 	{
 		if (ImGui::Begin("Configuration", &pOpen_config))
 		{
-			ImGui::SetWindowSize(ImVec2(450.0f, 300.0f));
+			//ImGui::SetWindowSize(ImVec2(450.0f, 300.0f));
 			ImGui::TextColored(ImVec4(155, 155, 0, 255), "OPTIONS");
 
 			if (ImGui::CollapsingHeader("Application"))

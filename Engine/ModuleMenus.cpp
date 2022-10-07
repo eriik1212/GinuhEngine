@@ -57,6 +57,7 @@ update_status ModuleMenus::PostUpdate(float dt)
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
 
+	// --------------------------------------------------------------------------- GENERAL WINDOW (CONFIG, ABOUT, CONSOLE, EXIT)
 	ImGui::Begin("GinuhEngine", 0, ImGuiWindowFlags_MenuBar);
 	ImGui::Text("Welcome to this fantastic engine!");
 

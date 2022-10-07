@@ -3,6 +3,7 @@
 #include "Globals.h"
 #include "ModuleMenus.h"
 #include "Module.h"
+#include "MemLeaks.h"
 
 #include "SDL/include/SDL.h"
 #include "PhysFS/include/physfs.h"
@@ -112,6 +113,7 @@ int main(int argc, char ** argv)
 	App->menus->my_log.AddLog(("Exiting game '%s'...", TITLE));
 	delete App;
 	
+	ReportMemoryLeaks();
 
 	return main_return;
 }

@@ -8,6 +8,8 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
+#include "ModuleFileLoader.h"
+
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 }
@@ -211,6 +213,7 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	// ------------------------------------------------------------------- DRAW CUBE IN INDEX
 	{
+		/*
 		//    v6----- v5
 		//   /|      /|
 		//  v1------v0|
@@ -241,12 +244,12 @@ update_status ModuleSceneIntro::Update(float dt)
 							 7,4,3, 3,2,7,
 							 4,7,6, 6,5,4 };
 
-		/*glGenBuffers(1, (GLuint*)&(my_indices));
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)* num_indices, indices, GL_STATIC_DRAW);
+		//glGenBuffers(1, (GLuint*)&(my_indices));
+		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+		//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)* num_indices, indices, GL_STATIC_DRAW);
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
-		glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);*/
+		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+		//glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
 
 		// activate and specify pointer to vertex array
 		glEnableClientState(GL_VERTEX_ARRAY);
@@ -257,11 +260,13 @@ update_status ModuleSceneIntro::Update(float dt)
 
 		// deactivate vertex arrays after drawing
 		glDisableClientState(GL_VERTEX_ARRAY);
-		
-		//FrameBuffer
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
+		*/
 	}
+
+	App->loader->houseMesh.DrawMesh();
+
+	//FrameBuffer
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	return UPDATE_CONTINUE;
 }

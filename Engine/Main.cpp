@@ -11,15 +11,6 @@
 #pragma comment( lib, "SDL/libx86/SDL2.lib" )
 #pragma comment( lib, "SDL/libx86/SDL2main.lib" )
 
-/*#pragma comment( lib, "Assimp/libx86/assimp.lib")
-#pragma comment( lib, "Assimp/libx86/zlibstatic.lib")
-
-#pragma comment( lib, "DevIL/libx86/DevIL.lib")
-#pragma comment( lib, "DevIL/libx86/ILU.lib")
-#pragma comment( lib, "DevIL/libx86/ILUT.lib")
-
-#pragma comment( lib, "PhysFS/libx86/physfs.lib")*/
-
 enum main_states
 {
 	MAIN_CREATION,

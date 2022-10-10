@@ -27,6 +27,8 @@ bool ModuleFileLoader::Init()
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 
+	LoadFile("Assets/BakerHouse.fbx", &houseMesh);
+
 	return ret;
 }
 
@@ -38,9 +40,6 @@ update_status ModuleFileLoader::PreUpdate(float dt)
 
 update_status ModuleFileLoader::Update(float dt)
 {
-
-	//if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)	LoadFile("C:/Users/david/OneDrive/Escritorio/baker_house/BakerHouse.fbx", &newMesh);
-
 	return UPDATE_CONTINUE;
 }
 
@@ -64,15 +63,12 @@ bool ModuleFileLoader::CleanUp()
 
 void ModuleFileLoader::LoadFile(const char* file_path, MeshData* ourMesh)
 {
-	// ************************************ STAND BY ************************************
+	// ************************************ CONSTRUCTION SITE ************************************
 
 	const aiScene* scene = aiImportFile(file_path, aiProcessPreset_TargetRealtime_MaxQuality);
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
-		// Use scene->mNumMeshes to iterate on scene->mMeshes array
-		aiReleaseImport(scene);
-
 		for (int i = 0; i < scene->mNumMeshes; i++)
 		{
 			// copy vertices
@@ -86,21 +82,24 @@ void ModuleFileLoader::LoadFile(const char* file_path, MeshData* ourMesh)
 			{
 				ourMesh->num_index = scene->mMeshes[i]->mNumFaces * 3;
 				ourMesh->index = new uint[ourMesh->num_index]; // assume each face is a triangle
-				for (uint i = 0; i < scene->mMeshes[i]->mNumFaces; ++i)
+				
+				for (uint j = 0; j < scene->mMeshes[i]->mNumFaces; ++j)
 				{
-					if (scene->mMeshes[i]->mFaces[i].mNumIndices != 3)
+					if (scene->mMeshes[i]->mFaces[j].mNumIndices != 3)
 					{
 						App->menus->info.AddConsoleLog(__FILE__, __LINE__, "WARNING, geometry face with != 3 indices!");
 					}
 					else
 					{
-						memcpy(&ourMesh->index[i * 3], scene->mMeshes[i]->mFaces[i].mIndices, 3 * sizeof(uint));
+						memcpy(&ourMesh->index[j * 3], scene->mMeshes[i]->mFaces[j].mIndices, 3 * sizeof(uint));
 					}
 				}
 			}
 
 		}
-		
+
+		aiReleaseImport(scene);
+
 	}
 	else
 	{
@@ -109,4 +108,15 @@ void ModuleFileLoader::LoadFile(const char* file_path, MeshData* ourMesh)
 	
 	
 
+}
+
+void MeshData::DrawMesh()
+{
+	glBegin(GL_TRIANGLES); // Drawing with triangles
+
+	for (int i = 0; i < num_index; i++) {
+		glVertex3f(vertex[index[i] * 3], vertex[index[i] * 3 + 1], vertex[index[i] * 3 + 2]);
+	}
+
+	glEnd();
 }

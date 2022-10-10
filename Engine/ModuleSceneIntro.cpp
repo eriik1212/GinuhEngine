@@ -8,7 +8,7 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
-#include "ModuleFileLoader.h"
+#include "ModuleFilesManager.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -263,7 +263,7 @@ update_status ModuleSceneIntro::Update(float dt)
 		*/
 	}
 
-	App->loader->houseMesh.DrawMesh();
+	App->loader->Render();
 
 	//FrameBuffer
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);

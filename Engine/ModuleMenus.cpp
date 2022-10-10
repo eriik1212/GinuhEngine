@@ -329,13 +329,13 @@ void ModuleMenus::MenuConfig()
 						}
 					}
 
-					if (ImGui::SliderInt("Width", &screen_width, 720, 1920) ||
+					/*if (ImGui::SliderInt("Width", &screen_width, 720, 1920) ||
 						ImGui::SliderInt("Height", &screen_height, 560, 1080))
 					{
 						SDL_SetWindowSize(App->window->window, screen_width, screen_height);
 						info.AddConsoleLog(__FILE__, __LINE__,"Window Size Change");
 
-					}
+					}*/
 
 
 				}
@@ -465,20 +465,6 @@ void ModuleMenus::MenuConfig()
 			}
 			if (ImGui::CollapsingHeader("Hardware"))
 			{
-
-				//Header
-				if (ImGui::Checkbox("Active", &hardwareActive))
-				{
-					if (hardwareActive)
-					{
-						//Aqui ha de fer algo pero encara no se exactament que
-					}
-					else
-					{
-						//Demanar al miquel a veure que vol dir aques checkbox
-					}
-
-				}
 
 				ImGui::Text("-----");
 

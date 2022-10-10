@@ -1,6 +1,6 @@
 #include "Globals.h"
 #include "Application.h"
-#include "ModuleFileLoader.h"
+#include "ModuleFilesManager.h"
 
 #include <Windows.h>
 #include "Assimp/include/cimport.h"
@@ -9,16 +9,18 @@
 
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
 
-ModuleFileLoader::ModuleFileLoader(Application* app, bool start_enabled) : Module(app, start_enabled)
+vector<MeshData*> ModuleFilesManager::meshList;
+
+ModuleFilesManager::ModuleFilesManager(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 }
 
 // Destructor
-ModuleFileLoader::~ModuleFileLoader()
+ModuleFilesManager::~ModuleFilesManager()
 {}
 
 // Called before render is available
-bool ModuleFileLoader::Init()
+bool ModuleFilesManager::Init()
 {
 	bool ret = true;
 
@@ -32,36 +34,38 @@ bool ModuleFileLoader::Init()
 	return ret;
 }
 
-update_status ModuleFileLoader::PreUpdate(float dt)
+update_status ModuleFilesManager::PreUpdate(float dt)
 {
 
 	return UPDATE_CONTINUE;
 }
 
-update_status ModuleFileLoader::Update(float dt)
+update_status ModuleFilesManager::Update(float dt)
 {
 	return UPDATE_CONTINUE;
 }
 
 // PostUpdate present buffer to screen
-update_status ModuleFileLoader::PostUpdate(float dt)
+update_status ModuleFilesManager::PostUpdate(float dt)
 {
 	
 	return UPDATE_CONTINUE;
 }
 
 // Called before quitting
-bool ModuleFileLoader::CleanUp()
+bool ModuleFilesManager::CleanUp()
 {
 	//LOG("Destroying Module");
 	App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Destroying Module File Loader");
+
+	meshList.clear();
 
 	aiDetachAllLogStreams();
 
 	return true;
 }
 
-void ModuleFileLoader::LoadFile(const char* file_path, MeshData* ourMesh)
+void ModuleFilesManager::LoadFile(const char* file_path, MeshData* ourMesh)
 {
 	// ************************************ CONSTRUCTION SITE ************************************
 
@@ -94,6 +98,7 @@ void ModuleFileLoader::LoadFile(const char* file_path, MeshData* ourMesh)
 						memcpy(&ourMesh->index[j * 3], scene->mMeshes[i]->mFaces[j].mIndices, 3 * sizeof(uint));
 					}
 				}
+				meshList.push_back(ourMesh);
 			}
 
 		}
@@ -110,13 +115,21 @@ void ModuleFileLoader::LoadFile(const char* file_path, MeshData* ourMesh)
 
 }
 
+void ModuleFilesManager::Render()
+{
+	for (int i = 0; i < meshList.size(); i++) {
+		meshList[i]->DrawMesh();
+	}
+}
+
 void MeshData::DrawMesh()
 {
-	glBegin(GL_TRIANGLES); // Drawing with triangles
+		glBegin(GL_TRIANGLES); // Drawing with triangles
 
-	for (int i = 0; i < num_index; i++) {
-		glVertex3f(vertex[index[i] * 3], vertex[index[i] * 3 + 1], vertex[index[i] * 3 + 2]);
-	}
+		for (int i = 0; i < num_index; i++) {
+			glVertex3f(vertex[index[i] * 3], vertex[index[i] * 3 + 1], vertex[index[i] * 3 + 2]);
+		}
 
-	glEnd();
+		glEnd();
+	
 }

@@ -1,12 +1,21 @@
-#ifndef __ModuleFileLoader_H__
-#define __ModuleFileLoader_H__
+#ifndef __ModuleFilesManager_H__
+#define __ModuleFilesManager_H__
 
 #include "Module.h"
 #include "Globals.h"
 #include "Glew/include/glew.h"
 
+using namespace std;
+
 struct MeshData
 {
+	MeshData(){}
+
+	~MeshData() {
+		delete[num_vertex]  vertex;
+		delete[num_index]  index;
+
+	}
 	uint id_index = 0; // index in VRAM
 	uint num_index = 0;
 	uint* index = nullptr;
@@ -18,11 +27,11 @@ struct MeshData
 	void DrawMesh();
 };
 
-class ModuleFileLoader : public Module
+class ModuleFilesManager : public Module
 {
 public:
-	ModuleFileLoader(Application* app, bool start_enabled = true);
-	~ModuleFileLoader();
+	ModuleFilesManager(Application* app, bool start_enabled = true);
+	~ModuleFilesManager();
 
 	bool Init();
 	update_status PreUpdate(float dt);
@@ -32,8 +41,10 @@ public:
 
 	void LoadFile(const char* filePath, MeshData* ourMesh);
 
-	MeshData houseMesh;
+	static void Render();
 
+	MeshData houseMesh;		
+	static vector<MeshData*> meshList;
 };
 
 #endif

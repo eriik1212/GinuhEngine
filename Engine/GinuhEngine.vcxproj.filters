@@ -163,7 +163,7 @@
     <ClCompile Include="ExternalLibraries\Json\json.c">
       <Filter>ExternalLibraries\Json</Filter>
     </ClCompile>
-    <ClCompile Include="ModuleFileLoader.cpp">
+    <ClCompile Include="ModuleFilesManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -429,7 +429,7 @@
     <ClInclude Include="ExternalLibraries\Json\json.h">
       <Filter>ExternalLibraries\Json</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleFileLoader.h">
+    <ClInclude Include="ModuleFilesManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MemLeaks.h">

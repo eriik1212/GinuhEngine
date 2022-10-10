@@ -156,7 +156,7 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="MemLeaks.h" />
     <ClInclude Include="ModuleCamera3D.h" />
-    <ClInclude Include="ModuleFileLoader.h" />
+    <ClInclude Include="ModuleFilesManager.h" />
     <ClInclude Include="ModuleMenus.h" />
     <ClInclude Include="ModuleRenderer3D.h" />
     <ClInclude Include="p2List.h" />
@@ -218,7 +218,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="ModuleCamera3D.cpp" />
     <ClCompile Include="ModuleInput.cpp" />
-    <ClCompile Include="ModuleFileLoader.cpp" />
+    <ClCompile Include="ModuleFilesManager.cpp" />
     <ClCompile Include="ModuleMenus.cpp" />
     <ClCompile Include="ModuleRenderer3D.cpp" />
     <ClCompile Include="ModuleSceneIntro.cpp" />

@@ -9,7 +9,7 @@
 #include "ImGui/imgui_impl_sdl.h"
 #include "ImGui/imgui_impl_opengl3.h"
 
-struct AppLog
+struct ConsoleInfo
 {
     ImGuiTextBuffer     Buf;
     ImGuiTextFilter     Filter;
@@ -18,8 +18,19 @@ struct AppLog
 
     void    Clear() { Buf.clear(); LineOffsets.clear(); }
 
-    void    AddLog(const char* logText)
+    void    AddConsoleLog(const char file[], int line, const char* logText, ...)
     {
+        static char tmp_string[4096];
+        static char tmp_string2[4096];
+        static va_list  ap;
+
+        // Construct the string from variable arguments
+        va_start(ap, logText);
+        vsprintf_s(tmp_string, 4096, logText, ap);
+        va_end(ap);
+        sprintf_s(tmp_string2, 4096, "\n%s(%d) : %s", file, line, tmp_string);
+        OutputDebugString(tmp_string2);
+
         int old_size = Buf.size();
         va_list args;
         va_start(args, logText);
@@ -37,12 +48,9 @@ struct AppLog
         }
 
         ScrollToBottom = true;
-
-
-        LOG(logText);
     }
 
-    void    Draw(const char* title, bool* p_opened = NULL)
+    void    DrawConsole(const char* title, bool* p_opened = NULL)
     {
         ImGui::SetNextWindowSize(ImVec2(600, 200));
         ImGui::Begin(title, p_opened);
@@ -97,8 +105,9 @@ public:
 		pOpen_console = true;
 
 	bool vsync = VSYNC;
+    
+    ConsoleInfo info;
 
-  AppLog my_log;
 private:
 	bool aboutVisible = false;
 	void MenuAbout();
@@ -108,6 +117,7 @@ private:
 
 	bool consoleVisible = false;
 	void MenuConsole();
+
 
 	//--------------------------------------------- OPTIONS
 	//window
@@ -137,10 +147,6 @@ private:
 
 	std::vector<float> fpsLog;
 	std::vector<float> timeLog;
-
-
-
-
 
 };
 

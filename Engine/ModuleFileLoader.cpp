@@ -55,7 +55,7 @@ update_status ModuleFileLoader::PostUpdate(float dt)
 bool ModuleFileLoader::CleanUp()
 {
 	//LOG("Destroying Module");
-	App->menus->my_log.AddLog("Destroying Module");
+	App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Destroying Module File Loader");
 
 	aiDetachAllLogStreams();
 
@@ -79,7 +79,7 @@ void ModuleFileLoader::LoadFile(const char* file_path, MeshData* ourMesh)
 			ourMesh->num_vertex = scene->mMeshes[i]->mNumVertices;
 			ourMesh->vertex = new float[ourMesh->num_vertex * 3];
 			memcpy(ourMesh->vertex, scene->mMeshes[i]->mVertices, sizeof(float) * ourMesh->num_vertex * 3);
-			LOG("New mesh with %d vertices", ourMesh->num_vertex);
+			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "New mesh with %d vertices", ourMesh->num_vertex);
 
 			// copy faces
 			if (scene->mMeshes[i]->HasFaces())
@@ -90,7 +90,7 @@ void ModuleFileLoader::LoadFile(const char* file_path, MeshData* ourMesh)
 				{
 					if (scene->mMeshes[i]->mFaces[i].mNumIndices != 3)
 					{
-						LOG("WARNING, geometry face with != 3 indices!");
+						App->menus->info.AddConsoleLog(__FILE__, __LINE__, "WARNING, geometry face with != 3 indices!");
 					}
 					else
 					{
@@ -104,7 +104,7 @@ void ModuleFileLoader::LoadFile(const char* file_path, MeshData* ourMesh)
 	}
 	else
 	{
-		LOG("Error loading scene % s", file_path);
+		App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Error loading scene % s", file_path);
 	}
 	
 	

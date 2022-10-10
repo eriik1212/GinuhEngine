@@ -19,7 +19,7 @@ ModuleSceneIntro::~ModuleSceneIntro()
 bool ModuleSceneIntro::Start()
 {
 	//LOG("Loading Intro assets");
-	App->menus->my_log.AddLog("Loading Intro assets");
+	App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Loading Intro assets");
 
 	bool ret = true;
 
@@ -34,10 +34,7 @@ bool ModuleSceneIntro::Start()
 bool ModuleSceneIntro::CleanUp()
 {
 	//LOG("Unloading Intro scene");
-	App->menus->my_log.AddLog("Unloading Intro scene");
-
-
-	App->menus->my_log.AddLog("Deleting FrameBuffer");
+	App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Unloading Intro scene");
 
 	return true;
 }

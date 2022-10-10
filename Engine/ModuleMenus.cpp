@@ -9,7 +9,6 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleMenus.h"
-
 #include <Windows.h>
 
 ModuleMenus::ModuleMenus(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -121,7 +120,7 @@ update_status ModuleMenus::PostUpdate(float dt)
 bool ModuleMenus::CleanUp()
 {
 	//LOG("Destroying ModuleMenus");
-	my_log.AddLog("Destroying Editor");
+	info.AddConsoleLog(__FILE__, __LINE__, "Destroying Module Menus");
 
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
@@ -286,13 +285,13 @@ void ModuleMenus::MenuConfig()
 					if (fullscreen)
 					{
 						SDL_SetWindowFullscreen(App->window->window, SDL_WINDOW_FULLSCREEN); //FULLSCREEN ENABLED
-						my_log.AddLog("FullScreen Enabled");
+						info.AddConsoleLog(__FILE__, __LINE__, "FullScreen Enabled");
 
 					}
 					else
 					{
 						SDL_SetWindowFullscreen(App->window->window, !SDL_WINDOW_FULLSCREEN); //FULLSCREEN DISABLED
-						my_log.AddLog("FullScreen Disabled");
+						info.AddConsoleLog(__FILE__, __LINE__,"FullScreen Disabled");
 
 					}
 				}
@@ -303,13 +302,13 @@ void ModuleMenus::MenuConfig()
 						if (resizable)
 						{
 							SDL_SetWindowResizable(App->window->window, SDL_TRUE); //RESIZABLE ENABLED
-							my_log.AddLog("Resizable Mode Enabled");
+							info.AddConsoleLog(__FILE__, __LINE__,"Resizable Mode Enabled");
 
 						}
 						else
 						{
 							SDL_SetWindowResizable(App->window->window, SDL_FALSE);//RESIZABLE DISABLED
-							my_log.AddLog("Resizable Mode Disabled");
+							info.AddConsoleLog(__FILE__, __LINE__,"Resizable Mode Disabled");
 
 						}
 					}
@@ -319,13 +318,13 @@ void ModuleMenus::MenuConfig()
 						if (borderless)
 						{
 							SDL_SetWindowBordered(App->window->window, SDL_FALSE); //BORDERLESS ENABLED
-							my_log.AddLog("Borderless Mode Enabled");
+							info.AddConsoleLog(__FILE__, __LINE__,"Borderless Mode Enabled");
 
 						}
 						else
 						{
 							SDL_SetWindowBordered(App->window->window, SDL_TRUE); //BORDERLESS DISABLED
-							my_log.AddLog("Borderless Mode Disabled");
+							info.AddConsoleLog(__FILE__, __LINE__,"Borderless Mode Disabled");
 
 						}
 					}
@@ -334,7 +333,7 @@ void ModuleMenus::MenuConfig()
 						ImGui::SliderInt("Height", &screen_height, 560, 1080))
 					{
 						SDL_SetWindowSize(App->window->window, screen_width, screen_height);
-						my_log.AddLog("Window Size Change");
+						info.AddConsoleLog(__FILE__, __LINE__,"Window Size Change");
 
 					}
 
@@ -348,13 +347,13 @@ void ModuleMenus::MenuConfig()
 					if (vsync)
 					{
 						SDL_GL_SetSwapInterval(1); //VSYNC ENABLED
-						my_log.AddLog("Vsync Enabled");
+						info.AddConsoleLog(__FILE__, __LINE__,"Vsync Enabled");
 
 					}
 					else
 					{
 						SDL_GL_SetSwapInterval(0); //VSYNC DISABLED
-						my_log.AddLog("Vsync Disabled");
+						info.AddConsoleLog(__FILE__, __LINE__,"Vsync Disabled");
 
 					}
 				}
@@ -362,7 +361,7 @@ void ModuleMenus::MenuConfig()
 				if (ImGui::SliderFloat("Brightness", &screen_brightness, 0.300f, 1.000f))
 				{
 					SDL_SetWindowBrightness(App->window->window, screen_brightness);
-					my_log.AddLog("Brightness Change");
+					info.AddConsoleLog(__FILE__, __LINE__,"Brightness Change");
 
 				}
 
@@ -372,13 +371,13 @@ void ModuleMenus::MenuConfig()
 					if (lights)
 					{
 						glEnable(GL_LIGHTING); //LIGHTS ENABLED
-						my_log.AddLog("Lights Enabled");
+						info.AddConsoleLog(__FILE__, __LINE__,"Lights Enabled");
 
 					}
 					else
 					{
 						glDisable(GL_LIGHTING); //LIGHTS DISABLED
-						my_log.AddLog("Lights Disabled");
+						info.AddConsoleLog(__FILE__, __LINE__,"Lights Disabled");
 					}
 
 				}
@@ -388,13 +387,13 @@ void ModuleMenus::MenuConfig()
 					if (depth_test)
 					{
 						glEnable(GL_DEPTH_TEST); //DEPTH TEST ENABLED
-						my_log.AddLog("Depth Test Enabled");
+						info.AddConsoleLog(__FILE__, __LINE__,"Depth Test Enabled");
 
 					}
 					else
 					{
 						glDisable(GL_DEPTH_TEST); //DEPTH TEST DISABLED
-						my_log.AddLog("Depth Test Disabled");
+						info.AddConsoleLog(__FILE__, __LINE__,"Depth Test Disabled");
 
 					}
 				}
@@ -403,13 +402,13 @@ void ModuleMenus::MenuConfig()
 					if (cull_face)
 					{
 						glEnable(GL_CULL_FACE); //CULL FACE ENABLED
-						my_log.AddLog("Cull Face Enabled");
+						info.AddConsoleLog(__FILE__, __LINE__,"Cull Face Enabled");
 
 					}
 					else
 					{
 						glDisable(GL_CULL_FACE); //CULL FACE  DISABLED
-						my_log.AddLog("Cull Face Disabled");
+						info.AddConsoleLog(__FILE__, __LINE__,"Cull Face Disabled");
 
 					}
 				}
@@ -419,13 +418,13 @@ void ModuleMenus::MenuConfig()
 					if (color_material)
 					{
 						glEnable(GL_COLOR_MATERIAL); //COLOR MATERIAL ENABLED
-						my_log.AddLog("Color Material Enabled");
+						info.AddConsoleLog(__FILE__, __LINE__,"Color Material Enabled");
 
 					}
 					else
 					{
 						glDisable(GL_COLOR_MATERIAL); //COLOR MATERIAL  DISABLED
-						my_log.AddLog("Color Material Disabled");
+						info.AddConsoleLog(__FILE__, __LINE__,"Color Material Disabled");
 
 					}
 				}
@@ -435,13 +434,13 @@ void ModuleMenus::MenuConfig()
 					if (texture2D)
 					{
 						glEnable(GL_TEXTURE_2D); //TEXTURE 2D ENABLED
-						my_log.AddLog("Texture 2D Enabled");
+						info.AddConsoleLog(__FILE__, __LINE__,"Texture 2D Enabled");
 
 					}
 					else
 					{
 						glDisable(GL_TEXTURE_2D); //TEXTURE 2D DISABLED
-						my_log.AddLog("Texture 2D Disabled");
+						info.AddConsoleLog(__FILE__, __LINE__,"Texture 2D Disabled");
 
 					}
 				}
@@ -450,13 +449,13 @@ void ModuleMenus::MenuConfig()
 					if (wireframe_view)
 					{
 						App->scene_intro->wireframe = true; //WIREFRAME VIEW ENABLED
-						my_log.AddLog("Wireframe View Enabled");
+						info.AddConsoleLog(__FILE__, __LINE__,"Wireframe View Enabled");
 
 					}
 					else
 					{
 						App->scene_intro->wireframe = false; //WIREFRAME VIEW DISABLED
-						my_log.AddLog("Wireframe View Disabled");
+						info.AddConsoleLog(__FILE__, __LINE__,"Wireframe View Disabled");
 
 					}
 
@@ -624,7 +623,7 @@ void ModuleMenus::MenuConsole()
 {
 	if (pOpen_console)
 	{
-		my_log.Draw("Console", &pOpen_console);
+		info.DrawConsole("Console", &pOpen_console);
 	}
 	if (pOpen_console == NULL)
 	{

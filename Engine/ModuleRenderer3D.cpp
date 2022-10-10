@@ -26,7 +26,7 @@ ModuleRenderer3D::~ModuleRenderer3D()
 bool ModuleRenderer3D::Init()
 {
 	//LOG("Creating 3D Renderer context");
-	App->menus->my_log.AddLog("Creating 3D Renderer context");
+	App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Creating 3D Renderer context");
 
 	bool ret = true;
 
@@ -35,20 +35,22 @@ bool ModuleRenderer3D::Init()
 	if(context == NULL)
 	{
 		//LOG("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
-		App->menus->my_log.AddLog(("OpenGL context could not be created! SDL_Error: %s", SDL_GetError()));
+		App->menus->info.AddConsoleLog(__FILE__, __LINE__, "OpenGL context could not be created! SDL_Error: %s", SDL_GetError());
 
 		ret = false;
 	}
 	
 	//GLEW
 	GLenum err = glewInit();
-	LOG("Using Glew %s", glewGetString(GLEW_VERSION));
+	//LOG("Using Glew %s", glewGetString(GLEW_VERSION));
+	App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Using Glew %s", glewGetString(GLEW_VERSION));
+	
 	//Should be 2.0
 
-	LOG("Vendor: %s", glGetString(GL_VENDOR));
-	LOG("Renderer: %s", glGetString(GL_RENDERER));
-	LOG("OpenGL version supported %s", glGetString(GL_VERSION));
-	LOG("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+	App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Vendor: %s", glGetString(GL_VENDOR));
+	App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Renderer: %s", glGetString(GL_RENDERER));
+	App->menus->info.AddConsoleLog(__FILE__, __LINE__, "OpenGL version supported %s", glGetString(GL_VERSION));
+	App->menus->info.AddConsoleLog(__FILE__, __LINE__, "GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 	
 
 	SDL_GL_MakeCurrent(App->window->window, context);
@@ -59,7 +61,7 @@ bool ModuleRenderer3D::Init()
 		if (VSYNC && SDL_GL_SetSwapInterval(1) < 0)
 		{
 			//LOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
-			App->menus->my_log.AddLog(("Warning: Unable to set VSync! SDL Error: %s", SDL_GetError()));
+			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Warning: Unable to set VSync! SDL Error: %s", SDL_GetError());
 		}
 
 		//Initialize Projection Matrix
@@ -70,8 +72,7 @@ bool ModuleRenderer3D::Init()
 		GLenum error = glGetError();
 		if(error != GL_NO_ERROR)
 		{
-			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
-			App->menus->my_log.AddLog("Error initializing OpenGL");
+			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Error initializing OpenGL! %s\n", gluErrorString(error));
 
 			ret = false;
 		}
@@ -84,8 +85,7 @@ bool ModuleRenderer3D::Init()
 		error = glGetError();
 		if(error != GL_NO_ERROR)
 		{
-			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
-			App->menus->my_log.AddLog("Error initializing OpenGL");
+			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Error initializing OpenGL! %s\n", gluErrorString(error));
 
 			ret = false;
 		}
@@ -100,7 +100,7 @@ bool ModuleRenderer3D::Init()
 		error = glGetError();
 		if(error != GL_NO_ERROR)
 		{
-			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
+			App->menus->info.AddConsoleLog(__FILE__, __LINE__,"Error initializing OpenGL! %s\n", gluErrorString(error));
 			ret = false;
 		}
 
@@ -160,7 +160,7 @@ bool ModuleRenderer3D::Init()
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		App->menus->my_log.AddLog("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
+		App->menus->info.AddConsoleLog(__FILE__, __LINE__,"ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	return ret;
@@ -207,7 +207,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 bool ModuleRenderer3D::CleanUp()
 {
 	//LOG("Destroying 3D Renderer");
-	App->menus->my_log.AddLog("Destroying 3D Renderer");
+	App->menus->info.AddConsoleLog(__FILE__, __LINE__,"Destroying 3D Renderer");
 
 
 	if (context != NULL)

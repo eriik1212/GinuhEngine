@@ -9,6 +9,8 @@
 
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
 
+using namespace std;
+
 vector<MeshData*> ModuleFilesManager::meshList;
 
 ModuleFilesManager::ModuleFilesManager(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -29,8 +31,6 @@ bool ModuleFilesManager::Init()
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 
-	LoadFile("Assets/BakerHouse.fbx", &houseMesh);
-
 	return ret;
 }
 
@@ -41,14 +41,71 @@ update_status ModuleFilesManager::PreUpdate(float dt)
 }
 
 update_status ModuleFilesManager::Update(float dt)
-{
+{	
+	// ------------------------------------------------------------------------ Drag & Drop LOGIC
+	SDL_EventState(SDL_DROPFILE, SDL_ENABLE);
+
+	while (SDL_PollEvent(&event)) {
+		switch (event.type) {
+		case (SDL_DROPFILE): {      // In case if dropped file
+			dropped_filedir = event.drop.file;
+			// Shows directory of dropped file
+			if (SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "File dropped on window", dropped_filedir, App->window->window) == 0)
+			{
+				App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Dropped File Succesfully");
+
+				string line;	// For writing text file
+				
+				// Creating ofstream & ifstream class object
+				ifstream ini_file{
+					dropped_filedir
+				}; // This is the original file
+
+				new_filedir = "Assets/house.fbx";
+
+				ofstream out_file{ new_filedir };
+
+				if (ini_file && out_file) {
+
+					while (getline(ini_file, line)) {
+						out_file << line << "\n";
+					}
+					App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Copy Finished");
+				}
+				else {
+					// Something went wrong
+					App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Cannot read File");
+				}
+				// Closing file
+				ini_file.close();
+				out_file.close();
+
+				CopyFile(dropped_filedir, new_filedir, FALSE);
+
+				LoadFile(new_filedir, &houseMesh);
+
+			}
+			else
+			{
+				App->menus->info.AddConsoleLog(__FILE__, __LINE__, "ERROR: Loading File, %s", SDL_GetError());
+
+			}
+
+
+			SDL_free(dropped_filedir);    // Free dropped_filedir memory
+			break;
+		}
+		}
+
+	}
+
 	return UPDATE_CONTINUE;
 }
 
 // PostUpdate present buffer to screen
 update_status ModuleFilesManager::PostUpdate(float dt)
 {
-	
+
 	return UPDATE_CONTINUE;
 }
 

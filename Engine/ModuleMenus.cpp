@@ -329,14 +329,13 @@ void ModuleMenus::MenuConfig()
 						}
 					}
 
-					/*if (ImGui::SliderInt("Width", &screen_width, 720, 1920) ||
-						ImGui::SliderInt("Height", &screen_height, 560, 1080))
-					{
-						SDL_SetWindowSize(App->window->window, screen_width, screen_height);
-						info.AddConsoleLog(__FILE__, __LINE__,"Window Size Change");
+					ImGui::Text("Width: ");
+					ImGui::SameLine();
+					ImGui::TextColored({ 0,255,0,255 }, "%d", SDL_GetWindowSurface(App->window->window)->w);
 
-					}*/
-
+					ImGui::Text("Height: ");
+					ImGui::SameLine();
+					ImGui::TextColored({ 0,255,0,255 }, "%d", SDL_GetWindowSurface(App->window->window)->h);
 
 				}
 			}

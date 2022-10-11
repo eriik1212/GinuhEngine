@@ -5,6 +5,12 @@
 #include "Globals.h"
 #include "Glew/include/glew.h"
 
+#include<iostream>
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include <fstream>
+
 using namespace std;
 
 struct MeshData
@@ -45,6 +51,12 @@ public:
 
 	MeshData houseMesh;		
 	static vector<MeshData*> meshList;
+
+private:
+	SDL_Event event;                        // Declare event handle
+	char* dropped_filedir;                  // Pointer for directory of dropped file
+	char* new_filedir;
 };
+
 
 #endif

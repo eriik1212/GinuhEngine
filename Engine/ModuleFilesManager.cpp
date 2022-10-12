@@ -9,7 +9,7 @@
 
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
 
-using namespace std;
+namespace fs = std::filesystem;
 
 vector<MeshData*> ModuleFilesManager::meshList;
 
@@ -31,6 +31,39 @@ bool ModuleFilesManager::Init()
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 
+	// ------------------------------------- Load All Existing .fbx files -------------------------------------
+
+	std::string path = "Assets/";
+	for (const auto& entry : fs::directory_iterator(path))
+	{
+
+		// We get the FileName and Extension
+		string fileName = entry.path().filename().string();
+		const char* fileName_char = fileName.c_str();
+
+		App->menus->info.AddConsoleLog(__FILE__, __LINE__, "File '%s'", fileName_char);
+
+		char existent_filedir[100];
+
+		strcpy(existent_filedir, assets_dir);
+		strcat(existent_filedir, fileName_char);
+		
+		if (existent_filedir != nullptr)
+		{
+			newMesh = new MeshData;
+
+			LoadFile(existent_filedir, newMesh);
+
+			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "File '%s' Loaded Succesfully", fileName_char);
+
+		}
+		else
+		{
+			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "File '%s' cannot be loaded", fileName_char);
+
+		}
+	}
+
 	return ret;
 }
 
@@ -49,52 +82,29 @@ update_status ModuleFilesManager::Update(float dt)
 		switch (event.type) {
 		case (SDL_DROPFILE): {      // In case if dropped file
 			dropped_filedir = event.drop.file;
-			// Shows directory of dropped file
-			if (SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "File dropped on window", dropped_filedir, App->window->window) == 0)
-			{
-				App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Dropped File Succesfully");
 
-				string line;	// For writing text file
-				
-				// Creating ofstream & ifstream class object
-				ifstream ini_file{
-					dropped_filedir
-				}; // This is the original file
+			// We get the FileName and Extension
+			string fileName = fs::path(dropped_filedir).filename().string();
+			const char* fileName_char = fileName.c_str();
 
-				new_filedir = "Assets/house.fbx";
+			char new_filedir[100];
 
-				ofstream out_file{ new_filedir };
+			strcpy(new_filedir, assets_dir);
+			strcat(new_filedir, fileName_char);
 
-				if (ini_file && out_file) {
+			// We copy the dropped file to "Assets/" dir, with its name
+			CopyFile(dropped_filedir, new_filedir, FALSE);
 
-					while (getline(ini_file, line)) {
-						out_file << line << "\n";
-					}
-					App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Copy Finished");
-				}
-				else {
-					// Something went wrong
-					App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Cannot read File");
-				}
-				// Closing file
-				ini_file.close();
-				out_file.close();
+			newMesh = new MeshData;
 
-				CopyFile(dropped_filedir, new_filedir, FALSE);
+			if(new_filedir != nullptr)	LoadFile(new_filedir, newMesh);
 
-				LoadFile(new_filedir, &houseMesh);
+			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "File '%s' Dropped Succesfully", fileName_char);
 
-			}
-			else
-			{
-				App->menus->info.AddConsoleLog(__FILE__, __LINE__, "ERROR: Loading File, %s", SDL_GetError());
-
-			}
-
-
-			SDL_free(dropped_filedir);    // Free dropped_filedir memory
-			break;
 		}
+			SDL_free(dropped_filedir);    // Free dropped_filedir memory
+			
+			break;
 		}
 
 	}
@@ -116,6 +126,8 @@ bool ModuleFilesManager::CleanUp()
 	App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Destroying Module File Loader");
 
 	meshList.clear();
+
+	delete newMesh;
 
 	aiDetachAllLogStreams();
 

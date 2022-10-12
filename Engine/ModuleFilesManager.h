@@ -5,13 +5,17 @@
 #include "Globals.h"
 #include "Glew/include/glew.h"
 
-#include<iostream>
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <fstream>
+#include <string>
+#include <filesystem>
 
 using namespace std;
+
+#define MAX_MESHES 10
 
 struct MeshData
 {
@@ -49,13 +53,14 @@ public:
 
 	static void Render();
 
-	MeshData houseMesh;		
+	MeshData* newMesh;
 	static vector<MeshData*> meshList;
 
 private:
 	SDL_Event event;                        // Declare event handle
 	char* dropped_filedir;                  // Pointer for directory of dropped file
-	char* new_filedir;
+	const char* assets_dir = "Assets/";
+
 };
 
 

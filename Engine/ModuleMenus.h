@@ -112,10 +112,10 @@ private:
 	bool aboutVisible = false;
 	void MenuAbout();
 
-	bool configVisible = false;
+	bool configVisible = true;
 	void MenuConfig();
 
-	bool consoleVisible = false;
+	bool consoleVisible = true;
 	void MenuConsole();
 
 

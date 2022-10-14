@@ -1,12 +1,8 @@
-#include "ImGui/imgui.h"
-#include "ImGui/imgui_impl_sdl.h"
-#include "ImGui/imgui_impl_opengl3.h"
 #include "Glew/include/glew.h"
 
 #include "Primitive.h"
 #include "Application.h"
 
-#include "Globals.h"
 #include "Application.h"
 #include "ModuleMenus.h"
 #include <Windows.h>
@@ -27,6 +23,11 @@ bool ModuleMenus::Init()
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
+
 	ImGui::StyleColorsDark();
 
 	return ret;
@@ -57,9 +58,29 @@ update_status ModuleMenus::PostUpdate(float dt)
 	ImGui::NewFrame();
 
 	// --------------------------------------------------------------------------- GENERAL WINDOW (CONFIG, ABOUT, CONSOLE, EXIT)
-	ImGui::Begin("GinuhEngine", 0, ImGuiWindowFlags_MenuBar);
-	ImGui::Text("Welcome to this fantastic engine!");
+	ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
+		ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
+		ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus |
+		ImGuiWindowFlags_NoBackground;
 
+	ImGuiViewport* viewport = ImGui::GetMainViewport();
+	ImGui::SetNextWindowPos(viewport->Pos);
+	ImGui::SetNextWindowSize(viewport->Size);
+	ImGui::SetNextWindowViewport(viewport->ID);
+
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+	ImGui::Begin("InvisibleWindow", nullptr, windowFlags);
+
+	ImGui::PopStyleVar(3);
+
+	ImGuiID dockSpaceId = ImGui::GetID("InvisibleWindowDockSpace");
+
+	ImGui::DockSpace(dockSpaceId, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
+	ImGui::End();
+
+	ImGui::Begin("GinuhEngine", 0, ImGuiWindowFlags_MenuBar);
 	if (ImGui::BeginMenuBar())
 	{
 		if (ImGui::MenuItem("Configuration"))

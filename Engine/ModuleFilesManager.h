@@ -5,17 +5,23 @@
 #include "Globals.h"
 #include "Glew/include/glew.h"
 
-#include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <fstream>
-#include <string>
-#include <filesystem>
+#include "DevIL/include/il.h"
+#include "DevIL/include/ilut.h"
+
+#include "Assimp/include/cimport.h"
+#include "Assimp/include/scene.h"
+#include "Assimp/include/postprocess.h"
+
+#pragma comment (lib, "Assimp/libx86/assimp.lib")
+#pragma comment (lib, "DevIL/libx86/DevIL.lib")
+#pragma comment (lib, "DevIL/libx86/ILU.lib" )
+#pragma comment (lib, "DevIL/libx86/ILUT.lib" )
 
 using namespace std;
 
 #define MAX_MESHES 10
+#define CHECKERS_HEIGHT 500
+#define CHECKERS_WIDTH 500
 
 struct MeshData
 {
@@ -37,6 +43,15 @@ struct MeshData
 	void DrawMesh();
 };
 
+struct ImageData
+{
+	ILuint ImgId = 0;
+
+	BYTE* data;
+
+	void DrawTexture();
+};
+
 class ModuleFilesManager : public Module
 {
 public:
@@ -50,17 +65,22 @@ public:
 	bool CleanUp();
 
 	void LoadFile(const char* filePath, MeshData* ourMesh);
+	void LoadTexture(const char* filePath, uint &texture_ID);
 
 	static void Render();
 
 	MeshData* newMesh;
 	static vector<MeshData*> meshList;
 
+	ImageData* newImage;
+	static vector<ImageData*> imageList;
+
 private:
 	SDL_Event event;                        // Declare event handle
 	char* dropped_filedir;                  // Pointer for directory of dropped file
 	const char* assets_dir = "Assets/";
 
+	uint textureID = 0;
 };
 
 

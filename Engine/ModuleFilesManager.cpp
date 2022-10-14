@@ -1,13 +1,5 @@
-#include "Globals.h"
 #include "Application.h"
 #include "ModuleFilesManager.h"
-
-#include <Windows.h>
-#include "Assimp/include/cimport.h"
-#include "Assimp/include/scene.h"
-#include "Assimp/include/postprocess.h"
-
-#pragma comment (lib, "Assimp/libx86/assimp.lib")
 
 namespace fs = std::filesystem;
 
@@ -31,8 +23,29 @@ bool ModuleFilesManager::Init()
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 
-	// ------------------------------------- Load All Existing .fbx files -------------------------------------
+	GLubyte checkerImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
+	for (int i = 0; i < CHECKERS_HEIGHT; i++) {
+		for (int j = 0; j < CHECKERS_WIDTH; j++) {
+			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
+			checkerImage[i][j][0] = (GLubyte)c;
+			checkerImage[i][j][1] = (GLubyte)c;
+			checkerImage[i][j][2] = (GLubyte)c;
+			checkerImage[i][j][3] = (GLubyte)255;
+		}
+	}
 
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
+		0, GL_RGBA, GL_UNSIGNED_BYTE, checkerImage);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	// ------------------------------------- Load All Existing .fbx files -------------------------------------
 	std::string path = "Assets/";
 	for (const auto& entry : fs::directory_iterator(path))
 	{
@@ -89,17 +102,22 @@ update_status ModuleFilesManager::Update(float dt)
 
 			char new_filedir[100];
 
-			strcpy(new_filedir, assets_dir);
-			strcat(new_filedir, fileName_char);
+			strcpy_s(new_filedir, assets_dir);
+			strcat_s(new_filedir, fileName_char);
 
 			// We copy the dropped file to "Assets/" dir, with its name
 			CopyFile(dropped_filedir, new_filedir, FALSE);
 
+			// We get the Extension
+			string extension = fs::path(dropped_filedir).extension().string();
+			const char* extension_char = extension.c_str();
+
 			newMesh = new MeshData;
 
-			if(new_filedir != nullptr)	LoadFile(new_filedir, newMesh);
+			if(extension == ".fbx" && new_filedir != nullptr)	LoadFile(new_filedir, newMesh);
+			if (extension == ".png" && new_filedir != nullptr  )	LoadTexture(new_filedir, newImage->ImgId);
 
-			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "File '%s' Dropped Succesfully", fileName_char);
+			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "File '%s', with Extension '%s' Dropped Succesfully", fileName_char, extension_char);
 
 		}
 			SDL_free(dropped_filedir);    // Free dropped_filedir memory
@@ -136,8 +154,6 @@ bool ModuleFilesManager::CleanUp()
 
 void ModuleFilesManager::LoadFile(const char* file_path, MeshData* ourMesh)
 {
-	// ************************************ CONSTRUCTION SITE ************************************
-
 	const aiScene* scene = aiImportFile(file_path, aiProcessPreset_TargetRealtime_MaxQuality);
 
 	if (scene != nullptr && scene->HasMeshes())
@@ -201,4 +217,42 @@ void MeshData::DrawMesh()
 
 		glEnd();
 	
+}
+
+void ModuleFilesManager::LoadTexture(const char* filePath, uint &texture_ID)
+{
+	ilInit();
+	iluInit();
+	ilutInit();
+
+	// -------------------------------------- Loading Image
+	if (ilLoadImage(filePath))
+	{
+		ilEnable(IL_FILE_OVERWRITE);
+		ilSaveImage(filePath);
+
+		uint id = 0;
+
+		ilGenImages(1, &id);
+		ilBindImage(id);
+		ilLoadImage(filePath);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		textureID = ilutGLBindTexImage();
+		glBindTexture(GL_TEXTURE_2D, 0);
+		ilDeleteImages(1, &id);
+	}
+	else
+	{
+		App->menus->info.AddConsoleLog(__FILE__, __LINE__, "DevIL ERROR: Could not Load Image. Error: %s", ilGetError());
+
+	}
+
+}
+
+void ImageData::DrawTexture()
+{
+
 }

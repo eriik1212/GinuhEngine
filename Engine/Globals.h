@@ -6,6 +6,12 @@
 
 #include <windows.h>
 #include <stdio.h>
+#include <iostream>
+#include <stdlib.h>
+#include <string.h>
+#include <fstream>
+#include <string>
+#include <filesystem>
 
 #define LOG(format, ...) log(__FILE__, __LINE__, format, __VA_ARGS__);
 

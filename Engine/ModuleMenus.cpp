@@ -380,9 +380,9 @@ void ModuleMenus::MenuConfig()
 					}
 				}
 
-				if (ImGui::SliderFloat("Brightness", &screen_brightness, 0.300f, 1.000f))
+				if (ImGui::SliderFloat("Brightness", &screenBrightness, 0.300f, 1.000f))
 				{
-					SDL_SetWindowBrightness(App->window->window, screen_brightness);
+					SDL_SetWindowBrightness(App->window->window, screenBrightness);
 					info.AddConsoleLog(__FILE__, __LINE__,"Brightness Change");
 
 				}
@@ -404,9 +404,9 @@ void ModuleMenus::MenuConfig()
 
 				}
 				ImGui::SameLine();
-				if (ImGui::Checkbox("Depth Test", &depth_test))
+				if (ImGui::Checkbox("Depth Test", &depthTest))
 				{
-					if (depth_test)
+					if (depthTest)
 					{
 						glEnable(GL_DEPTH_TEST); //DEPTH TEST ENABLED
 						info.AddConsoleLog(__FILE__, __LINE__,"Depth Test Enabled");
@@ -419,9 +419,9 @@ void ModuleMenus::MenuConfig()
 
 					}
 				}
-				if (ImGui::Checkbox("Cull Face", &cull_face))
+				if (ImGui::Checkbox("Cull Face", &cullFace))
 				{
-					if (cull_face)
+					if (cullFace)
 					{
 						glEnable(GL_CULL_FACE); //CULL FACE ENABLED
 						info.AddConsoleLog(__FILE__, __LINE__,"Cull Face Enabled");
@@ -435,9 +435,9 @@ void ModuleMenus::MenuConfig()
 					}
 				}
 				ImGui::SameLine();
-				if (ImGui::Checkbox("Color Material", &color_material))
+				if (ImGui::Checkbox("Color Material", &colorMaterial))
 				{
-					if (color_material)
+					if (colorMaterial)
 					{
 						glEnable(GL_COLOR_MATERIAL); //COLOR MATERIAL ENABLED
 						info.AddConsoleLog(__FILE__, __LINE__,"Color Material Enabled");
@@ -466,9 +466,9 @@ void ModuleMenus::MenuConfig()
 
 					}
 				}
-				if (ImGui::Checkbox("Wireframe View", &wireframe_view))
+				if (ImGui::Checkbox("Wireframe View", &wireframeView))
 				{
-					if (wireframe_view)
+					if (wireframeView)
 					{
 						App->scene_intro->wireframe = true; //WIREFRAME VIEW ENABLED
 						info.AddConsoleLog(__FILE__, __LINE__,"Wireframe View Enabled");

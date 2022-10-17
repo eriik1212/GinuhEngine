@@ -28,10 +28,11 @@ struct MeshData
 	MeshData(){}
 
 	~MeshData() {
-		delete[num_vertex]  vertex;
-		delete[num_index]  index;
 
+		delete[]  vertex;
+		delete[]  index;
 	}
+
 	uint id_index = 0; // index in VRAM
 	uint num_index = 0;
 	uint* index = nullptr;
@@ -42,6 +43,15 @@ struct MeshData
 
 	void DrawMesh();
 };
+
+/*struct TexData
+{
+	ILuint ImgId;
+
+	BYTE* data;
+
+	void DrawTexture();
+};*/
 
 class ModuleFilesManager : public Module
 {
@@ -56,19 +66,23 @@ public:
 	bool CleanUp();
 
 	void LoadFile(const char* filePath, MeshData* ourMesh);
-	void LoadTexture(const char* filePath);
+	uint LoadTexture(const char* filePath);
 
 	static void Render();
 
 	MeshData* newMesh;
 	static vector<MeshData*> meshList;
 
+	uint textureId = 0;
+
+	//TexData newTex;
+
 private:
 	SDL_Event event;                        // Declare event handle
 	char* dropped_filedir;                  // Pointer for directory of dropped file
 	const char* assets_dir = "Assets/";
 
-	uint textureID = 0;
+	uint checkerImageId = 0;
 };
 
 

@@ -18,6 +18,8 @@ bool ModuleFilesManager::Init()
 {
 	bool ret = true;
 
+	newMesh = new MeshData;
+
 	// Stream log messages to Debug window
 	struct aiLogStream stream;
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
@@ -35,8 +37,8 @@ bool ModuleFilesManager::Init()
 	}
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glGenTextures(1, &textureID);
-	glBindTexture(GL_TEXTURE_2D, textureID);
+	glGenTextures(1, &checkerImageId);
+	glBindTexture(GL_TEXTURE_2D, checkerImageId);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -58,8 +60,8 @@ bool ModuleFilesManager::Init()
 
 		char existent_filedir[100];
 
-		strcpy(existent_filedir, assets_dir);
-		strcat(existent_filedir, fileName_char);
+		strcpy_s(existent_filedir, assets_dir);
+		strcat_s(existent_filedir, fileName_char);
 
 		// We get the Extension
 		string extension = fs::path(fileName_char).extension().string();
@@ -67,7 +69,6 @@ bool ModuleFilesManager::Init()
 		
 		if (existent_filedir != nullptr && extension == ".fbx")
 		{
-			newMesh = new MeshData;
 
 			LoadFile(existent_filedir, newMesh);
 
@@ -76,9 +77,8 @@ bool ModuleFilesManager::Init()
 		}
 		else if (existent_filedir != nullptr && extension == ".png")
 		{
-			newMesh = new MeshData;
 
-			LoadTexture(existent_filedir);
+			textureId = LoadTexture(existent_filedir);
 
 			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "File '%s' Loaded Succesfully", fileName_char);
 
@@ -115,8 +115,8 @@ update_status ModuleFilesManager::Update(float dt)
 
 			char new_filedir[100];
 
-			strcpy(new_filedir, assets_dir);
-			strcat(new_filedir, fileName_char);
+			strcpy_s(new_filedir, assets_dir);
+			strcat_s(new_filedir, fileName_char);
 
 			// We copy the dropped file to "Assets/" dir, with its name
 			CopyFile(dropped_filedir, new_filedir, FALSE);
@@ -125,10 +125,8 @@ update_status ModuleFilesManager::Update(float dt)
 			string extension = fs::path(dropped_filedir).extension().string();
 			const char* extension_char = extension.c_str();
 
-			newMesh = new MeshData;
-
 			if(extension == ".fbx" && new_filedir != nullptr)	LoadFile(new_filedir, newMesh);
-			if(extension == ".png" && new_filedir != nullptr)	LoadTexture(new_filedir);
+			if (extension == ".png" && new_filedir != nullptr)	textureId = LoadTexture(new_filedir);
 
 			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "File '%s', with Extension '%s' Dropped Succesfully", fileName_char, extension_char);
 
@@ -139,13 +137,14 @@ update_status ModuleFilesManager::Update(float dt)
 		}
 
 	}
-	
+
 	return UPDATE_CONTINUE;
 }
 
 // PostUpdate present buffer to screen
 update_status ModuleFilesManager::PostUpdate(float dt)
 {
+	
 
 	return UPDATE_CONTINUE;
 }
@@ -218,6 +217,7 @@ void ModuleFilesManager::Render()
 	for (int i = 0; i < meshList.size(); i++) {
 		meshList[i]->DrawMesh();
 	}
+
 }
 
 void MeshData::DrawMesh()
@@ -225,6 +225,7 @@ void MeshData::DrawMesh()
 		glBegin(GL_TRIANGLES); // Drawing with triangles
 
 		for (int i = 0; i < num_index; i++) {
+			
 			glVertex3f(vertex[index[i] * 3], vertex[index[i] * 3 + 1], vertex[index[i] * 3 + 2]);
 		}
 
@@ -232,36 +233,42 @@ void MeshData::DrawMesh()
 	
 }
 
-void ModuleFilesManager::LoadTexture(const char* filePath)
+uint ModuleFilesManager::LoadTexture(const char* filePath)
 {
 	ilInit();
 	iluInit();
 	ilutInit();
-
+	
 	// -------------------------------------- Loading Image
 	if (ilLoadImage(filePath))
 	{
 		ilEnable(IL_FILE_OVERWRITE);
 		ilSaveImage(filePath);
 
-		uint id = 0;
-		
-		ilGenImages(1, &id);
-		ilBindImage(id);
+		ILuint ImgId = 0;
+		ilGenImages(1, &ImgId);
+		ilBindImage(ImgId);
+
 		ilLoadImage(filePath);
+
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		textureID = ilutGLBindTexImage();
-		glBindTexture(GL_TEXTURE_2D, id);
-		App->menus->info.AddConsoleLog(__FILE__, __LINE__, "ID: %d", id);
-		ilDeleteImages(1, &id);
+
+		//textureId = ilutGLBindTexImage();
+		glBindTexture(GL_TEXTURE_2D, 0);
+		ilDeleteImages(1, &ImgId);
+
+		App->menus->info.AddConsoleLog(__FILE__, __LINE__, "TEX ID: %d", ImgId);
+
+		return ImgId;
 	}
 	else
 	{
 		App->menus->info.AddConsoleLog(__FILE__, __LINE__, "DevIL ERROR: Could not Load Image. Error: %s", ilGetError());
 
+		return 0;
 	}
 
 }

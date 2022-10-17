@@ -213,7 +213,7 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	// ------------------------------------------------------------------- DRAW CUBE IN INDEX
 	{
-		/*
+		
 		//    v6----- v5
 		//   /|      /|
 		//  v1------v0|
@@ -256,11 +256,13 @@ update_status ModuleSceneIntro::Update(float dt)
 		glVertexPointer(3, GL_FLOAT, 0, vertices);
 
 		// draw a cube
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, App->loader->textureId);
 		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, indices);
 
 		// deactivate vertex arrays after drawing
 		glDisableClientState(GL_VERTEX_ARRAY);
-		*/
+		
 	}
 
 	App->loader->Render();

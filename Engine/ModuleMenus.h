@@ -124,19 +124,19 @@ private:
 	bool fullscreen = WIN_FULLSCREEN;
 	bool resizable = WIN_RESIZABLE;
 	bool borderless = WIN_BORDERLESS;
-	bool full_desk = WIN_FULLSCREEN_DESKTOP;
-	int screen_width = SCREEN_WIDTH;
-	int screen_height = SCREEN_HEIGHT;
+	bool fullDesk = WIN_FULLSCREEN_DESKTOP;
+	int screenWidth = SCREEN_WIDTH;
+	int screenHeight = SCREEN_HEIGHT;
 
 	//visual
 
 	bool lights = true;
-	bool depth_test = true;
-	bool cull_face = true;
-	bool color_material = true;
+	bool depthTest = true;
+	bool cullFace = true;
+	bool colorMaterial = true;
 	bool texture2D = true;
-	bool wireframe_view = false;
-	float screen_brightness = 1;
+	bool wireframeView = false;
+	float screenBrightness = 1;
 
 	bool hardwareActive = true;
 

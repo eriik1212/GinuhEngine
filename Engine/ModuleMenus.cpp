@@ -305,12 +305,14 @@ void ModuleMenus::MenuConfig()
 				{
 					if (fullscreen)
 					{
+						SDL_SetWindowSize(App->window->window, 1920, 1080);
 						SDL_SetWindowFullscreen(App->window->window, SDL_WINDOW_FULLSCREEN); //FULLSCREEN ENABLED
 						info.AddConsoleLog(__FILE__, __LINE__, "FullScreen Enabled");
 
 					}
 					else
 					{
+						SDL_SetWindowSize(App->window->window, SCREEN_WIDTH, SCREEN_HEIGHT);
 						SDL_SetWindowFullscreen(App->window->window, !SDL_WINDOW_FULLSCREEN); //FULLSCREEN DISABLED
 						info.AddConsoleLog(__FILE__, __LINE__,"FullScreen Disabled");
 

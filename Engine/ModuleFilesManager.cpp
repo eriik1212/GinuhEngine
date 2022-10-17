@@ -60,12 +60,25 @@ bool ModuleFilesManager::Init()
 
 		strcpy(existent_filedir, assets_dir);
 		strcat(existent_filedir, fileName_char);
+
+		// We get the Extension
+		string extension = fs::path(fileName_char).extension().string();
+		const char* extension_char = extension.c_str();
 		
-		if (existent_filedir != nullptr)
+		if (existent_filedir != nullptr && extension == ".fbx")
 		{
 			newMesh = new MeshData;
 
 			LoadFile(existent_filedir, newMesh);
+
+			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "File '%s' Loaded Succesfully", fileName_char);
+
+		}
+		else if (existent_filedir != nullptr && extension == ".png")
+		{
+			newMesh = new MeshData;
+
+			LoadTexture(existent_filedir);
 
 			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "File '%s' Loaded Succesfully", fileName_char);
 
@@ -102,8 +115,8 @@ update_status ModuleFilesManager::Update(float dt)
 
 			char new_filedir[100];
 
-			strcpy_s(new_filedir, assets_dir);
-			strcat_s(new_filedir, fileName_char);
+			strcpy(new_filedir, assets_dir);
+			strcat(new_filedir, fileName_char);
 
 			// We copy the dropped file to "Assets/" dir, with its name
 			CopyFile(dropped_filedir, new_filedir, FALSE);
@@ -115,7 +128,7 @@ update_status ModuleFilesManager::Update(float dt)
 			newMesh = new MeshData;
 
 			if(extension == ".fbx" && new_filedir != nullptr)	LoadFile(new_filedir, newMesh);
-			if (extension == ".png" && new_filedir != nullptr  )	LoadTexture(new_filedir, newImage->ImgId);
+			if(extension == ".png" && new_filedir != nullptr)	LoadTexture(new_filedir);
 
 			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "File '%s', with Extension '%s' Dropped Succesfully", fileName_char, extension_char);
 
@@ -126,7 +139,7 @@ update_status ModuleFilesManager::Update(float dt)
 		}
 
 	}
-
+	
 	return UPDATE_CONTINUE;
 }
 
@@ -219,7 +232,7 @@ void MeshData::DrawMesh()
 	
 }
 
-void ModuleFilesManager::LoadTexture(const char* filePath, uint &texture_ID)
+void ModuleFilesManager::LoadTexture(const char* filePath)
 {
 	ilInit();
 	iluInit();
@@ -232,7 +245,7 @@ void ModuleFilesManager::LoadTexture(const char* filePath, uint &texture_ID)
 		ilSaveImage(filePath);
 
 		uint id = 0;
-
+		
 		ilGenImages(1, &id);
 		ilBindImage(id);
 		ilLoadImage(filePath);
@@ -241,7 +254,8 @@ void ModuleFilesManager::LoadTexture(const char* filePath, uint &texture_ID)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		textureID = ilutGLBindTexImage();
-		glBindTexture(GL_TEXTURE_2D, 0);
+		glBindTexture(GL_TEXTURE_2D, id);
+		App->menus->info.AddConsoleLog(__FILE__, __LINE__, "ID: %d", id);
 		ilDeleteImages(1, &id);
 	}
 	else
@@ -249,10 +263,5 @@ void ModuleFilesManager::LoadTexture(const char* filePath, uint &texture_ID)
 		App->menus->info.AddConsoleLog(__FILE__, __LINE__, "DevIL ERROR: Could not Load Image. Error: %s", ilGetError());
 
 	}
-
-}
-
-void ImageData::DrawTexture()
-{
 
 }

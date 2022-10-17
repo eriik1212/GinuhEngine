@@ -43,15 +43,6 @@ struct MeshData
 	void DrawMesh();
 };
 
-struct ImageData
-{
-	ILuint ImgId = 0;
-
-	BYTE* data;
-
-	void DrawTexture();
-};
-
 class ModuleFilesManager : public Module
 {
 public:
@@ -65,15 +56,12 @@ public:
 	bool CleanUp();
 
 	void LoadFile(const char* filePath, MeshData* ourMesh);
-	void LoadTexture(const char* filePath, uint &texture_ID);
+	void LoadTexture(const char* filePath);
 
 	static void Render();
 
 	MeshData* newMesh;
 	static vector<MeshData*> meshList;
-
-	ImageData* newImage;
-	static vector<ImageData*> imageList;
 
 private:
 	SDL_Event event;                        // Declare event handle

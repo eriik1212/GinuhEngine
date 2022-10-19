@@ -20,8 +20,6 @@
 using namespace std;
 
 #define MAX_MESHES 10
-#define CHECKERS_HEIGHT 500
-#define CHECKERS_WIDTH 500
 
 struct MeshData
 {
@@ -81,8 +79,6 @@ private:
 	SDL_Event event;                        // Declare event handle
 	char* dropped_filedir;                  // Pointer for directory of dropped file
 	const char* assets_dir = "Assets/";
-
-	uint checkerImageId = 0;
 };
 
 

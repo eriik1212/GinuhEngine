@@ -5,6 +5,8 @@
 #include "Light.h"
 
 #define MAX_LIGHTS 8
+#define CHECKERS_HEIGHT 64
+#define CHECKERS_WIDTH 64
 
 class ModuleRenderer3D : public Module
 {
@@ -18,6 +20,7 @@ public:
 	bool CleanUp();
 
 	void OnResize(int width, int height);
+	void InitFrameBuffer();
 
 public:
 
@@ -26,8 +29,8 @@ public:
 	mat3x3 NormalMatrix;
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
 
-	unsigned int framebuffer;
-	unsigned int textureColorbuffer;
+	unsigned int frameBuff;
+	unsigned int textColorBuff;
 	unsigned int rbo;
 
 };

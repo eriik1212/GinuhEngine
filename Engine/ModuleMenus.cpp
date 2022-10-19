@@ -58,7 +58,7 @@ update_status ModuleMenus::PostUpdate(float dt)
 	ImGui::NewFrame();
 
 	// --------------------------------------------------------------------------- GENERAL WINDOW (CONFIG, ABOUT, CONSOLE, EXIT)
-	ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
+	ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoDocking |
 		ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
 		ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus |
 		ImGuiWindowFlags_NoBackground;
@@ -73,6 +73,57 @@ update_status ModuleMenus::PostUpdate(float dt)
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 	ImGui::Begin("InvisibleWindow", nullptr, windowFlags);
 
+	//ImGui::Begin("GinuhEngine", 0, ImGuiWindowFlags_MenuBar);
+	if (ImGui::BeginMainMenuBar())
+	{
+		if (ImGui::BeginMenu("Files"))
+		{
+			if (ImGui::MenuItem("New"))
+			{
+
+			}
+			if (ImGui::MenuItem("Open"))
+			{
+
+			}
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Windows"))
+		{
+			if (ImGui::MenuItem("Configuration"))
+			{
+				pOpen_config = true; // Window can close
+
+				configVisible = !configVisible;
+
+			}
+
+			if (ImGui::MenuItem("About"))
+			{
+				pOpen_about = true; // Window can close
+
+				aboutVisible = !aboutVisible;
+			}
+
+			if (ImGui::MenuItem("Console"))
+			{
+				pOpen_console = true; // Window can close
+
+				consoleVisible = !consoleVisible;
+			}
+
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::MenuItem("Exit"))
+		{
+			return UPDATE_STOP;
+		}
+
+		ImGui::EndMainMenuBar();
+
+	}
+
 	ImGui::PopStyleVar(3);
 
 	ImGuiID dockSpaceId = ImGui::GetID("InvisibleWindowDockSpace");
@@ -80,40 +131,9 @@ update_status ModuleMenus::PostUpdate(float dt)
 	ImGui::DockSpace(dockSpaceId, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
 	ImGui::End();
 
-	ImGui::Begin("GinuhEngine", 0, ImGuiWindowFlags_MenuBar);
-	if (ImGui::BeginMenuBar())
-	{
-		if (ImGui::MenuItem("Configuration"))
-		{
-			pOpen_config = true; // Window can close
-
-			configVisible = !configVisible;
-
-		}
-
-		if (ImGui::MenuItem("About"))
-		{
-			pOpen_about = true; // Window can close
-
-			aboutVisible = !aboutVisible;
-		}
-
-		if (ImGui::MenuItem("Console"))
-		{
-			pOpen_console = true; // Window can close
-
-			consoleVisible = !consoleVisible;
-		}
-
-		if (ImGui::MenuItem("Exit"))
-		{
-			return UPDATE_STOP;
-		}
-		ImGui::EndMenuBar();
-
-	}
-
-	ImGui::End();
+	if (configVisible) MenuConfig();
+	if (aboutVisible) MenuAbout();
+	if (consoleVisible) MenuConsole();
 
 	// --------------------------------------------------------------------------- WINDOW SCENE
 	ImGui::Begin("Scene");
@@ -121,14 +141,10 @@ update_status ModuleMenus::PostUpdate(float dt)
 
 	ImVec2 wsize = ImGui::GetWindowSize();
 
-	ImGui::Image((ImTextureID)App->renderer3D->textureColorbuffer, wsize, ImVec2(0, 1), ImVec2(1, 0));
+	ImGui::Image((ImTextureID)App->renderer3D->textColorBuff, wsize, ImVec2(0, 1), ImVec2(1, 0));
 
 	ImGui::EndChild();
 	ImGui::End();
-
-	if (configVisible) MenuConfig();
-	if (aboutVisible) MenuAbout();
-	if (consoleVisible) MenuConsole();
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

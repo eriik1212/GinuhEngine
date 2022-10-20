@@ -155,9 +155,6 @@ void ModuleFilesManager::LoadFile(const char* file_path, MeshData* ourMesh)
 			memcpy(ourMesh->vertex, scene->mMeshes[i]->mVertices, sizeof(float) * ourMesh->num_vertex * 3);
 			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "New mesh with %d vertices", ourMesh->num_vertex);
 
-			ourMesh->texture_vertex = new float[ourMesh->num_vertex * 3];
-			memcpy(ourMesh->texture_vertex, scene->mMeshes[i]->mTextureCoords, sizeof(float) * ourMesh->num_vertex * 3);
-
 			// copy faces
 			if (scene->mMeshes[i]->HasFaces())
 			{
@@ -176,6 +173,18 @@ void ModuleFilesManager::LoadFile(const char* file_path, MeshData* ourMesh)
 					}
 				}
 				meshList.push_back(ourMesh);
+			}
+			// texture logic
+			if (scene->HasTextures())
+			{
+				ourMesh->num_uvs = scene->mMeshes[i]->mNumVertices * 2;
+				ourMesh->uvs = new float[ourMesh->num_uvs];
+
+				for (int z = 0; z < scene->mMeshes[i]->mNumVertices; ++z)
+				{
+					memcpy(&ourMesh->uvs[z * 2], &scene->mMeshes[i]->mTextureCoords[0][z].x, sizeof(float));
+					memcpy(&ourMesh->uvs[(z * 2) + 1], &scene->mMeshes[i]->mTextureCoords[0][z].y, sizeof(float));
+				}
 			}
 
 		}
@@ -205,8 +214,11 @@ void MeshData::DrawMesh()
 {
 		glBegin(GL_TRIANGLES); // Drawing with triangles
 
+		for (int z = 0; z < num_uvs; z++)
+		{
+			glTexCoord2f(uvs[index[z] * 2 + 1], uvs[index[z] * 2]);
+		}
 		for (int i = 0; i < num_index; i++) {
-			glTexCoord3f(texture_vertex[index[i] * 3], texture_vertex[index[i] * 3 + 1], texture_vertex[index[i] * 3 + 2]);
 			glVertex3f(vertex[index[i] * 3], vertex[index[i] * 3 + 1], vertex[index[i] * 3 + 2]);
 		}
 

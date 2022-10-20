@@ -29,7 +29,6 @@ bool ModuleFilesManager::Init()
 	std::string path = "Assets/";
 	for (const auto& entry : fs::directory_iterator(path))
 	{
-
 		// We get the FileName and Extension
 		string fileName = entry.path().filename().string();
 		const char* fileName_char = fileName.c_str();
@@ -104,7 +103,7 @@ update_status ModuleFilesManager::Update(float dt)
 			const char* extension_char = extension.c_str();
 
 			if(extension == ".fbx" && new_filedir != nullptr)	LoadFile(new_filedir, newMesh);
-			if (extension == ".png" && new_filedir != nullptr)	textureId = LoadTexture(new_filedir);
+			else if (extension == ".png" && new_filedir != nullptr)	textureId = LoadTexture(new_filedir);
 
 			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "File '%s', with Extension '%s' Dropped Succesfully", fileName_char, extension_char);
 
@@ -156,6 +155,9 @@ void ModuleFilesManager::LoadFile(const char* file_path, MeshData* ourMesh)
 			memcpy(ourMesh->vertex, scene->mMeshes[i]->mVertices, sizeof(float) * ourMesh->num_vertex * 3);
 			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "New mesh with %d vertices", ourMesh->num_vertex);
 
+			ourMesh->texture_vertex = new float[ourMesh->num_vertex * 3];
+			memcpy(ourMesh->texture_vertex, scene->mMeshes[i]->mTextureCoords, sizeof(float) * ourMesh->num_vertex * 3);
+
 			// copy faces
 			if (scene->mMeshes[i]->HasFaces())
 			{
@@ -177,6 +179,7 @@ void ModuleFilesManager::LoadFile(const char* file_path, MeshData* ourMesh)
 			}
 
 		}
+		App->menus->info.AddConsoleLog(__FILE__, __LINE__, "% s Pushed In List Successfully", file_path);
 
 		aiReleaseImport(scene);
 
@@ -203,7 +206,7 @@ void MeshData::DrawMesh()
 		glBegin(GL_TRIANGLES); // Drawing with triangles
 
 		for (int i = 0; i < num_index; i++) {
-			
+			glTexCoord3f(texture_vertex[index[i] * 3], texture_vertex[index[i] * 3 + 1], texture_vertex[index[i] * 3 + 2]);
 			glVertex3f(vertex[index[i] * 3], vertex[index[i] * 3 + 1], vertex[index[i] * 3 + 2]);
 		}
 
@@ -229,13 +232,24 @@ uint ModuleFilesManager::LoadTexture(const char* filePath)
 
 		ilLoadImage(filePath);
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		//ilBindImage(ImgId);
+		BYTE* data = ilGetData();
 
-		//textureId = ilutGLBindTexImage();
-		glBindTexture(GL_TEXTURE_2D, 0);
+		ILuint imgWidth, imgHeight;
+		imgWidth = ilGetInteger(IL_IMAGE_WIDTH);
+		imgHeight = ilGetInteger(IL_IMAGE_HEIGHT);
+		int const type = ilGetInteger(IL_IMAGE_TYPE); // matches OpenGL
+		int const format = ilGetInteger(IL_IMAGE_FORMAT); // matches OpenGL
+		
+		glTexImage2D(GL_TEXTURE_2D, 0, format, imgWidth, imgHeight, 0, format,
+			type, data);  // Create texture from image data
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
+		ImgId = ilutGLBindTexImage();
+		glBindTexture(GL_TEXTURE_2D, ImgId);
 		ilDeleteImages(1, &ImgId);
 
 		App->menus->info.AddConsoleLog(__FILE__, __LINE__, "TEX ID: %d", ImgId);

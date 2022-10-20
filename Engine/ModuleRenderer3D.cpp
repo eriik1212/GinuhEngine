@@ -140,14 +140,14 @@ bool ModuleRenderer3D::Init()
 
 	InitFrameBuffer();
 
-	GLubyte checkerImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
+	/*GLubyte checkerImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][3];
 	for (int i = 0; i < CHECKERS_HEIGHT; i++) {
 		for (int j = 0; j < CHECKERS_WIDTH; j++) {
 			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
 			checkerImage[i][j][0] = (GLubyte)c;
 			checkerImage[i][j][1] = (GLubyte)c;
 			checkerImage[i][j][2] = (GLubyte)c;
-			checkerImage[i][j][3] = (GLubyte)255;
+			//checkerImage[i][j][3] = (GLubyte)255;
 		}
 	}
 
@@ -157,8 +157,9 @@ bool ModuleRenderer3D::Init()
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	*/
 
-	glDisable(GL_TEXTURE_2D);
+	glEnable(GL_TEXTURE_2D);
 
 	return ret;
 }

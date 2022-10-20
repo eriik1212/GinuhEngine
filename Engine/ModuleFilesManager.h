@@ -39,6 +39,9 @@ struct MeshData
 	uint num_vertex = 0;
 	float* vertex = nullptr;
 
+	uint* num_texture_vertex = 0;
+	float* texture_vertex = nullptr;
+
 	void DrawMesh();
 };
 

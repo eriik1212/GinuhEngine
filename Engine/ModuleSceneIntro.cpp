@@ -55,69 +55,40 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	// ------------------------------------------------------------------- DRAW CUBE IN DIRECT MODE
 	{
-		/*glBegin(GL_TRIANGLES);  // draw a cube with 12 triangles
+		glBegin(GL_QUADS);  // draw a cube with 12 triangles
 
-	// bottom face =================
-	glVertex3f(1.0f, 0.0f, 0.0f);	// v2
-	glVertex3f(0.0f, 0.0f, 1.0f);	// v1
-	glVertex3f(0.0f, 0.0f, 0.0f);	// v0
-
-	glVertex3f(1.0f, 0.0f, 0.0f);	// v2
-	glVertex3f(1.0f, 0.0f, 1.0f);	// v3
-	glVertex3f(0.0f, 0.0f, 1.0f);	// v1
-
-	// front face =================
-	glVertex3f(1.0f, 0.0f, 0.0f);	// v2
-	glVertex3f(0.0f, 0.0f, 0.0f);	// v0
-	glVertex3f(0.0f, 1.0f, 0.0f);	// v4
-
-
-	glVertex3f(1.0f, 0.0f, 0.0f);	// v2
-	glVertex3f(0.0f, 1.0f, 0.0f);	// v4
-	glVertex3f(1.0f, 1.0f, 0.0f);	// v5
-
-
-	// right face ===================
-	glVertex3f(1.0f, 0.0f, 0.0f);	// v2
-	glVertex3f(1.0f, 1.0f, 0.0f);	// v5
-	glVertex3f(1.0f, 1.0f, 1.0f);	// v6
-
-
-	glVertex3f(1.0f, 0.0f, 1.0f);	// v3
-	glVertex3f(1.0f, 0.0f, 0.0f);	// v2
-	glVertex3f(1.0f, 1.0f, 1.0f);	// v6
-
-	// back face ===================
-	glVertex3f(1.0f, 1.0f, 1.0f);	// v6
-	glVertex3f(0.0f, 0.0f, 1.0f);	// v1
-	glVertex3f(1.0f, 0.0f, 1.0f);	// v3
-
-	glVertex3f(1.0f, 1.0f, 1.0f);	// v6
-	glVertex3f(0.0f, 1.0f, 1.0f);	// v7
-	glVertex3f(0.0f, 0.0f, 1.0f);	// v1
-
-	// left face ===================
-	glVertex3f(0.0f, 1.0f, 1.0f);	// v7
-	glVertex3f(0.0f, 0.0f, 0.0f);	// v0
-	glVertex3f(0.0f, 0.0f, 1.0f);	// v1
-
-	glVertex3f(0.0f, 1.0f, 1.0f);	// v7
-	glVertex3f(0.0f, 1.0f, 0.0f);	// v4
-	glVertex3f(0.0f, 0.0f, 0.0f);	// v0
-
-	// top face ===================
-	glVertex3f(1.0f, 1.0f, 1.0f);	// v6
-	glVertex3f(1.0f, 1.0f, 0.0f);	// v5
-	glVertex3f(0.0f, 1.0f, 0.0f);	// v4
-
-
-	glVertex3f(0.0f, 1.0f, 0.0f);	// v4
-	glVertex3f(0.0f, 1.0f, 1.0f);	// v7
-	glVertex3f(1.0f, 1.0f, 1.0f);	// v6
-
-
-	glEnd );
-	*/
+		// Front Face
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f, 1.0f);
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, -1.0f, 1.0f);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 1.0f, 1.0f);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, 1.0f, 1.0f);
+		// Back Face
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f, -1.0f);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f, 1.0f, -1.0f);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(1.0f, 1.0f, -1.0f);
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(1.0f, -1.0f, -1.0f);
+		// Top Face
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, 1.0f, -1.0f);
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, 1.0f, 1.0f);
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, 1.0f, 1.0f);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 1.0f, -1.0f);
+		// Bottom Face
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f, -1.0f, -1.0f);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(1.0f, -1.0f, -1.0f);
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(1.0f, -1.0f, 1.0f);
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f, 1.0f);
+		// Right face
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, -1.0f, -1.0f);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 1.0f, -1.0f);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(1.0f, 1.0f, 1.0f);
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(1.0f, -1.0f, 1.0f);
+		// Left Face
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f, -1.0f);
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f, 1.0f);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f, 1.0f, 1.0f);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, 1.0f, -1.0f);
+		glEnd();
+	
 	}
 
 	// ------------------------------------------------------------------- DRAW CUBE IN VERTEX ARRAYS
@@ -222,7 +193,7 @@ update_status ModuleSceneIntro::Update(float dt)
 		//  |/      |/
 		//  v2------v3
 
-		uint my_indices = 36,
+		/*uint my_indices = 36,
 			num_indices = 36;
 
 		GLfloat vertices[] = { 
@@ -256,12 +227,12 @@ update_status ModuleSceneIntro::Update(float dt)
 		glVertexPointer(3, GL_FLOAT, 0, vertices);
 
 		// draw a cube
-		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, App->loader->textureId);
+		//glEnable(GL_TEXTURE_2D);
+		//glBindTexture(GL_TEXTURE_2D, App->loader->textureId);
 		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, indices);
 
 		// deactivate vertex arrays after drawing
-		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_VERTEX_ARRAY);*/
 		
 	}
 

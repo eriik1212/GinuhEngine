@@ -214,6 +214,7 @@ bool ModuleRenderer3D::CleanUp()
 	}
 
 	glDeleteFramebuffers(1, &frameBuff);
+	glDeleteFramebuffers(1, &textColorBuff);
 
 	return true;
 }

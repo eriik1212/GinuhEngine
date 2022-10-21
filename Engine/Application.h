@@ -1,6 +1,5 @@
 #pragma once
 
-#include "p2List.h"
 #include "Globals.h"
 #include "Timer.h"
 #include "Module.h"
@@ -11,6 +10,9 @@
 #include "ModuleCamera3D.h"
 #include "ModuleMenus.h"
 #include "ModuleFilesManager.h"
+
+#include <vector>
+using namespace std;
 
 class Application
 {
@@ -27,7 +29,7 @@ private:
 
 	Timer	ms_timer;
 	float	dt;
-	p2List<Module*> list_modules;
+	vector<Module*> list_modules;
 
 public:
 

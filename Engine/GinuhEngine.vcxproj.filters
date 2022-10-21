@@ -201,15 +201,6 @@
     <ClInclude Include="ModuleWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="p2DynArray.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="p2List.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="p2Point.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Primitive.h">
       <Filter>Header Files</Filter>
     </ClInclude>

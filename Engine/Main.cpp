@@ -100,8 +100,8 @@ int main(int argc, char ** argv)
 
 		}
 	}
-	//LOG("Exiting game '%s'...\n", TITLE);
-	App->menus->info.AddConsoleLog(__FILE__, __LINE__,("Exiting game '%s'...", TITLE));
+	LOG("Exiting game '%s'...\n", TITLE);
+	//App->menus->info.AddConsoleLog(__FILE__, __LINE__,("Exiting game '%s'...", TITLE));
 	delete App;
 	
 	ReportMemoryLeaks();

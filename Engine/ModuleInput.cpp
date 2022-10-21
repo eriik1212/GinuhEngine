@@ -136,5 +136,6 @@ bool ModuleInput::CleanUp()
 	App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Quitting SDL input event subsystem");
 
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
+
 	return true;
 }

@@ -18,8 +18,6 @@ bool ModuleFilesManager::Init()
 {
 	bool ret = true;
 
-	newMesh = new MeshData;
-
 	// Stream log messages to Debug window
 	struct aiLogStream stream;
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
@@ -46,7 +44,6 @@ bool ModuleFilesManager::Init()
 		
 		if (existent_filedir != nullptr && extension == ".fbx")
 		{
-
 			LoadFile(existent_filedir, newMesh);
 
 			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "File '%s' Loaded Succesfully", fileName_char);
@@ -102,7 +99,10 @@ update_status ModuleFilesManager::Update(float dt)
 			string extension = fs::path(dropped_filedir).extension().string();
 			const char* extension_char = extension.c_str();
 
-			if(extension == ".fbx" && new_filedir != nullptr)	LoadFile(new_filedir, newMesh);
+			if (extension == ".fbx" && new_filedir != nullptr)
+			{
+				LoadFile(new_filedir, newMesh);
+			}
 			else if (extension == ".png" && new_filedir != nullptr)	textureId = LoadTexture(new_filedir);
 
 			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "File '%s', with Extension '%s' Dropped Succesfully", fileName_char, extension_char);
@@ -132,18 +132,20 @@ bool ModuleFilesManager::CleanUp()
 	//LOG("Destroying Module");
 	App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Destroying Module File Loader");
 
+	aiDetachAllLogStreams();
+
 	meshList.clear();
 
 	delete newMesh;
-
-	aiDetachAllLogStreams();
-
+	
 	return true;
 }
 
 void ModuleFilesManager::LoadFile(const char* file_path, MeshData* ourMesh)
 {
 	const aiScene* scene = aiImportFile(file_path, aiProcessPreset_TargetRealtime_MaxQuality);
+
+	ourMesh = new MeshData();
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
@@ -195,19 +197,17 @@ void ModuleFilesManager::LoadFile(const char* file_path, MeshData* ourMesh)
 	}
 	else
 	{
-		App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Error loading scene % s", file_path);
+		App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Error loading scene % s. ERROR: %s", file_path, aiGetErrorString());
 	}
 	
-	
-
 }
 
 void ModuleFilesManager::Render()
 {
 	for (int i = 0; i < meshList.size(); i++) {
 		meshList[i]->DrawMesh();
-	}
 
+	}
 }
 
 void MeshData::DrawMesh()
@@ -218,8 +218,8 @@ void MeshData::DrawMesh()
 		{
 			glTexCoord2f(uvs[index[z] * 2 + 1], uvs[index[z] * 2]);
 		}
-		for (int i = 0; i < num_index; i++) {
-			glVertex3f(vertex[index[i] * 3], vertex[index[i] * 3 + 1], vertex[index[i] * 3 + 2]);
+		for (int a = 0; a < num_index; a++) {
+			glVertex3f(vertex[index[a] * 3], vertex[index[a] * 3 + 1], vertex[index[a] * 3 + 2]);
 		}
 
 		glEnd();

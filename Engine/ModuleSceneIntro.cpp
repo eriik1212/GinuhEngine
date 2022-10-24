@@ -55,6 +55,7 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	// ------------------------------------------------------------------- DRAW CUBE IN DIRECT MODE
 	{
+		/*
 		glBegin(GL_QUADS);  // draw a cube with 12 triangles
 
 		// Front Face
@@ -88,7 +89,7 @@ update_status ModuleSceneIntro::Update(float dt)
 		glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f, 1.0f, 1.0f);
 		glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, 1.0f, -1.0f);
 		glEnd();
-	
+	*/
 	}
 
 	// ------------------------------------------------------------------- DRAW CUBE IN VERTEX ARRAYS

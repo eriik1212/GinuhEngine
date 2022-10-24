@@ -45,15 +45,6 @@ struct MeshData
 	void DrawMesh();
 };
 
-/*struct TexData
-{
-	ILuint ImgId;
-
-	BYTE* data;
-
-	void DrawTexture();
-};*/
-
 class ModuleFilesManager : public Module
 {
 public:
@@ -71,12 +62,10 @@ public:
 
 	static void Render();
 
-	MeshData* newMesh;
+	MeshData* newMesh = new MeshData();
 	static vector<MeshData*> meshList;
 
 	uint textureId = 0;
-
-	//TexData newTex;
 
 private:
 	SDL_Event event;                        // Declare event handle

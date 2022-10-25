@@ -43,15 +43,20 @@ bool ModuleRenderer3D::Init()
 	//GLEW
 	GLenum err = glewInit();
 	//LOG("Using Glew %s", glewGetString(GLEW_VERSION));
-	App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Using Glew %s", glewGetString(GLEW_VERSION));
-	
+	if (GLEW_OK != err) {
+		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
+		App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Error: %a\n", glewGetErrorString(err));
+	}
+	else {
+		App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Using Glew %s", glewGetString(GLEW_VERSION));
+
+	}
 	//Should be 2.0
 
 	App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Vendor: %s", glGetString(GL_VENDOR));
 	App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Renderer: %s", glGetString(GL_RENDERER));
 	App->menus->info.AddConsoleLog(__FILE__, __LINE__, "OpenGL version supported %s", glGetString(GL_VERSION));
 	App->menus->info.AddConsoleLog(__FILE__, __LINE__, "GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
-	
 
 	SDL_GL_MakeCurrent(App->window->window, context);
 

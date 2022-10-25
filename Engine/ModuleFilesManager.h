@@ -27,8 +27,14 @@ struct MeshData
 
 	~MeshData() {
 
-		delete[]  vertex;
-		delete[]  index;
+		delete[] vertex;
+		delete[] index;
+		vertex = nullptr;
+		index = nullptr;
+		glDeleteBuffers(1, &id_vertex);
+		glDeleteBuffers(1, &id_index);
+		id_vertex = 0;
+		id_index = 0;
 	}
 
 	uint id_index = 0; // index in VRAM
@@ -38,9 +44,6 @@ struct MeshData
 	uint id_vertex = 0; // unique vertex in VRAM
 	uint num_vertex = 0;
 	float* vertex = nullptr;
-
-	uint num_uvs = 0;
-	float* uvs = nullptr;
 
 	void DrawMesh();
 };
@@ -57,21 +60,24 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
-	void LoadFile(const char* filePath, MeshData* ourMesh);
+	void LoadFile(const char* filePath);
+	void LoadMeshData(MeshData* mesh);
 	uint LoadTexture(const char* filePath);
 
-	static void Render();
+	void Render();
 
-	MeshData* newMesh = new MeshData();
-	static vector<MeshData*> meshList;
 
-	uint textureId = 0;
 
 private:
 	SDL_Event event;                        // Declare event handle
-	char* dropped_filedir;                  // Pointer for directory of dropped file
+	char* dropped_filedir = "";                  // Pointer for directory of dropped file
 	const char* assets_dir = "Assets/";
+
+	vector<MeshData*> meshList;
+
 };
+
+static ILuint ImgId;
 
 
 #endif

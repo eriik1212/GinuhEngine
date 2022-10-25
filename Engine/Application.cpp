@@ -22,15 +22,16 @@ Application::Application()
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
+	
+	// Scene
+	AddModule(scene_intro);
+
+	// Renderer
+	AddModule(renderer3D);
 
 	//Files Manager
 	AddModule(loader);
-	
-	// Scenes
-	AddModule(scene_intro);
 
-	// Renderer last!
-	AddModule(renderer3D);
 }
 
 Application::~Application()

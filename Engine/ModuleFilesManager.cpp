@@ -3,8 +3,6 @@
 
 namespace fs = std::filesystem;
 
-vector<MeshData*> ModuleFilesManager::meshList;
-
 ModuleFilesManager::ModuleFilesManager(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 }
@@ -44,7 +42,7 @@ bool ModuleFilesManager::Init()
 		
 		if (existent_filedir != nullptr && extension == ".fbx")
 		{
-			LoadFile(existent_filedir, newMesh);
+			LoadFile(existent_filedir);
 
 			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "File '%s' Loaded Succesfully", fileName_char);
 
@@ -52,7 +50,7 @@ bool ModuleFilesManager::Init()
 		else if (existent_filedir != nullptr && extension == ".png")
 		{
 
-			textureId = LoadTexture(existent_filedir);
+			LoadTexture(existent_filedir);
 
 			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "File '%s' Loaded Succesfully", fileName_char);
 
@@ -101,9 +99,9 @@ update_status ModuleFilesManager::Update(float dt)
 
 			if (extension == ".fbx" && new_filedir != nullptr)
 			{
-				LoadFile(new_filedir, newMesh);
+				LoadFile(new_filedir);
 			}
-			else if (extension == ".png" && new_filedir != nullptr)	textureId = LoadTexture(new_filedir);
+			else if (extension == ".png" && new_filedir != nullptr)	LoadTexture(new_filedir);
 
 			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "File '%s', with Extension '%s' Dropped Succesfully", fileName_char, extension_char);
 
@@ -121,7 +119,6 @@ update_status ModuleFilesManager::Update(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleFilesManager::PostUpdate(float dt)
 {
-	
 
 	return UPDATE_CONTINUE;
 }
@@ -136,32 +133,40 @@ bool ModuleFilesManager::CleanUp()
 
 	meshList.clear();
 
-	delete newMesh;
-	
 	return true;
 }
 
-void ModuleFilesManager::LoadFile(const char* file_path, MeshData* ourMesh)
+void ModuleFilesManager::LoadFile(const char* file_path)
 {
 	const aiScene* scene = aiImportFile(file_path, aiProcessPreset_TargetRealtime_MaxQuality);
-
-	ourMesh = new MeshData();
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		for (int i = 0; i < scene->mNumMeshes; i++)
 		{
+			MeshData* newMesh = new MeshData();
 			// copy vertices
-			ourMesh->num_vertex = scene->mMeshes[i]->mNumVertices;
-			ourMesh->vertex = new float[ourMesh->num_vertex * 3];
-			memcpy(ourMesh->vertex, scene->mMeshes[i]->mVertices, sizeof(float) * ourMesh->num_vertex * 3);
-			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "New mesh with %d vertices", ourMesh->num_vertex);
+			newMesh->num_vertex = scene->mMeshes[i]->mNumVertices;
+			newMesh->vertex = new float[newMesh->num_vertex * 5];
+			memcpy(newMesh->vertex, scene->mMeshes[i]->mVertices, sizeof(float) * newMesh->num_vertex * 3);
+			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "New mesh with %d vertices", newMesh->num_vertex);
+
+			for (int v = 0; v < newMesh->num_vertex; v++) {
+				// Vertex
+				newMesh->vertex[v * 5] = scene->mMeshes[i]->mVertices[v].x;
+				newMesh->vertex[v * 5 + 1] = scene->mMeshes[i]->mVertices[v].y;
+				newMesh->vertex[v * 5 + 2] = scene->mMeshes[i]->mVertices[v].z;
+
+				// UVs
+				newMesh->vertex[v * 5 + 3] = scene->mMeshes[i]->mTextureCoords[0][v].x;
+				newMesh->vertex[v * 5 + 4] = scene->mMeshes[i]->mTextureCoords[0][v].y;
+			}
 
 			// copy faces
 			if (scene->mMeshes[i]->HasFaces())
 			{
-				ourMesh->num_index = scene->mMeshes[i]->mNumFaces * 3;
-				ourMesh->index = new uint[ourMesh->num_index]; // assume each face is a triangle
+				newMesh->num_index = scene->mMeshes[i]->mNumFaces * 3;
+				newMesh->index = new uint[newMesh->num_index]; // assume each face is a triangle
 				
 				for (uint j = 0; j < scene->mMeshes[i]->mNumFaces; ++j)
 				{
@@ -171,22 +176,15 @@ void ModuleFilesManager::LoadFile(const char* file_path, MeshData* ourMesh)
 					}
 					else
 					{
-						memcpy(&ourMesh->index[j * 3], scene->mMeshes[i]->mFaces[j].mIndices, 3 * sizeof(uint));
+						memcpy(&newMesh->index[j * 3], scene->mMeshes[i]->mFaces[j].mIndices, 3 * sizeof(uint));
 					}
 				}
-				meshList.push_back(ourMesh);
+				LoadMeshData(newMesh);
 			}
-			// texture logic
-			if (scene->HasTextures())
-			{
-				ourMesh->num_uvs = scene->mMeshes[i]->mNumVertices * 2;
-				ourMesh->uvs = new float[ourMesh->num_uvs];
-
-				for (int z = 0; z < scene->mMeshes[i]->mNumVertices; ++z)
-				{
-					memcpy(&ourMesh->uvs[z * 2], &scene->mMeshes[i]->mTextureCoords[0][z].x, sizeof(float));
-					memcpy(&ourMesh->uvs[(z * 2) + 1], &scene->mMeshes[i]->mTextureCoords[0][z].y, sizeof(float));
-				}
+			else {
+				//if no faces, just delete mesh
+				App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Scene %s, has no faces.", file_path);
+				delete newMesh;
 			}
 
 		}
@@ -212,17 +210,32 @@ void ModuleFilesManager::Render()
 
 void MeshData::DrawMesh()
 {
-		glBegin(GL_TRIANGLES); // Drawing with triangles
+	//Bind Texture
+	glEnable(GL_TEXTURE_COORD_ARRAY);
+	glEnable(GL_TEXTURE_2D);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glBindTexture(GL_TEXTURE_2D, ImgId);
 
-		for (int z = 0; z < num_uvs; z++)
-		{
-			glTexCoord2f(uvs[index[z] * 2 + 1], uvs[index[z] * 2]);
-		}
-		for (int a = 0; a < num_index; a++) {
-			glVertex3f(vertex[index[a] * 3], vertex[index[a] * 3 + 1], vertex[index[a] * 3 + 2]);
-		}
+	// Bind Buffers
+	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
 
-		glEnd();
+	// Vertex Array [ x, y, z, u, v ]
+	glVertexPointer(3, GL_FLOAT, sizeof(float) * 5, NULL);
+	glTexCoordPointer(2, GL_FLOAT, sizeof(float) * 5, (void*)(3 * sizeof(float)));
+
+	glPushMatrix();
+
+	// Draw
+	glDrawElements(GL_TRIANGLES, num_index, GL_UNSIGNED_INT, NULL);
+
+	glPopMatrix(); // Unbind transform matrix
+
+	// Unbind buffers
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_TEXTURE_COORD_ARRAY);
 	
 }
 
@@ -238,7 +251,6 @@ uint ModuleFilesManager::LoadTexture(const char* filePath)
 		ilEnable(IL_FILE_OVERWRITE);
 		ilSaveImage(filePath);
 
-		ILuint ImgId = 0;
 		ilGenImages(1, &ImgId);
 		ilBindImage(ImgId);
 
@@ -275,4 +287,26 @@ uint ModuleFilesManager::LoadTexture(const char* filePath)
 		return 0;
 	}
 
+}
+
+void ModuleFilesManager::LoadMeshData(MeshData* mesh)
+{
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	//Create vertices and indices buffers
+	glGenBuffers(1, (GLuint*)&(mesh->id_vertex));
+	glGenBuffers(1, (GLuint*)&(mesh->id_index));
+
+	//Bind and fill buffers
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertex);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_vertex * 5, mesh->vertex, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_index);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->num_index, mesh->index, GL_STATIC_DRAW);
+
+	//Unbind buffers
+	glDisableClientState(GL_VERTEX_ARRAY);
+
+	//Add mesh to meshes vector
+	meshList.push_back(mesh);
 }

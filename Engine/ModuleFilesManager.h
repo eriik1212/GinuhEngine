@@ -20,6 +20,7 @@
 using namespace std;
 
 #define MAX_MESHES 10
+#define VERTEX_FEATURES 5
 
 struct MeshData
 {
@@ -64,8 +65,11 @@ public:
 	void LoadMeshData(MeshData* mesh);
 	uint LoadTexture(const char* filePath);
 
+	// ------------------------------------ Draw
 	void Render();
 
+	bool wireframe = false;
+	bool textureEnabled = true;
 
 
 private:

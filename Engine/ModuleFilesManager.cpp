@@ -147,21 +147,31 @@ void ModuleFilesManager::LoadFile(const char* file_path)
 			MeshData* newMesh = new MeshData();
 			// copy vertices
 			newMesh->num_vertex = scene->mMeshes[i]->mNumVertices;
-			newMesh->vertex = new float[newMesh->num_vertex * 5];
-			memcpy(newMesh->vertex, scene->mMeshes[i]->mVertices, sizeof(float) * newMesh->num_vertex * 3);
+			newMesh->vertex = new float[newMesh->num_vertex * VERTEX_FEATURES];
+			//memcpy(newMesh->vertex, scene->mMeshes[i]->mVertices, sizeof(float) * newMesh->num_vertex * 3);
 			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "New mesh with %d vertices", newMesh->num_vertex);
 
 			for (int v = 0; v < newMesh->num_vertex; v++) {
 				// Vertex
-				newMesh->vertex[v * 5] = scene->mMeshes[i]->mVertices[v].x;
-				newMesh->vertex[v * 5 + 1] = scene->mMeshes[i]->mVertices[v].y;
-				newMesh->vertex[v * 5 + 2] = scene->mMeshes[i]->mVertices[v].z;
+				newMesh->vertex[v * VERTEX_FEATURES] = scene->mMeshes[i]->mVertices[v].x;
+				newMesh->vertex[v * VERTEX_FEATURES + 1] = scene->mMeshes[i]->mVertices[v].y;
+				newMesh->vertex[v * VERTEX_FEATURES + 2] = scene->mMeshes[i]->mVertices[v].z;
 
-				// UVs
-				newMesh->vertex[v * 5 + 3] = scene->mMeshes[i]->mTextureCoords[0][v].x;
-				newMesh->vertex[v * 5 + 4] = scene->mMeshes[i]->mTextureCoords[0][v].y;
+				if (scene->mMeshes[i]->HasTextureCoords(0))
+				{
+					// UVs
+					newMesh->vertex[v * VERTEX_FEATURES + 3] = scene->mMeshes[i]->mTextureCoords[0][v].x;
+					newMesh->vertex[v * VERTEX_FEATURES + 4] = scene->mMeshes[i]->mTextureCoords[0][v].y;
+				}
+				// -------------------------------------------------------------------------------------- In a future
+				//if (scene->mMeshes[i]->HasNormals())
+				//{
+					//newMesh->vertex[v * VERTEX_FEATURES + 5] = scene->mMeshes[i]->mNormals[v].x;
+					//newMesh->vertex[v * VERTEX_FEATURES + 6] = scene->mMeshes[i]->mNormals[v].y;
+					//newMesh->vertex[v * VERTEX_FEATURES + 7] = scene->mMeshes[i]->mNormals[v].z;
+				//}
 			}
-
+			
 			// copy faces
 			if (scene->mMeshes[i]->HasFaces())
 			{
@@ -202,6 +212,15 @@ void ModuleFilesManager::LoadFile(const char* file_path)
 
 void ModuleFilesManager::Render()
 {
+	if(textureEnabled)
+		glEnable(GL_TEXTURE_2D);
+	else
+		glDisable(GL_TEXTURE_2D);
+
+	// Wireframe View
+	if (wireframe)		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	else		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
 	for (int i = 0; i < meshList.size(); i++) {
 		meshList[i]->DrawMesh();
 
@@ -212,7 +231,7 @@ void MeshData::DrawMesh()
 {
 	//Bind Texture
 	glEnable(GL_TEXTURE_COORD_ARRAY);
-	glEnable(GL_TEXTURE_2D);
+	//glEnable(GL_TEXTURE_2D);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glBindTexture(GL_TEXTURE_2D, ImgId);
 
@@ -221,8 +240,9 @@ void MeshData::DrawMesh()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
 
 	// Vertex Array [ x, y, z, u, v ]
-	glVertexPointer(3, GL_FLOAT, sizeof(float) * 5, NULL);
-	glTexCoordPointer(2, GL_FLOAT, sizeof(float) * 5, (void*)(3 * sizeof(float)));
+	glVertexPointer(3, GL_FLOAT, sizeof(float) * VERTEX_FEATURES, NULL);
+	glTexCoordPointer(2, GL_FLOAT, sizeof(float) * VERTEX_FEATURES, (void*)(3 * sizeof(float)));
+	glNormalPointer(GL_FLOAT, sizeof(float) * VERTEX_FEATURES, NULL);
 
 	glPushMatrix();
 
@@ -231,12 +251,29 @@ void MeshData::DrawMesh()
 
 	glPopMatrix(); // Unbind transform matrix
 
+	for (int v = 0; v < num_vertex; v++) {
+		//glEnableClientState(GL_VERTEX_ARRAY);
+		glVertexPointer(3, GL_FLOAT, sizeof(float) * VERTEX_FEATURES, &vertex[v * VERTEX_FEATURES]);
+		glVertexPointer(3, GL_FLOAT, sizeof(float) * VERTEX_FEATURES, &vertex[v * VERTEX_FEATURES + 1]);
+		glVertexPointer(3, GL_FLOAT, sizeof(float) * VERTEX_FEATURES, &vertex[v * VERTEX_FEATURES + 2]);
+		glClientActiveTexture(GL_TEXTURE0);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glTexCoordPointer(2, GL_FLOAT, sizeof(float) * VERTEX_FEATURES, &vertex[v * VERTEX_FEATURES + 3]);
+		glTexCoordPointer(2, GL_FLOAT, sizeof(float) * VERTEX_FEATURES, &vertex[v * VERTEX_FEATURES + 4]);
+		glEnableClientState(GL_NORMAL_ARRAY);
+		glNormalPointer(GL_FLOAT, sizeof(float) * VERTEX_FEATURES, &vertex[v * VERTEX_FEATURES + 5]);
+		glNormalPointer(GL_FLOAT, sizeof(float) * VERTEX_FEATURES, &vertex[v * VERTEX_FEATURES + 6]);
+		glNormalPointer(GL_FLOAT, sizeof(float) * VERTEX_FEATURES, &vertex[v * VERTEX_FEATURES + 7]);
+
+		//glDrawRangeElements(GL_TRIANGLES, vertex[v * VERTEX_FEATURES], vertex[v * VERTEX_FEATURES + 1], vertex[v * VERTEX_FEATURES + 2], GL_UNSIGNED_SHORT, index);
+
+	}
+
 	// Unbind buffers
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisable(GL_TEXTURE_2D);
+	//glDisable(GL_TEXTURE_2D);
 	glDisable(GL_TEXTURE_COORD_ARRAY);
-	
 }
 
 uint ModuleFilesManager::LoadTexture(const char* filePath)

@@ -12,9 +12,6 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 
-public:
-	bool wireframe = false;
-
 private:
 
 };

@@ -8,7 +8,7 @@ Application::Application()
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
 	menus = new ModuleMenus(this);
-	loader = new ModuleFilesManager(this);
+	files_manager = new ModuleFilesManager(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -30,7 +30,7 @@ Application::Application()
 	AddModule(renderer3D);
 
 	//Files Manager
-	AddModule(loader);
+	AddModule(files_manager);
 
 }
 

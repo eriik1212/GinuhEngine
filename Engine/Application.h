@@ -23,7 +23,7 @@ public:
 	ModuleRenderer3D* renderer3D;
 	ModuleCamera3D* camera;
 	ModuleMenus* menus;
-	ModuleFilesManager* loader;
+	ModuleFilesManager* files_manager;
 
 private:
 

@@ -471,13 +471,15 @@ void ModuleMenus::MenuConfig()
 				{
 					if (texture2D)
 					{
-						glEnable(GL_TEXTURE_2D); //TEXTURE 2D ENABLED
+						App->files_manager->textureEnabled = true;
+						//glEnable(GL_TEXTURE_2D); //TEXTURE 2D ENABLED
 						info.AddConsoleLog(__FILE__, __LINE__,"Texture 2D Enabled");
 
 					}
 					else
 					{
-						glDisable(GL_TEXTURE_2D); //TEXTURE 2D DISABLED
+						App->files_manager->textureEnabled = false;
+						//glDisable(GL_TEXTURE_2D); //TEXTURE 2D DISABLED
 						info.AddConsoleLog(__FILE__, __LINE__,"Texture 2D Disabled");
 
 					}
@@ -486,13 +488,13 @@ void ModuleMenus::MenuConfig()
 				{
 					if (wireframeView)
 					{
-						App->scene_intro->wireframe = true; //WIREFRAME VIEW ENABLED
+						App->files_manager->wireframe = true; //WIREFRAME VIEW ENABLED
 						info.AddConsoleLog(__FILE__, __LINE__,"Wireframe View Enabled");
 
 					}
 					else
 					{
-						App->scene_intro->wireframe = false; //WIREFRAME VIEW DISABLED
+						App->files_manager->wireframe = false; //WIREFRAME VIEW DISABLED
 						info.AddConsoleLog(__FILE__, __LINE__,"Wireframe View Disabled");
 
 					}

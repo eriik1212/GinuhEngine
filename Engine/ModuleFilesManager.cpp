@@ -152,10 +152,8 @@ void ModuleFilesManager::LoadFile(const char* file_path)
 	{
 		for (int i = 0; i < scene->mNumMeshes; i++)
 		{
-			int meshCount = meshList.size();
+			int m = meshList.size();
 
-			for (int m = meshList.size(); m < scene->mNumMeshes + meshCount; m++)
-			{
 				newMesh[m] = new MeshData();
 				// copy vertices
 				newMesh[m]->num_vertex = scene->mMeshes[i]->mNumVertices;
@@ -209,7 +207,6 @@ void ModuleFilesManager::LoadFile(const char* file_path)
 					delete newMesh[m];
 					newMesh[m] = nullptr;
 				}
-			}
 		}
 		App->menus->info.AddConsoleLog(__FILE__, __LINE__, "% s Pushed In List Successfully", file_path);
 
@@ -231,7 +228,11 @@ void ModuleFilesManager::Render()
 		glDisable(GL_TEXTURE_2D);
 
 	// Wireframe View
-	if (wireframe)		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	if (wireframe)
+	{
+		glDisable(GL_TEXTURE_2D);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	}
 	else		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	for (int i = 0; i < meshList.size(); i++) {

@@ -45,7 +45,7 @@ int main(int argc, char ** argv)
 
 			//LOG("-------------- Application Init --------------");
 			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "-------------- Application Init --------------");
-
+			
 			if (App->Init() == false)
 			{
 				//LOG("Application Init exits with ERROR");

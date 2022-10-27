@@ -19,8 +19,8 @@
 
 using namespace std;
 
-#define MAX_MESHES 10
-#define VERTEX_FEATURES 5
+#define MAX_MESHES 100
+#define VERTEX_FEATURES 8
 
 struct MeshData
 {
@@ -28,14 +28,11 @@ struct MeshData
 
 	~MeshData() {
 
-		delete[] vertex;
-		delete[] index;
+		delete vertex;
 		vertex = nullptr;
+
+		delete index;
 		index = nullptr;
-		glDeleteBuffers(1, &id_vertex);
-		glDeleteBuffers(1, &id_index);
-		id_vertex = 0;
-		id_index = 0;
 	}
 
 	uint id_index = 0; // index in VRAM
@@ -77,6 +74,7 @@ private:
 	char* dropped_filedir = "";                  // Pointer for directory of dropped file
 	const char* assets_dir = "Assets/";
 
+	MeshData* newMesh[MAX_MESHES];
 	vector<MeshData*> meshList;
 
 };

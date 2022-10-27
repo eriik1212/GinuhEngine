@@ -131,6 +131,14 @@ bool ModuleFilesManager::CleanUp()
 
 	aiDetachAllLogStreams();
 
+	//newMesh->~MeshData();
+	for (int m = 0; m < meshList.size(); m++)
+	{
+		delete newMesh[m];
+		newMesh[m] = nullptr;
+	}
+
+
 	meshList.clear();
 
 	return true;
@@ -144,59 +152,64 @@ void ModuleFilesManager::LoadFile(const char* file_path)
 	{
 		for (int i = 0; i < scene->mNumMeshes; i++)
 		{
-			MeshData* newMesh = new MeshData();
-			// copy vertices
-			newMesh->num_vertex = scene->mMeshes[i]->mNumVertices;
-			newMesh->vertex = new float[newMesh->num_vertex * VERTEX_FEATURES];
-			//memcpy(newMesh->vertex, scene->mMeshes[i]->mVertices, sizeof(float) * newMesh->num_vertex * 3);
-			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "New mesh with %d vertices", newMesh->num_vertex);
+			int meshCount = meshList.size();
 
-			for (int v = 0; v < newMesh->num_vertex; v++) {
-				// Vertex
-				newMesh->vertex[v * VERTEX_FEATURES] = scene->mMeshes[i]->mVertices[v].x;
-				newMesh->vertex[v * VERTEX_FEATURES + 1] = scene->mMeshes[i]->mVertices[v].y;
-				newMesh->vertex[v * VERTEX_FEATURES + 2] = scene->mMeshes[i]->mVertices[v].z;
-
-				if (scene->mMeshes[i]->HasTextureCoords(0))
-				{
-					// UVs
-					newMesh->vertex[v * VERTEX_FEATURES + 3] = scene->mMeshes[i]->mTextureCoords[0][v].x;
-					newMesh->vertex[v * VERTEX_FEATURES + 4] = scene->mMeshes[i]->mTextureCoords[0][v].y;
-				}
-				// -------------------------------------------------------------------------------------- In a future
-				//if (scene->mMeshes[i]->HasNormals())
-				//{
-					//newMesh->vertex[v * VERTEX_FEATURES + 5] = scene->mMeshes[i]->mNormals[v].x;
-					//newMesh->vertex[v * VERTEX_FEATURES + 6] = scene->mMeshes[i]->mNormals[v].y;
-					//newMesh->vertex[v * VERTEX_FEATURES + 7] = scene->mMeshes[i]->mNormals[v].z;
-				//}
-			}
-			
-			// copy faces
-			if (scene->mMeshes[i]->HasFaces())
+			for (int m = meshList.size(); m < scene->mNumMeshes + meshCount; m++)
 			{
-				newMesh->num_index = scene->mMeshes[i]->mNumFaces * 3;
-				newMesh->index = new uint[newMesh->num_index]; // assume each face is a triangle
-				
-				for (uint j = 0; j < scene->mMeshes[i]->mNumFaces; ++j)
-				{
-					if (scene->mMeshes[i]->mFaces[j].mNumIndices != 3)
+				newMesh[m] = new MeshData();
+				// copy vertices
+				newMesh[m]->num_vertex = scene->mMeshes[i]->mNumVertices;
+				newMesh[m]->vertex = new float[newMesh[m]->num_vertex * VERTEX_FEATURES];
+				//memcpy(newMesh->vertex, scene->mMeshes[i]->mVertices, sizeof(float) * newMesh->num_vertex * 3);
+				App->menus->info.AddConsoleLog(__FILE__, __LINE__, "New mesh with %d vertices", newMesh[m]->num_vertex);
+
+				for (int v = 0; v < newMesh[m]->num_vertex; v++) {
+					// Vertex
+					newMesh[m]->vertex[v * VERTEX_FEATURES] = scene->mMeshes[i]->mVertices[v].x;
+					newMesh[m]->vertex[v * VERTEX_FEATURES + 1] = scene->mMeshes[i]->mVertices[v].y;
+					newMesh[m]->vertex[v * VERTEX_FEATURES + 2] = scene->mMeshes[i]->mVertices[v].z;
+
+					if (scene->mMeshes[i]->HasTextureCoords(0))
 					{
-						App->menus->info.AddConsoleLog(__FILE__, __LINE__, "WARNING, geometry face with != 3 indices!");
+						// UVs
+						newMesh[m]->vertex[v * VERTEX_FEATURES + 3] = scene->mMeshes[i]->mTextureCoords[0][v].x;
+						newMesh[m]->vertex[v * VERTEX_FEATURES + 4] = scene->mMeshes[i]->mTextureCoords[0][v].y;
 					}
-					else
+					// -------------------------------------------------------------------------------------- In a future
+					if (scene->mMeshes[i]->HasNormals())
 					{
-						memcpy(&newMesh->index[j * 3], scene->mMeshes[i]->mFaces[j].mIndices, 3 * sizeof(uint));
+						newMesh[m]->vertex[v * VERTEX_FEATURES + 5] = scene->mMeshes[i]->mNormals[v].x;
+						newMesh[m]->vertex[v * VERTEX_FEATURES + 6] = scene->mMeshes[i]->mNormals[v].y;
+						newMesh[m]->vertex[v * VERTEX_FEATURES + 7] = scene->mMeshes[i]->mNormals[v].z;
 					}
 				}
-				LoadMeshData(newMesh);
-			}
-			else {
-				//if no faces, just delete mesh
-				App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Scene %s, has no faces.", file_path);
-				delete newMesh;
-			}
 
+				// copy faces
+				if (scene->mMeshes[i]->HasFaces())
+				{
+					newMesh[m]->num_index = scene->mMeshes[i]->mNumFaces * 3;
+					newMesh[m]->index = new uint[newMesh[m]->num_index]; // assume each face is a triangle
+
+					for (uint j = 0; j < scene->mMeshes[i]->mNumFaces; ++j)
+					{
+						if (scene->mMeshes[i]->mFaces[j].mNumIndices != 3)
+						{
+							App->menus->info.AddConsoleLog(__FILE__, __LINE__, "WARNING, geometry face with != 3 indices!");
+						}
+						else
+						{
+							memcpy(&newMesh[m]->index[j * 3], scene->mMeshes[i]->mFaces[j].mIndices, 3 * sizeof(uint));
+						}
+					}
+					LoadMeshData(newMesh[m]);
+				}
+				else {
+					App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Scene %s, has no faces.", file_path);
+
+					delete newMesh[m];
+					newMesh[m] = nullptr;
+				}
+			}
 		}
 		App->menus->info.AddConsoleLog(__FILE__, __LINE__, "% s Pushed In List Successfully", file_path);
 
@@ -229,17 +242,15 @@ void ModuleFilesManager::Render()
 
 void MeshData::DrawMesh()
 {
-	//Bind Texture
+
 	glEnable(GL_TEXTURE_COORD_ARRAY);
-	//glEnable(GL_TEXTURE_2D);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glBindTexture(GL_TEXTURE_2D, ImgId);
 
-	// Bind Buffers
+	// ----------------------------------------------------------------------- Bind Buffers
 	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
 
-	// Vertex Array [ x, y, z, u, v ]
 	glVertexPointer(3, GL_FLOAT, sizeof(float) * VERTEX_FEATURES, NULL);
 	glTexCoordPointer(2, GL_FLOAT, sizeof(float) * VERTEX_FEATURES, (void*)(3 * sizeof(float)));
 	glNormalPointer(GL_FLOAT, sizeof(float) * VERTEX_FEATURES, NULL);
@@ -249,8 +260,9 @@ void MeshData::DrawMesh()
 	// Draw
 	glDrawElements(GL_TRIANGLES, num_index, GL_UNSIGNED_INT, NULL);
 
-	glPopMatrix(); // Unbind transform matrix
+	glPopMatrix();
 
+	// ----------------------------------------------------------------------- DRAW TEXTURE CORRECTLY
 	for (int v = 0; v < num_vertex; v++) {
 		//glEnableClientState(GL_VERTEX_ARRAY);
 		glVertexPointer(3, GL_FLOAT, sizeof(float) * VERTEX_FEATURES, &vertex[v * VERTEX_FEATURES]);
@@ -269,10 +281,9 @@ void MeshData::DrawMesh()
 
 	}
 
-	// Unbind buffers
+	// ----------------------------------------------------------------------- UnBind Buffers
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisableClientState(GL_VERTEX_ARRAY);
-	//glDisable(GL_TEXTURE_2D);
 	glDisable(GL_TEXTURE_COORD_ARRAY);
 }
 
@@ -299,11 +310,12 @@ uint ModuleFilesManager::LoadTexture(const char* filePath)
 		ILuint imgWidth, imgHeight;
 		imgWidth = ilGetInteger(IL_IMAGE_WIDTH);
 		imgHeight = ilGetInteger(IL_IMAGE_HEIGHT);
-		int const type = ilGetInteger(IL_IMAGE_TYPE); // matches OpenGL
-		int const format = ilGetInteger(IL_IMAGE_FORMAT); // matches OpenGL
+		int const type = ilGetInteger(IL_IMAGE_TYPE);
+		int const format = ilGetInteger(IL_IMAGE_FORMAT);
 		
+		// ---------------------------------------------------------------------------------------------------- Create Texture from ImageData
 		glTexImage2D(GL_TEXTURE_2D, 0, format, imgWidth, imgHeight, 0, format,
-			type, data);  // Create texture from image data
+			type, data);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
@@ -330,20 +342,19 @@ void ModuleFilesManager::LoadMeshData(MeshData* mesh)
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 
-	//Create vertices and indices buffers
+	// ---------------------------------------------------- Buffer Creation
 	glGenBuffers(1, (GLuint*)&(mesh->id_vertex));
 	glGenBuffers(1, (GLuint*)&(mesh->id_index));
 
-	//Bind and fill buffers
+	// ----------------------------------------------------------------------- Bind Buffers
 	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertex);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_vertex * 5, mesh->vertex, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_vertex * VERTEX_FEATURES, mesh->vertex, GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_index);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->num_index, mesh->index, GL_STATIC_DRAW);
 
-	//Unbind buffers
 	glDisableClientState(GL_VERTEX_ARRAY);
 
-	//Add mesh to meshes vector
+	//Push Mesh to the List
 	meshList.push_back(mesh);
 }

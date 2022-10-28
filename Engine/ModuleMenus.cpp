@@ -158,7 +158,7 @@ update_status ModuleMenus::PostUpdate(float dt)
 bool ModuleMenus::CleanUp()
 {
 	//LOG("Destroying ModuleMenus");
-	info.LOGC( "Destroying Module Menus");
+	LOGC( "Destroying Module Menus");
 
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
@@ -318,14 +318,14 @@ void ModuleMenus::MenuConfig()
 					{
 						SDL_SetWindowSize(App->window->window, 1920, 1080);
 						SDL_SetWindowFullscreen(App->window->window, SDL_WINDOW_FULLSCREEN); //FULLSCREEN ENABLED
-						info.LOGC( "FullScreen Enabled");
+						LOGC( "FullScreen Enabled");
 
 					}
 					else
 					{
 						SDL_SetWindowSize(App->window->window, SCREEN_WIDTH, SCREEN_HEIGHT);
 						SDL_SetWindowFullscreen(App->window->window, !SDL_WINDOW_FULLSCREEN); //FULLSCREEN DISABLED
-						info.LOGC("FullScreen Disabled");
+						LOGC("FullScreen Disabled");
 
 					}
 				}
@@ -336,13 +336,13 @@ void ModuleMenus::MenuConfig()
 						if (resizable)
 						{
 							SDL_SetWindowResizable(App->window->window, SDL_TRUE); //RESIZABLE ENABLED
-							info.LOGC("Resizable Mode Enabled");
+							LOGC("Resizable Mode Enabled");
 
 						}
 						else
 						{
 							SDL_SetWindowResizable(App->window->window, SDL_FALSE);//RESIZABLE DISABLED
-							info.LOGC("Resizable Mode Disabled");
+							LOGC("Resizable Mode Disabled");
 
 						}
 					}
@@ -352,13 +352,13 @@ void ModuleMenus::MenuConfig()
 						if (borderless)
 						{
 							SDL_SetWindowBordered(App->window->window, SDL_FALSE); //BORDERLESS ENABLED
-							info.LOGC("Borderless Mode Enabled");
+							LOGC("Borderless Mode Enabled");
 
 						}
 						else
 						{
 							SDL_SetWindowBordered(App->window->window, SDL_TRUE); //BORDERLESS DISABLED
-							info.LOGC("Borderless Mode Disabled");
+							LOGC("Borderless Mode Disabled");
 
 						}
 					}
@@ -380,13 +380,13 @@ void ModuleMenus::MenuConfig()
 					if (vsync)
 					{
 						SDL_GL_SetSwapInterval(1); //VSYNC ENABLED
-						info.LOGC("Vsync Enabled");
+						LOGC("Vsync Enabled");
 
 					}
 					else
 					{
 						SDL_GL_SetSwapInterval(0); //VSYNC DISABLED
-						info.LOGC("Vsync Disabled");
+						LOGC("Vsync Disabled");
 
 					}
 				}
@@ -394,7 +394,7 @@ void ModuleMenus::MenuConfig()
 				if (ImGui::SliderFloat("Brightness", &screenBrightness, 0.300f, 1.000f))
 				{
 					SDL_SetWindowBrightness(App->window->window, screenBrightness);
-					info.LOGC("Brightness Change");
+					LOGC("Brightness Change");
 
 				}
 
@@ -404,13 +404,13 @@ void ModuleMenus::MenuConfig()
 					if (lights)
 					{
 						glEnable(GL_LIGHTING); //LIGHTS ENABLED
-						info.LOGC("Lights Enabled");
+						LOGC("Lights Enabled");
 
 					}
 					else
 					{
 						glDisable(GL_LIGHTING); //LIGHTS DISABLED
-						info.LOGC("Lights Disabled");
+						LOGC("Lights Disabled");
 					}
 
 				}
@@ -420,13 +420,13 @@ void ModuleMenus::MenuConfig()
 					if (depthTest)
 					{
 						glEnable(GL_DEPTH_TEST); //DEPTH TEST ENABLED
-						info.LOGC("Depth Test Enabled");
+						LOGC("Depth Test Enabled");
 
 					}
 					else
 					{
 						glDisable(GL_DEPTH_TEST); //DEPTH TEST DISABLED
-						info.LOGC("Depth Test Disabled");
+						LOGC("Depth Test Disabled");
 
 					}
 				}
@@ -435,13 +435,13 @@ void ModuleMenus::MenuConfig()
 					if (cullFace)
 					{
 						glEnable(GL_CULL_FACE); //CULL FACE ENABLED
-						info.LOGC("Cull Face Enabled");
+						LOGC("Cull Face Enabled");
 
 					}
 					else
 					{
 						glDisable(GL_CULL_FACE); //CULL FACE  DISABLED
-						info.LOGC("Cull Face Disabled");
+						LOGC("Cull Face Disabled");
 
 					}
 				}
@@ -451,13 +451,13 @@ void ModuleMenus::MenuConfig()
 					if (colorMaterial)
 					{
 						glEnable(GL_COLOR_MATERIAL); //COLOR MATERIAL ENABLED
-						info.LOGC("Color Material Enabled");
+						LOGC("Color Material Enabled");
 
 					}
 					else
 					{
 						glDisable(GL_COLOR_MATERIAL); //COLOR MATERIAL  DISABLED
-						info.LOGC("Color Material Disabled");
+						LOGC("Color Material Disabled");
 
 					}
 				}
@@ -468,14 +468,14 @@ void ModuleMenus::MenuConfig()
 					{
 						App->files_manager->textureEnabled = true;
 						//glEnable(GL_TEXTURE_2D); //TEXTURE 2D ENABLED
-						info.LOGC("Texture 2D Enabled");
+						LOGC("Texture 2D Enabled");
 
 					}
 					else
 					{
 						App->files_manager->textureEnabled = false;
 						//glDisable(GL_TEXTURE_2D); //TEXTURE 2D DISABLED
-						info.LOGC("Texture 2D Disabled");
+						LOGC("Texture 2D Disabled");
 
 					}
 				}
@@ -484,13 +484,13 @@ void ModuleMenus::MenuConfig()
 					if (wireframeView)
 					{
 						App->files_manager->wireframe = true; //WIREFRAME VIEW ENABLED
-						info.LOGC("Wireframe View Enabled");
+						LOGC("Wireframe View Enabled");
 
 					}
 					else
 					{
 						App->files_manager->wireframe = false; //WIREFRAME VIEW DISABLED
-						info.LOGC("Wireframe View Disabled");
+						LOGC("Wireframe View Disabled");
 
 					}
 
@@ -670,3 +670,4 @@ void ModuleMenus::PushLog(std::vector<float>* Log, float toPush) //Function to k
 
 
 }
+

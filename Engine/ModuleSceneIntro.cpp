@@ -23,7 +23,7 @@ ModuleSceneIntro::~ModuleSceneIntro()
 bool ModuleSceneIntro::Start()
 {
 	//LOG("Loading Intro assets");
-	info.LOGC( "Loading Intro assets");
+	LOGC( "Loading Intro assets");
 
 	bool ret = true;
 
@@ -38,7 +38,7 @@ bool ModuleSceneIntro::Start()
 bool ModuleSceneIntro::CleanUp()
 {
 	//LOG("Unloading Intro scene");
-	info.LOGC( "Unloading Intro scene");
+	LOGC( "Unloading Intro scene");
 
 	return true;
 }

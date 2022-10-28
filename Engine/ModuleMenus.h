@@ -27,7 +27,6 @@ public:
 
 	bool vsync = VSYNC;
     
-
 private:
 	bool aboutVisible = false;
 	void MenuAbout();
@@ -68,8 +67,6 @@ private:
 	std::vector<float> fpsLog;
 	std::vector<float> timeLog;
 
-	//ConsoleInfo info;
-	
 };
 
 #endif

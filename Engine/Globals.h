@@ -13,27 +13,58 @@
 #include <string>
 #include <filesystem>
 
-#include "ImGui/imgui.h"
+#include "imgui/imgui.h"
 
 #define LOG(format, ...) log(__FILE__, __LINE__, format, __VA_ARGS__);
 
 void log(const char file[], int line, const char* format, ...);
 
-#define LOGC(format, ...) ConsoleInfo::AddConsoleLog(__FILE__, __LINE__, format, __VA_ARGS__);
-
 //void    ConsoleInfo::AddConsoleLog(const char file[], int line, const char* logText, ...);
+class ConsoleInfo;
+
+#define LOGC(logText, ...) info.AddConsoleLog(__FILE__, __LINE__, logText, __VA_ARGS__);
 
 struct ConsoleInfo
 {
-    ImGuiTextBuffer     Buf;
-    ImGuiTextFilter     Filter;
-    ImVector<int>       LineOffsets;        // Index to lines offset
-    bool                ScrollToBottom;
+public:
+	ImGuiTextBuffer     Buf;
+	ImGuiTextFilter     Filter;
+	ImVector<int>       LineOffsets;        // Index to lines offset
+	bool                ScrollToBottom;
 
-    void    Clear() { Buf.clear(); LineOffsets.clear(); }
+	void    Clear() { Buf.clear(); LineOffsets.clear(); }
 
-    void    AddConsoleLog(const char file[], int line, const char* logText, ...);
+	void AddConsoleLog(const char file[], int line, const char* logText, ...)
+	{
+		static char tmp_string[4096];
+		static char tmp_string2[4096];
+		static va_list  ap;
 
+		// Construct the string from variable arguments
+		va_start(ap, logText);
+		vsprintf_s(tmp_string, 4096, logText, ap);
+		va_end(ap);
+		sprintf_s(tmp_string2, 4096, "\n%s(%d) : %s", file, line, tmp_string);
+		OutputDebugString(tmp_string2);
+
+		int old_size = Buf.size();
+		va_list args;
+		va_start(args, logText);
+		Buf.appendfv(logText, args);
+		Buf.appendfv("\n", args);
+		va_end(args);
+		for (int new_size = Buf.size(); old_size < new_size; old_size++)
+		{
+
+			if (Buf[old_size] == '\n')
+			{
+				LineOffsets.push_back(old_size);
+
+			}
+		}
+
+		ScrollToBottom = true;
+	}
 	void    DrawConsole(const char* title, bool* p_opened = NULL)
 	{
 		ImGui::SetNextWindowSize(ImVec2(600, 200));

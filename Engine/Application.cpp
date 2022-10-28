@@ -56,7 +56,7 @@ bool Application::Init()
 
 	// After all Init calls we call Start() in all modules
 	//LOG("Application Start --------------");
-	info.LOGC("Application Start --------------");
+	LOGC("Application Start --------------");
 
 	for (size_t i = 0; i < list_modules.size(); i++)
 	{

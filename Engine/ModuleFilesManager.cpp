@@ -1,5 +1,7 @@
 #include "Application.h"
 #include "ModuleFilesManager.h"
+#include "ConsoleInfo.h"
+
 
 namespace fs = std::filesystem;
 
@@ -21,6 +23,14 @@ bool ModuleFilesManager::Init()
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 
+	return ret;
+}
+
+// -----------------------------------------------------------------
+bool ModuleFilesManager::Start()
+{
+	bool ret = true;
+
 	// ------------------------------------- Load All Existing .fbx files -------------------------------------
 	std::string path = "Assets/";
 	for (const auto& entry : fs::directory_iterator(path))
@@ -29,7 +39,7 @@ bool ModuleFilesManager::Init()
 		string fileName = entry.path().filename().string();
 		const char* fileName_char = fileName.c_str();
 
-		App->menus->info.AddConsoleLog(__FILE__, __LINE__, "File '%s'", fileName_char);
+		info.LOGC("File '%s'", fileName_char);
 
 		char existent_filedir[100];
 
@@ -39,12 +49,12 @@ bool ModuleFilesManager::Init()
 		// We get the Extension
 		string extension = fs::path(fileName_char).extension().string();
 		const char* extension_char = extension.c_str();
-		
+
 		if (existent_filedir != nullptr && extension == ".fbx")
 		{
 			LoadFile(existent_filedir);
 
-			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "File '%s' Loaded Succesfully", fileName_char);
+			info.LOGC("File '%s' Loaded Succesfully", fileName_char);
 
 		}
 		else if (existent_filedir != nullptr && extension == ".png")
@@ -52,12 +62,12 @@ bool ModuleFilesManager::Init()
 
 			LoadTexture(existent_filedir);
 
-			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "File '%s' Loaded Succesfully", fileName_char);
+			info.LOGC("File '%s' Loaded Succesfully", fileName_char);
 
 		}
 		else
 		{
-			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "File '%s' cannot be loaded", fileName_char);
+			info.LOGC("File '%s' cannot be loaded", fileName_char);
 
 		}
 	}
@@ -103,7 +113,7 @@ update_status ModuleFilesManager::Update(float dt)
 			}
 			else if (extension == ".png" && new_filedir != nullptr)	LoadTexture(new_filedir);
 
-			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "File '%s', with Extension '%s' Dropped Succesfully", fileName_char, extension_char);
+			info.LOGC("File '%s', with Extension '%s' Dropped Succesfully", fileName_char, extension_char);
 
 		}
 			SDL_free(dropped_filedir);    // Free dropped_filedir memory
@@ -127,7 +137,7 @@ update_status ModuleFilesManager::PostUpdate(float dt)
 bool ModuleFilesManager::CleanUp()
 {
 	//LOG("Destroying Module");
-	App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Destroying Module File Loader");
+	info.LOGC("Destroying Module File Loader");
 
 	aiDetachAllLogStreams();
 
@@ -159,7 +169,7 @@ void ModuleFilesManager::LoadFile(const char* file_path)
 				newMesh[m]->num_vertex = scene->mMeshes[i]->mNumVertices;
 				newMesh[m]->vertex = new float[newMesh[m]->num_vertex * VERTEX_FEATURES];
 				//memcpy(newMesh->vertex, scene->mMeshes[i]->mVertices, sizeof(float) * newMesh->num_vertex * 3);
-				App->menus->info.AddConsoleLog(__FILE__, __LINE__, "New mesh with %d vertices", newMesh[m]->num_vertex);
+				info.LOGC("New mesh with %d vertices", newMesh[m]->num_vertex);
 
 				for (int v = 0; v < newMesh[m]->num_vertex; v++) {
 					// Vertex
@@ -192,7 +202,7 @@ void ModuleFilesManager::LoadFile(const char* file_path)
 					{
 						if (scene->mMeshes[i]->mFaces[j].mNumIndices != 3)
 						{
-							App->menus->info.AddConsoleLog(__FILE__, __LINE__, "WARNING, geometry face with != 3 indices!");
+							info.LOGC( "WARNING, geometry face with != 3 indices!");
 						}
 						else
 						{
@@ -202,20 +212,20 @@ void ModuleFilesManager::LoadFile(const char* file_path)
 					LoadMeshData(newMesh[m]);
 				}
 				else {
-					App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Scene %s, has no faces.", file_path);
+					info.LOGC( "Scene %s, has no faces.", file_path);
 
 					delete newMesh[m];
 					newMesh[m] = nullptr;
 				}
 		}
-		App->menus->info.AddConsoleLog(__FILE__, __LINE__, "% s Pushed In List Successfully", file_path);
+		info.LOGC( "% s Pushed In List Successfully", file_path);
 
 		aiReleaseImport(scene);
 
 	}
 	else
 	{
-		App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Error loading scene % s. ERROR: %s", file_path, aiGetErrorString());
+		info.LOGC( "Error loading scene % s. ERROR: %s", file_path, aiGetErrorString());
 	}
 	
 }
@@ -326,13 +336,13 @@ uint ModuleFilesManager::LoadTexture(const char* filePath)
 		glBindTexture(GL_TEXTURE_2D, ImgId);
 		ilDeleteImages(1, &ImgId);
 
-		App->menus->info.AddConsoleLog(__FILE__, __LINE__, "TEX ID: %d", ImgId);
+		info.LOGC( "TEX ID: %d", ImgId);
 
 		return ImgId;
 	}
 	else
 	{
-		App->menus->info.AddConsoleLog(__FILE__, __LINE__, "DevIL ERROR: Could not Load Image. Error: %s", ilGetError());
+		info.LOGC( "DevIL ERROR: Could not Load Image. Error: %s", ilGetError());
 
 		return 0;
 	}

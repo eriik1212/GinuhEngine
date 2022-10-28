@@ -13,9 +13,66 @@
 #include <string>
 #include <filesystem>
 
+#include "ImGui/imgui.h"
+
 #define LOG(format, ...) log(__FILE__, __LINE__, format, __VA_ARGS__);
 
 void log(const char file[], int line, const char* format, ...);
+
+#define LOGC(format, ...) ConsoleInfo::AddConsoleLog(__FILE__, __LINE__, format, __VA_ARGS__);
+
+//void    ConsoleInfo::AddConsoleLog(const char file[], int line, const char* logText, ...);
+
+struct ConsoleInfo
+{
+    ImGuiTextBuffer     Buf;
+    ImGuiTextFilter     Filter;
+    ImVector<int>       LineOffsets;        // Index to lines offset
+    bool                ScrollToBottom;
+
+    void    Clear() { Buf.clear(); LineOffsets.clear(); }
+
+    void    AddConsoleLog(const char file[], int line, const char* logText, ...);
+
+	void    DrawConsole(const char* title, bool* p_opened = NULL)
+	{
+		ImGui::SetNextWindowSize(ImVec2(600, 200));
+		ImGui::Begin(title, p_opened);
+		if (ImGui::Button("Clear")) Clear();
+		ImGui::SameLine();
+		Filter.Draw("Filter", -100.0f);
+		ImGui::Separator();
+		ImGui::BeginChild("scrolling");
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 1));
+
+		if (Filter.IsActive())
+		{
+			const char* buf_begin = Buf.begin();
+			const char* line = buf_begin;
+			for (int line_no = 0; line != NULL; line_no++)
+			{
+				const char* line_end = (line_no < LineOffsets.Size) ? buf_begin + LineOffsets[line_no] : NULL;
+				if (Filter.PassFilter(line, line_end))
+					ImGui::TextUnformatted(line, line_end);
+				line = line_end && line_end[1] ? line_end + 1 : NULL;
+			}
+		}
+		else
+		{
+			ImGui::TextUnformatted(Buf.begin());
+		}
+
+		if (ScrollToBottom)
+			ImGui::SetScrollHereY(1.0f);
+		ScrollToBottom = false;
+
+		ImGui::PopStyleVar();
+		ImGui::EndChild();
+		ImGui::End();
+	}
+};
+
+static ConsoleInfo info;
 
 #define CAP(n) ((n <= 0.0f) ? n=0.0f : (n >= 1.0f) ? n=1.0f : n=n)
 

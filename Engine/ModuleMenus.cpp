@@ -5,6 +5,7 @@
 
 #include "Application.h"
 #include "ModuleMenus.h"
+#include "ConsoleInfo.h"
 #include <Windows.h>
 
 ModuleMenus::ModuleMenus(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -157,7 +158,7 @@ update_status ModuleMenus::PostUpdate(float dt)
 bool ModuleMenus::CleanUp()
 {
 	//LOG("Destroying ModuleMenus");
-	info.AddConsoleLog(__FILE__, __LINE__, "Destroying Module Menus");
+	info.LOGC( "Destroying Module Menus");
 
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
@@ -300,9 +301,6 @@ void ModuleMenus::MenuConfig()
 				ImGui::LabelText( "Ginuh Engine", "App Name:");
 				ImGui::LabelText( "UPC CITM", "Organisation:");
 				ImGui::SliderInt("Max FPS", &App->limitFPS, 1, 165);
-				
-				
-
 
 				ImGui::Text("Limit Framerate: ");
 
@@ -311,9 +309,6 @@ void ModuleMenus::MenuConfig()
 				ImGui::PlotHistogram("##framerate", &fpsLog[0],fpsLog.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
 				sprintf_s(title, 25, "Milliseconds %0.f", timeLog[timeLog.size() - 1]);
 				ImGui::PlotHistogram("##milliseconds", &timeLog[0], timeLog.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
-
-
-
 			}
 			if (ImGui::CollapsingHeader("Window"))
 			{
@@ -323,14 +318,14 @@ void ModuleMenus::MenuConfig()
 					{
 						SDL_SetWindowSize(App->window->window, 1920, 1080);
 						SDL_SetWindowFullscreen(App->window->window, SDL_WINDOW_FULLSCREEN); //FULLSCREEN ENABLED
-						info.AddConsoleLog(__FILE__, __LINE__, "FullScreen Enabled");
+						info.LOGC( "FullScreen Enabled");
 
 					}
 					else
 					{
 						SDL_SetWindowSize(App->window->window, SCREEN_WIDTH, SCREEN_HEIGHT);
 						SDL_SetWindowFullscreen(App->window->window, !SDL_WINDOW_FULLSCREEN); //FULLSCREEN DISABLED
-						info.AddConsoleLog(__FILE__, __LINE__,"FullScreen Disabled");
+						info.LOGC("FullScreen Disabled");
 
 					}
 				}
@@ -341,13 +336,13 @@ void ModuleMenus::MenuConfig()
 						if (resizable)
 						{
 							SDL_SetWindowResizable(App->window->window, SDL_TRUE); //RESIZABLE ENABLED
-							info.AddConsoleLog(__FILE__, __LINE__,"Resizable Mode Enabled");
+							info.LOGC("Resizable Mode Enabled");
 
 						}
 						else
 						{
 							SDL_SetWindowResizable(App->window->window, SDL_FALSE);//RESIZABLE DISABLED
-							info.AddConsoleLog(__FILE__, __LINE__,"Resizable Mode Disabled");
+							info.LOGC("Resizable Mode Disabled");
 
 						}
 					}
@@ -357,13 +352,13 @@ void ModuleMenus::MenuConfig()
 						if (borderless)
 						{
 							SDL_SetWindowBordered(App->window->window, SDL_FALSE); //BORDERLESS ENABLED
-							info.AddConsoleLog(__FILE__, __LINE__,"Borderless Mode Enabled");
+							info.LOGC("Borderless Mode Enabled");
 
 						}
 						else
 						{
 							SDL_SetWindowBordered(App->window->window, SDL_TRUE); //BORDERLESS DISABLED
-							info.AddConsoleLog(__FILE__, __LINE__,"Borderless Mode Disabled");
+							info.LOGC("Borderless Mode Disabled");
 
 						}
 					}
@@ -385,13 +380,13 @@ void ModuleMenus::MenuConfig()
 					if (vsync)
 					{
 						SDL_GL_SetSwapInterval(1); //VSYNC ENABLED
-						info.AddConsoleLog(__FILE__, __LINE__,"Vsync Enabled");
+						info.LOGC("Vsync Enabled");
 
 					}
 					else
 					{
 						SDL_GL_SetSwapInterval(0); //VSYNC DISABLED
-						info.AddConsoleLog(__FILE__, __LINE__,"Vsync Disabled");
+						info.LOGC("Vsync Disabled");
 
 					}
 				}
@@ -399,7 +394,7 @@ void ModuleMenus::MenuConfig()
 				if (ImGui::SliderFloat("Brightness", &screenBrightness, 0.300f, 1.000f))
 				{
 					SDL_SetWindowBrightness(App->window->window, screenBrightness);
-					info.AddConsoleLog(__FILE__, __LINE__,"Brightness Change");
+					info.LOGC("Brightness Change");
 
 				}
 
@@ -409,13 +404,13 @@ void ModuleMenus::MenuConfig()
 					if (lights)
 					{
 						glEnable(GL_LIGHTING); //LIGHTS ENABLED
-						info.AddConsoleLog(__FILE__, __LINE__,"Lights Enabled");
+						info.LOGC("Lights Enabled");
 
 					}
 					else
 					{
 						glDisable(GL_LIGHTING); //LIGHTS DISABLED
-						info.AddConsoleLog(__FILE__, __LINE__,"Lights Disabled");
+						info.LOGC("Lights Disabled");
 					}
 
 				}
@@ -425,13 +420,13 @@ void ModuleMenus::MenuConfig()
 					if (depthTest)
 					{
 						glEnable(GL_DEPTH_TEST); //DEPTH TEST ENABLED
-						info.AddConsoleLog(__FILE__, __LINE__,"Depth Test Enabled");
+						info.LOGC("Depth Test Enabled");
 
 					}
 					else
 					{
 						glDisable(GL_DEPTH_TEST); //DEPTH TEST DISABLED
-						info.AddConsoleLog(__FILE__, __LINE__,"Depth Test Disabled");
+						info.LOGC("Depth Test Disabled");
 
 					}
 				}
@@ -440,13 +435,13 @@ void ModuleMenus::MenuConfig()
 					if (cullFace)
 					{
 						glEnable(GL_CULL_FACE); //CULL FACE ENABLED
-						info.AddConsoleLog(__FILE__, __LINE__,"Cull Face Enabled");
+						info.LOGC("Cull Face Enabled");
 
 					}
 					else
 					{
 						glDisable(GL_CULL_FACE); //CULL FACE  DISABLED
-						info.AddConsoleLog(__FILE__, __LINE__,"Cull Face Disabled");
+						info.LOGC("Cull Face Disabled");
 
 					}
 				}
@@ -456,13 +451,13 @@ void ModuleMenus::MenuConfig()
 					if (colorMaterial)
 					{
 						glEnable(GL_COLOR_MATERIAL); //COLOR MATERIAL ENABLED
-						info.AddConsoleLog(__FILE__, __LINE__,"Color Material Enabled");
+						info.LOGC("Color Material Enabled");
 
 					}
 					else
 					{
 						glDisable(GL_COLOR_MATERIAL); //COLOR MATERIAL  DISABLED
-						info.AddConsoleLog(__FILE__, __LINE__,"Color Material Disabled");
+						info.LOGC("Color Material Disabled");
 
 					}
 				}
@@ -473,14 +468,14 @@ void ModuleMenus::MenuConfig()
 					{
 						App->files_manager->textureEnabled = true;
 						//glEnable(GL_TEXTURE_2D); //TEXTURE 2D ENABLED
-						info.AddConsoleLog(__FILE__, __LINE__,"Texture 2D Enabled");
+						info.LOGC("Texture 2D Enabled");
 
 					}
 					else
 					{
 						App->files_manager->textureEnabled = false;
 						//glDisable(GL_TEXTURE_2D); //TEXTURE 2D DISABLED
-						info.AddConsoleLog(__FILE__, __LINE__,"Texture 2D Disabled");
+						info.LOGC("Texture 2D Disabled");
 
 					}
 				}
@@ -489,13 +484,13 @@ void ModuleMenus::MenuConfig()
 					if (wireframeView)
 					{
 						App->files_manager->wireframe = true; //WIREFRAME VIEW ENABLED
-						info.AddConsoleLog(__FILE__, __LINE__,"Wireframe View Enabled");
+						info.LOGC("Wireframe View Enabled");
 
 					}
 					else
 					{
 						App->files_manager->wireframe = false; //WIREFRAME VIEW DISABLED
-						info.AddConsoleLog(__FILE__, __LINE__,"Wireframe View Disabled");
+						info.LOGC("Wireframe View Disabled");
 
 					}
 

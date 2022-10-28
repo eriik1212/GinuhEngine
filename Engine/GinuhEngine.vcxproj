@@ -88,6 +88,7 @@
   <ItemGroup>
     <ClInclude Include="Application.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="ConsoleInfo.h" />
     <ClInclude Include="ExternalLibraries\ImGui\imconfig.h" />
     <ClInclude Include="ExternalLibraries\ImGui\imgui.h" />
     <ClInclude Include="ExternalLibraries\ImGui\imgui_impl_opengl3.h" />

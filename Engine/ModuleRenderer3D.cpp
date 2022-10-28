@@ -7,6 +7,8 @@
 #include "ModuleRenderer3D.h"
 #include "Glew/include/glew.h"
 #include "SDL/include/SDL_opengl.h"
+#include "ConsoleInfo.h"
+
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
@@ -26,7 +28,7 @@ ModuleRenderer3D::~ModuleRenderer3D()
 bool ModuleRenderer3D::Init()
 {
 	//LOG("Creating 3D Renderer context");
-	App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Creating 3D Renderer context");
+	info.LOGC( "Creating 3D Renderer context");
 
 	bool ret = true;
 
@@ -35,7 +37,7 @@ bool ModuleRenderer3D::Init()
 	if(context == NULL)
 	{
 		//LOG("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
-		App->menus->info.AddConsoleLog(__FILE__, __LINE__, "OpenGL context could not be created! SDL_Error: %s", SDL_GetError());
+		info.LOGC( "OpenGL context could not be created! SDL_Error: %s", SDL_GetError());
 
 		ret = false;
 	}
@@ -45,18 +47,18 @@ bool ModuleRenderer3D::Init()
 	//LOG("Using Glew %s", glewGetString(GLEW_VERSION));
 	if (GLEW_OK != err) {
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
-		App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Error: %a\n", glewGetErrorString(err));
+		info.LOGC( "Error: %a\n", glewGetErrorString(err));
 	}
 	else {
-		App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Using Glew %s", glewGetString(GLEW_VERSION));
+		info.LOGC( "Using Glew %s", glewGetString(GLEW_VERSION));
 
 	}
 	//Should be 2.0
 
-	App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Vendor: %s", glGetString(GL_VENDOR));
-	App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Renderer: %s", glGetString(GL_RENDERER));
-	App->menus->info.AddConsoleLog(__FILE__, __LINE__, "OpenGL version supported %s", glGetString(GL_VERSION));
-	App->menus->info.AddConsoleLog(__FILE__, __LINE__, "GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+	info.LOGC( "Vendor: %s", glGetString(GL_VENDOR));
+	info.LOGC( "Renderer: %s", glGetString(GL_RENDERER));
+	info.LOGC( "OpenGL version supported %s", glGetString(GL_VERSION));
+	info.LOGC( "GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
 	SDL_GL_MakeCurrent(App->window->window, context);
 
@@ -66,7 +68,7 @@ bool ModuleRenderer3D::Init()
 		if (VSYNC && SDL_GL_SetSwapInterval(1) < 0)
 		{
 			//LOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
-			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Warning: Unable to set VSync! SDL Error: %s", SDL_GetError());
+			info.LOGC( "Warning: Unable to set VSync! SDL Error: %s", SDL_GetError());
 		}
 
 		//Initialize Projection Matrix
@@ -77,7 +79,7 @@ bool ModuleRenderer3D::Init()
 		GLenum error = glGetError();
 		if(error != GL_NO_ERROR)
 		{
-			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Error initializing OpenGL! %s\n", gluErrorString(error));
+			info.LOGC( "Error initializing OpenGL! %s\n", gluErrorString(error));
 
 			ret = false;
 		}
@@ -90,7 +92,7 @@ bool ModuleRenderer3D::Init()
 		error = glGetError();
 		if(error != GL_NO_ERROR)
 		{
-			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Error initializing OpenGL! %s\n", gluErrorString(error));
+			info.LOGC( "Error initializing OpenGL! %s\n", gluErrorString(error));
 
 			ret = false;
 		}
@@ -105,7 +107,7 @@ bool ModuleRenderer3D::Init()
 		error = glGetError();
 		if(error != GL_NO_ERROR)
 		{
-			App->menus->info.AddConsoleLog(__FILE__, __LINE__,"Error initializing OpenGL! %s\n", gluErrorString(error));
+			info.LOGC("Error initializing OpenGL! %s\n", gluErrorString(error));
 			ret = false;
 		}
 
@@ -210,7 +212,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 bool ModuleRenderer3D::CleanUp()
 {
 	//LOG("Destroying 3D Renderer");
-	App->menus->info.AddConsoleLog(__FILE__, __LINE__,"Destroying 3D Renderer");
+	info.LOGC("Destroying 3D Renderer");
 
 
 	if (context != NULL)
@@ -262,6 +264,6 @@ void ModuleRenderer3D::InitFrameBuffer()
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		App->menus->info.AddConsoleLog(__FILE__, __LINE__, "ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
+		info.LOGC( "ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

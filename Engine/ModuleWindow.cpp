@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleWindow.h"
+#include "ConsoleInfo.h"
 
 ModuleWindow::ModuleWindow(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -17,14 +18,14 @@ ModuleWindow::~ModuleWindow()
 bool ModuleWindow::Init()
 {
 	//LOG("Init SDL window & surface");
-	App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Init SDL window & surface");
+	info.LOGC( "Init SDL window & surface");
 
 	bool ret = true;
 
 	if(SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
 		//LOG("SDL_VIDEO could not initialize! SDL_Error: %s\n", SDL_GetError());
-		App->menus->info.AddConsoleLog(__FILE__, __LINE__, "SDL_VIDEO could not initialize! SDL_Error: %s\n", SDL_GetError());
+		info.LOGC( "SDL_VIDEO could not initialize! SDL_Error: %s\n", SDL_GetError());
 
 		ret = false;
 	}
@@ -64,7 +65,7 @@ bool ModuleWindow::Init()
 		if(window == NULL)
 		{
 			//LOG("Window could not be created! SDL_Error: %s\n", SDL_GetError());
-			App->menus->info.AddConsoleLog(__FILE__, __LINE__,"Window could not be created! SDL_Error: %s\n", SDL_GetError());
+			info.LOGC("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 
 			ret = false;
 		}
@@ -84,7 +85,7 @@ bool ModuleWindow::CleanUp()
 {
 	//LOG("Destroying SDL window and quitting all SDL systems");
 
-	App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Destroying SDL window and quitting all SDL systems");
+	info.LOGC( "Destroying SDL window and quitting all SDL systems");
 
 	//Destroy window
 	if(window != NULL)

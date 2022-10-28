@@ -5,6 +5,8 @@
 
 #include "Glew/include/glew.h"
 #include "SDL/include/SDL_opengl.h"
+#include "ConsoleInfo.h"
+
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
@@ -21,7 +23,7 @@ ModuleSceneIntro::~ModuleSceneIntro()
 bool ModuleSceneIntro::Start()
 {
 	//LOG("Loading Intro assets");
-	App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Loading Intro assets");
+	info.LOGC( "Loading Intro assets");
 
 	bool ret = true;
 
@@ -36,7 +38,7 @@ bool ModuleSceneIntro::Start()
 bool ModuleSceneIntro::CleanUp()
 {
 	//LOG("Unloading Intro scene");
-	App->menus->info.AddConsoleLog(__FILE__, __LINE__, "Unloading Intro scene");
+	info.LOGC( "Unloading Intro scene");
 
 	return true;
 }

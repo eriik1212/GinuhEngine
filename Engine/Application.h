@@ -10,6 +10,7 @@
 #include "ModuleCamera3D.h"
 #include "ModuleMenus.h"
 #include "ModuleFilesManager.h"
+#include "ConsoleInfo.h"
 
 #include <vector>
 using namespace std;

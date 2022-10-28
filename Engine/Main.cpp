@@ -4,6 +4,7 @@
 #include "ModuleMenus.h"
 #include "Module.h"
 #include "MemLeaks.h"
+#include "ConsoleInfo.h"
 
 #include "SDL/include/SDL.h"
 #include "PhysFS/include/physfs.h"
@@ -37,19 +38,19 @@ int main(int argc, char ** argv)
 			App = new Application();
 			state = MAIN_START;
 			//LOG("-------------- Application Creation --------------");
-			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "-------------- Application Creation --------------");
+			info.LOGC( "-------------- Application Creation --------------");
 			
 			break;
 
 		case MAIN_START:
 
 			//LOG("-------------- Application Init --------------");
-			App->menus->info.AddConsoleLog(__FILE__, __LINE__, "-------------- Application Init --------------");
+			info.LOGC( "-------------- Application Init --------------");
 			
 			if (App->Init() == false)
 			{
 				//LOG("Application Init exits with ERROR");
-				App->menus->info.AddConsoleLog(__FILE__, __LINE__,"Application Init exits with ERROR");
+				info.LOGC("Application Init exits with ERROR");
 
 				state = MAIN_EXIT;
 			}
@@ -57,7 +58,7 @@ int main(int argc, char ** argv)
 			{
 				state = MAIN_UPDATE;
 				//LOG("-------------- Application Update --------------");
-				App->menus->info.AddConsoleLog(__FILE__, __LINE__,"-------------- Application Update --------------");
+				info.LOGC("-------------- Application Update --------------");
 
 			}
 
@@ -70,7 +71,7 @@ int main(int argc, char ** argv)
 			if (update_return == UPDATE_ERROR)
 			{
 				//LOG("Application Update exits with ERROR");
-				App->menus->info.AddConsoleLog(__FILE__, __LINE__,"Application Update exits with ERROR");
+				info.LOGC("Application Update exits with ERROR");
 
 				state = MAIN_EXIT;
 			}
@@ -83,12 +84,12 @@ int main(int argc, char ** argv)
 		case MAIN_FINISH:
 
 			//LOG("-------------- Application CleanUp --------------");
-			App->menus->info.AddConsoleLog(__FILE__, __LINE__,"-------------- Application CleanUp --------------");
+			info.LOGC("-------------- Application CleanUp --------------");
 
 			if (App->CleanUp() == false)
 			{
 				//LOG("Application CleanUp exits with ERROR");
-				App->menus->info.AddConsoleLog(__FILE__, __LINE__,"Application CleanUp exits with ERROR");
+				info.LOGC("Application CleanUp exits with ERROR");
 
 			}
 			else
@@ -101,7 +102,7 @@ int main(int argc, char ** argv)
 		}
 	}
 	LOG("Exiting game '%s'...\n", TITLE);
-	//App->menus->info.AddConsoleLog(__FILE__, __LINE__,("Exiting game '%s'...", TITLE));
+	//info.LOGC(("Exiting game '%s'...", TITLE));
 	delete App;
 	
 	ReportMemoryLeaks();

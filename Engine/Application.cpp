@@ -15,22 +15,22 @@ Application::Application()
 	// They will CleanUp() in reverse order
 
 
-	//ImGui Module
-	AddModule(menus);
-
 	// Main Modules
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
-	
+
+	//ImGui Module
+	AddModule(menus);
+
+	//Files Manager
+	AddModule(files_manager);
+
 	// Scene
 	AddModule(scene_intro);
 
 	// Renderer
 	AddModule(renderer3D);
-
-	//Files Manager
-	AddModule(files_manager);
 
 }
 
@@ -56,7 +56,7 @@ bool Application::Init()
 
 	// After all Init calls we call Start() in all modules
 	//LOG("Application Start --------------");
-	menus->info.AddConsoleLog(__FILE__, __LINE__, "Application Start --------------");
+	info.LOGC("Application Start --------------");
 
 	for (size_t i = 0; i < list_modules.size(); i++)
 	{

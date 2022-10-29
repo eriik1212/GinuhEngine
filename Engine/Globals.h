@@ -20,13 +20,11 @@
 void log(const char file[], int line, const char* format, ...);
 
 //void    ConsoleInfo::AddConsoleLog(const char file[], int line, const char* logText, ...);
-class ConsoleInfo;
 
 #define LOGC(logText, ...) info.AddConsoleLog(__FILE__, __LINE__, logText, __VA_ARGS__);
 
 struct ConsoleInfo
 {
-public:
 	ImGuiTextBuffer     Buf;
 	ImGuiTextFilter     Filter;
 	ImVector<int>       LineOffsets;        // Index to lines offset
@@ -36,7 +34,7 @@ public:
 
 	void AddConsoleLog(const char file[], int line, const char* logText, ...)
 	{
-		static char tmp_string[4096];
+		static  char tmp_string[4096];
 		static char tmp_string2[4096];
 		static va_list  ap;
 
@@ -64,7 +62,9 @@ public:
 		}
 
 		ScrollToBottom = true;
+
 	}
+
 	void    DrawConsole(const char* title, bool* p_opened = NULL)
 	{
 		ImGui::SetNextWindowSize(ImVec2(600, 200));

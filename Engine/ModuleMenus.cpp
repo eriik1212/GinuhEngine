@@ -6,6 +6,7 @@
 #include "Application.h"
 #include "ModuleMenus.h"
 #include "ConsoleInfo.h"
+
 #include <Windows.h>
 
 ModuleMenus::ModuleMenus(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -137,12 +138,12 @@ update_status ModuleMenus::PostUpdate(float dt)
 	if (consoleVisible) MenuConsole();
 
 	// --------------------------------------------------------------------------- WINDOW SCENE
-	ImGui::Begin("Scene");
-	ImGui::BeginChild("", ImVec2(SCREEN_WIDTH, SCREEN_HEIGHT));
-
+	ImGui::Begin("Scene", 0, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+	ImGui::BeginChild("", ImVec2(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h));
+	
 	ImVec2 wsize = ImGui::GetWindowSize();
 
-	ImGui::Image((ImTextureID)App->renderer3D->textColorBuff, wsize, ImVec2(0, 1), ImVec2(1, 0));
+	ImGui::Image((ImTextureID)App->renderer3D->textColorBuff, ImGui::GetContentRegionAvail(), ImVec2(0, 1), ImVec2(1, 0));
 
 	ImGui::EndChild();
 	ImGui::End();

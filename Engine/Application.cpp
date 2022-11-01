@@ -9,6 +9,8 @@ Application::Application()
 	camera = new ModuleCamera3D(this);
 	menus = new ModuleMenus(this);
 	files_manager = new ModuleFilesManager(this);
+	menu_gameObject = new ModuleMenuGameObject(this);
+	
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -28,8 +30,15 @@ Application::Application()
 	// Scene
 	AddModule(scene_intro);
 
+	//game obejct
+	AddModule(menu_gameObject);
+
 	// Renderer
 	AddModule(renderer3D);
+
+	
+
+	
 
 }
 

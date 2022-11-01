@@ -220,7 +220,8 @@ void ModuleFilesManager::LoadFile(const char* file_path)
 		}
 		App->menus->info.AddConsoleLog( "% s Pushed In List Successfully", file_path);
 		aiReleaseImport(scene);
-
+		
+		//He pensat que aqui potser es pot cridar a la funció CreateEmptyGameObject() posant els varems de la mesh carregada, 
 	}
 	else
 	{

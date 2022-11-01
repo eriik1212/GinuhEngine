@@ -2,10 +2,9 @@
 
 #include "Primitive.h"
 #include "Application.h"
-
-#include "Application.h"
 #include "ModuleMenus.h"
 #include "ConsoleInfo.h"
+//#include "ModuleMenuGameObject.h"
 
 #include <Windows.h>
 
@@ -130,6 +129,21 @@ update_status ModuleMenus::PostUpdate(float dt)
 				consoleVisible = !consoleVisible;
 			}
 
+			if (ImGui::MenuItem("Hierarchy"))
+			{
+				pOpen_hierarchy = true; // Window can close
+
+				hierarchyVisible = !hierarchyVisible;
+			}
+
+			if (ImGui::MenuItem("Inspector"))
+			{
+				pOpen_inspector = true; // Window can close
+
+				inspectorVisible = !inspectorVisible;
+			}
+
+
 			ImGui::EndMenu();
 		}
 
@@ -152,6 +166,8 @@ update_status ModuleMenus::PostUpdate(float dt)
 	if (configVisible) MenuConfig();
 	if (aboutVisible) MenuAbout();
 	if (consoleVisible) MenuConsole();
+	if (hierarchyVisible) MenuHierarchy();
+	if (inspectorVisible) MenuInspector();
 
 	// --------------------------------------------------------------------------- WINDOW SCENE
 	ImGui::Begin("Scene", 0, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
@@ -669,6 +685,95 @@ void ModuleMenus::MenuConsole()
 	}
 }
 
+
+void ModuleMenus::MenuHierarchy()
+{
+	if (pOpen_hierarchy)
+	{
+		if (ImGui::Begin("Hierarchy", &pOpen_hierarchy))
+		{
+			if (ImGui::Button("Create new Game Object", ImVec2(ImGui::GetWindowWidth(), 25)))
+			{
+				popUpOpen = !popUpOpen;
+				if (popUpOpen)
+				{
+					ImGui::OpenPopup("New GameObject");
+					ori = ImGui::GetMousePosOnOpeningCurrentPopup();
+				}
+				else
+				{
+					ImGui::CloseCurrentPopup();
+				}
+			}
+			
+
+
+		}
+		ImGui::End();
+	}
+	if (pOpen_hierarchy == NULL) hierarchyVisible = !hierarchyVisible; // Window is closed so function "MenuConfig()" stops being called
+
+}
+
+void ModuleMenus::MenuInspector()
+{
+	if (pOpen_inspector)
+	{
+		if (ImGui::Begin("Inspector", &pOpen_inspector))
+		{
+			selectGameobject = App->menu_gameObject->GetSelectedGameObject();
+			// Inspector
+			
+			////ImGui::Checkbox("##Enable", &selectGameobject->enabled);
+			//if (!selectGameobject->is_camera)
+			//{
+			//	ImGui::SameLine();
+			//	if (ImGui::Checkbox("Visible", &selectGameobject->visible))
+			//	{
+			//		SetVisible(selectGameobject, selectGameobject, selectGameobject->visible, true);
+			//	}
+			//}
+
+			if (App->menu_gameObject->GetSelectedGameObject() != NULL)
+			{
+		
+				if (App->menu_gameObject->GetSelectedGameObject()->GetComponent(Component::TYPE::TRANSFORM) != NULL)
+				{
+					dynamic_cast<C_Transform*>(App->menu_gameObject->GetSelectedGameObject()->GetComponent(Component::TYPE::TRANSFORM))->OnEditor();
+				}
+
+				ImGui::Separator();
+				if (ImGui::Button("Add Component"))
+				{
+					popUpOpen = !popUpOpen;
+					if (popUpOpen)
+					{
+						ImGui::OpenPopup("New Component");
+						ori = ImGui::GetMousePosOnOpeningCurrentPopup();
+					}
+					else
+					{
+						ImGui::CloseCurrentPopup();
+					}
+				}
+
+				if (popUpOpen)
+				{
+					ImGui::SetNextWindowSize(ImVec2(200.0f, 250.0f));
+					if (ImGui::BeginPopup("New Component"))
+					{
+						DisplayComponents();
+						ImGui::EndPopup();
+					}
+					
+				}
+			}
+		}
+		ImGui::End();
+	}
+	if (pOpen_inspector == NULL) inspectorVisible = !inspectorVisible; // Window is closed so function "MenuConfig()" stops being called
+}
+
 void ModuleMenus::OpenLink(const char* url)
 {
 	ShellExecuteA(0, "open", url, 0, 0, 0);
@@ -688,3 +793,38 @@ void ModuleMenus::PushLog(std::vector<float>* Log, float toPush) //Function to k
 
 }
 
+//void ModuleMenus::SetVisible(GameObject* selected_game_object, GameObject* game_object, bool visible, bool it_one)
+//{
+//	C_MeshRenderer* mr = dynamic_cast<C_MeshRenderer*>(game_object->GetComponent(Component::TYPE::MESH_RENDERER));
+//	if (mr != NULL && selected_game_object->GetParent()->visible)
+//	{
+//		if (game_object->visible || it_one) mr->GetMesh().visible = visible;
+//	}
+//	for (auto& childs : game_object->GetChilds())
+//	{
+//		SetVisible(selected_game_object, childs, visible, false);
+//	}
+//
+//}
+
+void ModuleMenus::DisplayComponents()
+{
+	ImGui::AlignTextToFramePadding();
+	ImGui::SameLine();
+	filter.Draw("##Filter");
+	std::string componentNames[numComponents - 1] = { "Camera", "Mesh Render" };
+	for (int i = 0; i < (numComponents - 1); i++)
+	{
+		std::string name = componentNames[i];
+		if (filter.PassFilter(name.c_str()))
+		{
+			if (ImGui::Selectable(name.c_str()))
+			{
+				switch (i)
+				{
+				//case 0: dynamic_cast<Camera*>(selectGameobject->AddComponent(Component::TYPE::CAMERA)); break;
+				}
+			}
+		}
+	}
+}

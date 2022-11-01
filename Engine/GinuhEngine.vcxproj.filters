@@ -166,6 +166,18 @@
     <ClCompile Include="ExternalLibraries\ImGui\imgui_widgets.cpp">
       <Filter>ExternalLibraries\ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="C_Transform.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleMenuGameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -429,6 +441,18 @@
     <ClInclude Include="ConsoleInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="C_Transform.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleMenuGameObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -463,6 +487,9 @@
     </Filter>
     <Filter Include="ExternalLibraries\ImGui">
       <UniqueIdentifier>{245948d4-6788-4ea3-b504-6a7c4fcc854f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components">
+      <UniqueIdentifier>{33f1ba1e-6cf4-48df-8bc6-4b6a43175629}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

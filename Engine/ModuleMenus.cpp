@@ -78,7 +78,7 @@ update_status ModuleMenus::PostUpdate(float dt)
 	//ImGui::Begin("GinuhEngine", 0, ImGuiWindowFlags_MenuBar);
 	if (ImGui::BeginMainMenuBar())
 	{
-		if (ImGui::BeginMenu("Files"))
+		/*if (ImGui::BeginMenu("Files"))
 		{
 			if (ImGui::MenuItem("New"))
 			{
@@ -88,6 +88,22 @@ update_status ModuleMenus::PostUpdate(float dt)
 			{
 
 			}
+			ImGui::EndMenu();
+		}*/
+		if (ImGui::BeginMenu("Create"))
+		{
+			if (ImGui::MenuItem("Cube"))
+				App->files_manager->LoadFile("Assets/Primitives/cube.fbx");
+			if (ImGui::MenuItem("Plane"))
+				App->files_manager->LoadFile("Assets/Primitives/plane.fbx");
+			if (ImGui::MenuItem("Cylinder"))
+				App->files_manager->LoadFile("Assets/Primitives/cylinder.fbx");
+			if (ImGui::MenuItem("Cone"))
+				App->files_manager->LoadFile("Assets/Primitives/cone.fbx");
+			if (ImGui::MenuItem("Sphere"))
+				App->files_manager->LoadFile("Assets/Primitives/sphere.fbx");
+			if (ImGui::MenuItem("Torus"))
+				App->files_manager->LoadFile("Assets/Primitives/torus.fbx");
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Windows"))
@@ -159,7 +175,7 @@ update_status ModuleMenus::PostUpdate(float dt)
 bool ModuleMenus::CleanUp()
 {
 	//LOG("Destroying ModuleMenus");
-	LOGC( "Destroying Module Menus");
+	App->menus->info.AddConsoleLog( "Destroying Module Menus");
 
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
@@ -319,14 +335,14 @@ void ModuleMenus::MenuConfig()
 					{
 						SDL_SetWindowSize(App->window->window, 1920, 1080);
 						SDL_SetWindowFullscreen(App->window->window, SDL_WINDOW_FULLSCREEN); //FULLSCREEN ENABLED
-						LOGC( "FullScreen Enabled");
+						App->menus->info.AddConsoleLog( "FullScreen Enabled");
 
 					}
 					else
 					{
 						SDL_SetWindowSize(App->window->window, SCREEN_WIDTH, SCREEN_HEIGHT);
 						SDL_SetWindowFullscreen(App->window->window, !SDL_WINDOW_FULLSCREEN); //FULLSCREEN DISABLED
-						LOGC("FullScreen Disabled");
+						App->menus->info.AddConsoleLog("FullScreen Disabled");
 
 					}
 				}
@@ -337,13 +353,13 @@ void ModuleMenus::MenuConfig()
 						if (resizable)
 						{
 							SDL_SetWindowResizable(App->window->window, SDL_TRUE); //RESIZABLE ENABLED
-							LOGC("Resizable Mode Enabled");
+							App->menus->info.AddConsoleLog("Resizable Mode Enabled");
 
 						}
 						else
 						{
 							SDL_SetWindowResizable(App->window->window, SDL_FALSE);//RESIZABLE DISABLED
-							LOGC("Resizable Mode Disabled");
+							App->menus->info.AddConsoleLog("Resizable Mode Disabled");
 
 						}
 					}
@@ -353,13 +369,13 @@ void ModuleMenus::MenuConfig()
 						if (borderless)
 						{
 							SDL_SetWindowBordered(App->window->window, SDL_FALSE); //BORDERLESS ENABLED
-							LOGC("Borderless Mode Enabled");
+							App->menus->info.AddConsoleLog("Borderless Mode Enabled");
 
 						}
 						else
 						{
 							SDL_SetWindowBordered(App->window->window, SDL_TRUE); //BORDERLESS DISABLED
-							LOGC("Borderless Mode Disabled");
+							App->menus->info.AddConsoleLog("Borderless Mode Disabled");
 
 						}
 					}
@@ -381,13 +397,13 @@ void ModuleMenus::MenuConfig()
 					if (vsync)
 					{
 						SDL_GL_SetSwapInterval(1); //VSYNC ENABLED
-						LOGC("Vsync Enabled");
+						App->menus->info.AddConsoleLog("Vsync Enabled");
 
 					}
 					else
 					{
 						SDL_GL_SetSwapInterval(0); //VSYNC DISABLED
-						LOGC("Vsync Disabled");
+						App->menus->info.AddConsoleLog("Vsync Disabled");
 
 					}
 				}
@@ -395,7 +411,7 @@ void ModuleMenus::MenuConfig()
 				if (ImGui::SliderFloat("Brightness", &screenBrightness, 0.300f, 1.000f))
 				{
 					SDL_SetWindowBrightness(App->window->window, screenBrightness);
-					LOGC("Brightness Change");
+					App->menus->info.AddConsoleLog("Brightness Change");
 
 				}
 
@@ -405,13 +421,13 @@ void ModuleMenus::MenuConfig()
 					if (lights)
 					{
 						glEnable(GL_LIGHTING); //LIGHTS ENABLED
-						LOGC("Lights Enabled");
+						App->menus->info.AddConsoleLog("Lights Enabled");
 
 					}
 					else
 					{
 						glDisable(GL_LIGHTING); //LIGHTS DISABLED
-						LOGC("Lights Disabled");
+						App->menus->info.AddConsoleLog("Lights Disabled");
 					}
 
 				}
@@ -421,13 +437,13 @@ void ModuleMenus::MenuConfig()
 					if (depthTest)
 					{
 						glEnable(GL_DEPTH_TEST); //DEPTH TEST ENABLED
-						LOGC("Depth Test Enabled");
+						App->menus->info.AddConsoleLog("Depth Test Enabled");
 
 					}
 					else
 					{
 						glDisable(GL_DEPTH_TEST); //DEPTH TEST DISABLED
-						LOGC("Depth Test Disabled");
+						App->menus->info.AddConsoleLog("Depth Test Disabled");
 
 					}
 				}
@@ -436,13 +452,13 @@ void ModuleMenus::MenuConfig()
 					if (cullFace)
 					{
 						glEnable(GL_CULL_FACE); //CULL FACE ENABLED
-						LOGC("Cull Face Enabled");
+						App->menus->info.AddConsoleLog("Cull Face Enabled");
 
 					}
 					else
 					{
 						glDisable(GL_CULL_FACE); //CULL FACE  DISABLED
-						LOGC("Cull Face Disabled");
+						App->menus->info.AddConsoleLog("Cull Face Disabled");
 
 					}
 				}
@@ -452,13 +468,13 @@ void ModuleMenus::MenuConfig()
 					if (colorMaterial)
 					{
 						glEnable(GL_COLOR_MATERIAL); //COLOR MATERIAL ENABLED
-						LOGC("Color Material Enabled");
+						App->menus->info.AddConsoleLog("Color Material Enabled");
 
 					}
 					else
 					{
 						glDisable(GL_COLOR_MATERIAL); //COLOR MATERIAL  DISABLED
-						LOGC("Color Material Disabled");
+						App->menus->info.AddConsoleLog("Color Material Disabled");
 
 					}
 				}
@@ -469,14 +485,14 @@ void ModuleMenus::MenuConfig()
 					{
 						App->files_manager->textureEnabled = true;
 						//glEnable(GL_TEXTURE_2D); //TEXTURE 2D ENABLED
-						LOGC("Texture 2D Enabled");
+						App->menus->info.AddConsoleLog("Texture 2D Enabled");
 
 					}
 					else
 					{
 						App->files_manager->textureEnabled = false;
 						//glDisable(GL_TEXTURE_2D); //TEXTURE 2D DISABLED
-						LOGC("Texture 2D Disabled");
+						App->menus->info.AddConsoleLog("Texture 2D Disabled");
 
 					}
 				}
@@ -485,13 +501,13 @@ void ModuleMenus::MenuConfig()
 					if (wireframeView)
 					{
 						App->files_manager->wireframe = true; //WIREFRAME VIEW ENABLED
-						LOGC("Wireframe View Enabled");
+						App->menus->info.AddConsoleLog("Wireframe View Enabled");
 
 					}
 					else
 					{
 						App->files_manager->wireframe = false; //WIREFRAME VIEW DISABLED
-						LOGC("Wireframe View Disabled");
+						App->menus->info.AddConsoleLog("Wireframe View Disabled");
 
 					}
 

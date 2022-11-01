@@ -38,19 +38,19 @@ int main(int argc, char ** argv)
 			App = new Application();
 			state = MAIN_START;
 			//LOG("-------------- Application Creation --------------");
-			LOGC( "-------------- Application Creation --------------");
+			App->menus->info.AddConsoleLog( "-------------- Application Creation --------------");
 			
 			break;
 
 		case MAIN_START:
 
 			//LOG("-------------- Application Init --------------");
-			LOGC( "-------------- Application Init --------------");
+			App->menus->info.AddConsoleLog( "-------------- Application Init --------------");
 			
 			if (App->Init() == false)
 			{
 				//LOG("Application Init exits with ERROR");
-				LOGC("Application Init exits with ERROR");
+				App->menus->info.AddConsoleLog("Application Init exits with ERROR");
 
 				state = MAIN_EXIT;
 			}
@@ -58,7 +58,7 @@ int main(int argc, char ** argv)
 			{
 				state = MAIN_UPDATE;
 				//LOG("-------------- Application Update --------------");
-				LOGC("-------------- Application Update --------------");
+				App->menus->info.AddConsoleLog("-------------- Application Update --------------");
 
 			}
 
@@ -71,7 +71,7 @@ int main(int argc, char ** argv)
 			if (update_return == UPDATE_ERROR)
 			{
 				//LOG("Application Update exits with ERROR");
-				LOGC("Application Update exits with ERROR");
+				App->menus->info.AddConsoleLog("Application Update exits with ERROR");
 
 				state = MAIN_EXIT;
 			}
@@ -84,12 +84,12 @@ int main(int argc, char ** argv)
 		case MAIN_FINISH:
 
 			//LOG("-------------- Application CleanUp --------------");
-			LOGC("-------------- Application CleanUp --------------");
+			App->menus->info.AddConsoleLog("-------------- Application CleanUp --------------");
 
 			if (App->CleanUp() == false)
 			{
 				//LOG("Application CleanUp exits with ERROR");
-				LOGC("Application CleanUp exits with ERROR");
+				App->menus->info.AddConsoleLog("Application CleanUp exits with ERROR");
 
 			}
 			else
@@ -102,7 +102,7 @@ int main(int argc, char ** argv)
 		}
 	}
 	LOG("Exiting game '%s'...\n", TITLE);
-	//LOGC(("Exiting game '%s'...", TITLE));
+	//App->menus->info.AddConsoleLog(("Exiting game '%s'...", TITLE));
 	delete App;
 	
 	ReportMemoryLeaks();

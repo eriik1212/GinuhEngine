@@ -193,7 +193,7 @@ update_status ModuleMenus::PostUpdate(float dt)
 
 	// --------------------------------------------------------------------------- WINDOW SCENE
 	ImGui::Begin("Scene", 0, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
-	ImGui::BeginChild("", ImVec2(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h));
+	ImGui::BeginChild("##ID", ImVec2(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h));
 	
 	ImVec2 wsize = ImGui::GetWindowSize();
 
@@ -371,15 +371,16 @@ void ModuleMenus::MenuConfig()
 				{
 					if (fullscreen)
 					{
-						SDL_SetWindowSize(App->window->window, 1920, 1080);
 						SDL_SetWindowFullscreen(App->window->window, SDL_WINDOW_FULLSCREEN); //FULLSCREEN ENABLED
+						SDL_SetWindowSize(App->window->window, 1920, 1080);
 						App->menus->info.AddConsoleLog( "FullScreen Enabled");
 
 					}
 					else
 					{
+						
+						SDL_SetWindowFullscreen(App->window->window, 0); //FULLSCREEN DISABLED
 						SDL_SetWindowSize(App->window->window, SCREEN_WIDTH, SCREEN_HEIGHT);
-						SDL_SetWindowFullscreen(App->window->window, !SDL_WINDOW_FULLSCREEN); //FULLSCREEN DISABLED
 						App->menus->info.AddConsoleLog("FullScreen Disabled");
 
 					}

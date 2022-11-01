@@ -19,6 +19,13 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 ModuleSceneIntro::~ModuleSceneIntro()
 {}
 
+bool ModuleSceneIntro::Init()
+{
+	root = CreateGameObject("Scene Root", nullptr, "tag");
+
+	return true;
+}
+
 // Load assets
 bool ModuleSceneIntro::Start()
 {
@@ -41,6 +48,12 @@ bool ModuleSceneIntro::CleanUp()
 	App->menus->info.AddConsoleLog( "Unloading Intro scene");
 
 	return true;
+}
+
+GameObject* ModuleSceneIntro::CreateGameObject(std::string name, GameObject* parent, std::string tag)
+{
+	GameObject* go = new GameObject(parent, name, tag, true);
+	return go;
 }
 
 // Update: draw background

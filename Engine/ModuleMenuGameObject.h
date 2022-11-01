@@ -23,7 +23,7 @@ public:
 		return selected_go;
 	}
 
-	GameObject CreateEmptyGameObject(aiNode* node, const aiScene* scene, std::string path, GameObject* parent);
+	GameObject CreateGameObject(aiNode* node, const aiScene* scene, std::string path, GameObject* parent);
 
 	GameObject* rootGameObject = nullptr;
 private:

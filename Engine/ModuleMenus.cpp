@@ -692,22 +692,11 @@ void ModuleMenus::MenuHierarchy()
 	{
 		if (ImGui::Begin("Hierarchy", &pOpen_hierarchy))
 		{
-			if (ImGui::Button("Create new Game Object", ImVec2(ImGui::GetWindowWidth(), 25)))
+			/*if (ImGui::Button("Create new Game Object", ImVec2(ImGui::GetWindowWidth(), 25)))
 			{
-				popUpOpen = !popUpOpen;
-				if (popUpOpen)
-				{
-					ImGui::OpenPopup("New GameObject");
-					ori = ImGui::GetMousePosOnOpeningCurrentPopup();
-				}
-				else
-				{
-					ImGui::CloseCurrentPopup();
-				}
-			}
+				
+			}*/
 			
-
-
 		}
 		ImGui::End();
 	}

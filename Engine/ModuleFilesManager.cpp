@@ -220,8 +220,10 @@ void ModuleFilesManager::LoadFile(const char* file_path)
 		}
 		App->menus->info.AddConsoleLog( "% s Pushed In List Successfully", file_path);
 		aiReleaseImport(scene);
-		
-		//He pensat que aqui potser es pot cridar a la funció CreateEmptyGameObject() posant els varems de la mesh carregada, 
+
+		// Load into a GameObject and set the mesh render
+		/*if (create_go) GameObject* newGameObject = new GameObject(parent, node_name.C_Str());
+		else dynamic_cast<C_MeshRenderer*>(parent->AddComponent(Component::TYPE::MESH_RENDERER))->InitAsNewMesh(vertices, indices);*/
 	}
 	else
 	{
@@ -369,3 +371,47 @@ void ModuleFilesManager::LoadMeshData(MeshData* mesh)
 	//Push Mesh to the List
 	meshList.push_back(mesh);
 }
+
+//void ModuleFilesManager::CreatePrimitive(GameObject* parent, PrimitiveType type)
+//{
+//	if (parent == nullptr) parent = App->menu_gameObject->rootGameObject;
+//
+//	switch (type)
+//	{
+//	case PrimitiveType::PLANE:
+//	{
+//		GameObject* plane = LoadFile("Assets/plane.fbx");
+//		plane->SetParent(parent);
+//		plane->name = "Plane";
+//		break;
+//	}
+//	case PrimitiveType::CUBE:
+//	{
+//		GameObject* cube = MeshImporter::LoadMesh("Assets/cube.fbx");
+//		cube->SetParent(parent);
+//		cube->name = "Cube";
+//		break;
+//	}
+//	case PrimitiveType::SPHERE:
+//	{
+//		GameObject* sphere = MeshImporter::LoadMesh("Assets/sphere.fbx");
+//		sphere->SetParent(parent);
+//		sphere->name = "Sphere";
+//		break;
+//	}
+//	case PrimitiveType::CYLINDER:
+//	{
+//		GameObject* cylinder = MeshImporter::LoadMesh("Assets/cylinder.fbx");
+//		cylinder->SetParent(parent);
+//		cylinder->name = "Cylinder";
+//		break;
+//	}
+//	case PrimitiveType::CONE:
+//	{
+//		GameObject* cone = MeshImporter::LoadMesh("Assets/cone.fbx");
+//		cone->SetParent(parent);
+//		cone->name = "Cone";
+//		break;
+//	}
+//	}
+//}

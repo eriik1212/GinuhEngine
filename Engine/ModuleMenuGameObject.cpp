@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleMenuGameObject.h"
+#include "ModuleMenus.h"
 
 ModuleMenuGameObject::ModuleMenuGameObject(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -13,7 +14,7 @@ ModuleMenuGameObject::~ModuleMenuGameObject()
 bool ModuleMenuGameObject::Start()
 {
 	//LOG("Loading Intro assets");
-	LOGC("Loading Menu Game Object");
+	App->menus->info.AddConsoleLog("Loading Menu Game Object");
 
 	bool ret = true;
 
@@ -24,18 +25,17 @@ bool ModuleMenuGameObject::Start()
 bool ModuleMenuGameObject::CleanUp()
 {
 	//LOG("Unloading Intro scene");
-	LOGC("Unloading Menu Game Object");
+	App->menus->info.AddConsoleLog("Unloading Menu Game Object");
 
 	return true;
 }
 
-GameObject ModuleMenuGameObject::CreateEmptyGameObject(aiNode* node, const aiScene* scene, std::string path, GameObject* parent)
+GameObject ModuleMenuGameObject::CreateGameObject(aiNode* node, const aiScene* scene, std::string path, GameObject* parent)
 {
 	GameObject* newParent = nullptr;
 
 	bool necessaryNode = node->mNumChildren > 1;
 
-	
 
 	//if (parent == nullptr) returnGameObject = newParent = new GameObject(rootGameObject, "GameObject");
 	//else newParent = new GameObject(parent, node->mName.C_Str());

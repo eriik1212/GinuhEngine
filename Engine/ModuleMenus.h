@@ -5,7 +5,6 @@
 
 #include "Module.h"
 #include "Globals.h"
-#include "GameObject.h"
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_impl_sdl.h"
 #include "ImGui/imgui_impl_opengl3.h"
@@ -130,9 +129,8 @@ private:
 	bool inspectorVisible = true;
 	void MenuInspector();
 
-	//functions for inspector
-	void SetVisible(GameObject* selected_game_object, GameObject* game_object, bool visible, bool it_one);
-	void DisplayComponents();
+	
+	
 
 
 	//--------------------------------------------- OPTIONS
@@ -156,7 +154,6 @@ private:
 
 	bool hardwareActive = true;
 
-	
 
 	void OpenLink(const char* url);
 	void PushLog(std::vector<float>* Log, float toPush);
@@ -167,14 +164,8 @@ private:
 	std::vector<float> fpsLog;
 	std::vector<float> timeLog;
 
-	//Hierarchy
-	bool popUpOpen = false;
-	ImVec2 ori;
-
-	//Inspector
-	GameObject* selectGameobject = nullptr;
-	ImGuiTextFilter filter;
-	static const int numComponents = 3;
+	
+	
 
 
 };

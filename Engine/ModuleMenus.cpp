@@ -3,7 +3,7 @@
 #include "Primitive.h"
 #include "Application.h"
 #include "ModuleMenus.h"
-#include "ConsoleInfo.h"
+
 //#include "ModuleMenuGameObject.h"
 
 #include <Windows.h>
@@ -92,17 +92,39 @@ update_status ModuleMenus::PostUpdate(float dt)
 		if (ImGui::BeginMenu("Create"))
 		{
 			if (ImGui::MenuItem("Cube"))
+			{
 				App->files_manager->LoadFile("Assets/Primitives/cube.fbx");
+				
+				
+			}
 			if (ImGui::MenuItem("Plane"))
+			{
 				App->files_manager->LoadFile("Assets/Primitives/plane.fbx");
+				
+				
+			}
 			if (ImGui::MenuItem("Cylinder"))
+			{
 				App->files_manager->LoadFile("Assets/Primitives/cylinder.fbx");
+				
+				
+			}
 			if (ImGui::MenuItem("Cone"))
+			{
 				App->files_manager->LoadFile("Assets/Primitives/cone.fbx");
+				
+			}
 			if (ImGui::MenuItem("Sphere"))
+			{
 				App->files_manager->LoadFile("Assets/Primitives/sphere.fbx");
+				
+				
+			}	
 			if (ImGui::MenuItem("Torus"))
+			{
 				App->files_manager->LoadFile("Assets/Primitives/torus.fbx");
+				
+			}	
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Windows"))
@@ -696,7 +718,8 @@ void ModuleMenus::MenuHierarchy()
 			{
 				
 			}*/
-			
+		
+
 		}
 		ImGui::End();
 	}
@@ -710,53 +733,8 @@ void ModuleMenus::MenuInspector()
 	{
 		if (ImGui::Begin("Inspector", &pOpen_inspector))
 		{
-			selectGameobject = App->menu_gameObject->GetSelectedGameObject();
-			// Inspector
 			
-			////ImGui::Checkbox("##Enable", &selectGameobject->enabled);
-			//if (!selectGameobject->is_camera)
-			//{
-			//	ImGui::SameLine();
-			//	if (ImGui::Checkbox("Visible", &selectGameobject->visible))
-			//	{
-			//		SetVisible(selectGameobject, selectGameobject, selectGameobject->visible, true);
-			//	}
-			//}
-
-			if (App->menu_gameObject->GetSelectedGameObject() != NULL)
-			{
-		
-				if (App->menu_gameObject->GetSelectedGameObject()->GetComponent(Component::TYPE::TRANSFORM) != NULL)
-				{
-					dynamic_cast<C_Transform*>(App->menu_gameObject->GetSelectedGameObject()->GetComponent(Component::TYPE::TRANSFORM))->OnEditor();
-				}
-
-				ImGui::Separator();
-				if (ImGui::Button("Add Component"))
-				{
-					popUpOpen = !popUpOpen;
-					if (popUpOpen)
-					{
-						ImGui::OpenPopup("New Component");
-						ori = ImGui::GetMousePosOnOpeningCurrentPopup();
-					}
-					else
-					{
-						ImGui::CloseCurrentPopup();
-					}
-				}
-
-				if (popUpOpen)
-				{
-					ImGui::SetNextWindowSize(ImVec2(200.0f, 250.0f));
-					if (ImGui::BeginPopup("New Component"))
-					{
-						DisplayComponents();
-						ImGui::EndPopup();
-					}
-					
-				}
-			}
+			
 		}
 		ImGui::End();
 	}
@@ -782,38 +760,3 @@ void ModuleMenus::PushLog(std::vector<float>* Log, float toPush) //Function to k
 
 }
 
-//void ModuleMenus::SetVisible(GameObject* selected_game_object, GameObject* game_object, bool visible, bool it_one)
-//{
-//	C_MeshRenderer* mr = dynamic_cast<C_MeshRenderer*>(game_object->GetComponent(Component::TYPE::MESH_RENDERER));
-//	if (mr != NULL && selected_game_object->GetParent()->visible)
-//	{
-//		if (game_object->visible || it_one) mr->GetMesh().visible = visible;
-//	}
-//	for (auto& childs : game_object->GetChilds())
-//	{
-//		SetVisible(selected_game_object, childs, visible, false);
-//	}
-//
-//}
-
-void ModuleMenus::DisplayComponents()
-{
-	ImGui::AlignTextToFramePadding();
-	ImGui::SameLine();
-	filter.Draw("##Filter");
-	std::string componentNames[numComponents - 1] = { "Camera", "Mesh Render" };
-	for (int i = 0; i < (numComponents - 1); i++)
-	{
-		std::string name = componentNames[i];
-		if (filter.PassFilter(name.c_str()))
-		{
-			if (ImGui::Selectable(name.c_str()))
-			{
-				switch (i)
-				{
-				//case 0: dynamic_cast<Camera*>(selectGameobject->AddComponent(Component::TYPE::CAMERA)); break;
-				}
-			}
-		}
-	}
-}

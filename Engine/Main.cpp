@@ -4,7 +4,6 @@
 #include "ModuleMenus.h"
 #include "Module.h"
 #include "MemLeaks.h"
-#include "ConsoleInfo.h"
 
 #include "SDL/include/SDL.h"
 #include "PhysFS/include/physfs.h"

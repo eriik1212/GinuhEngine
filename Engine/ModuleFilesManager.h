@@ -46,14 +46,6 @@ struct MeshData
 	void DrawMesh();
 };
 
-enum class PrimitiveType
-{
-	PLANE,
-	CUBE,
-	SPHERE,
-	CYLINDER,
-	CONE,
-};
 
 class ModuleFilesManager : public Module
 {
@@ -72,7 +64,7 @@ public:
 	void LoadMeshData(MeshData* mesh);
 	uint LoadTexture(const char* filePath);
 
-	void CreatePrimitive(GameObject* parent, PrimitiveType type);
+	
 	// ------------------------------------ Draw
 	void Render();
 

@@ -1,6 +1,6 @@
 #include "Application.h"
 #include "ModuleFilesManager.h"
-#include "ConsoleInfo.h"
+
 
 
 namespace fs = std::filesystem;
@@ -221,9 +221,6 @@ void ModuleFilesManager::LoadFile(const char* file_path)
 		App->menus->info.AddConsoleLog( "% s Pushed In List Successfully", file_path);
 		aiReleaseImport(scene);
 
-		// Load into a GameObject and set the mesh render
-		/*if (create_go) GameObject* newGameObject = new GameObject(parent, node_name.C_Str());
-		else dynamic_cast<C_MeshRenderer*>(parent->AddComponent(Component::TYPE::MESH_RENDERER))->InitAsNewMesh(vertices, indices);*/
 	}
 	else
 	{

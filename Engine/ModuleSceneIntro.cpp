@@ -5,7 +5,6 @@
 
 #include "Glew/include/glew.h"
 #include "SDL/include/SDL_opengl.h"
-#include "ConsoleInfo.h"
 
 #include <gl/GL.h>
 #include <gl/GLU.h>
@@ -21,7 +20,7 @@ ModuleSceneIntro::~ModuleSceneIntro()
 
 bool ModuleSceneIntro::Init()
 {
-	root = CreateGameObject("Scene Root", nullptr, "tag");
+	
 
 	return true;
 }
@@ -50,19 +49,15 @@ bool ModuleSceneIntro::CleanUp()
 	return true;
 }
 
-GameObject* ModuleSceneIntro::CreateGameObject(std::string name, GameObject* parent, std::string tag)
-{
-	GameObject* go = new GameObject(parent, name, tag, true);
-	return go;
-}
+
 
 // Update: draw background
 update_status ModuleSceneIntro::Update(float dt)
 {
 
-	//Plane p(0, 1, 0, 0);
-	//p.axis = true;
-	//p.Render();
+	Plane p(0, 1, 0, 0);
+	p.axis = true;
+	p.Render();
 
 	// ------------------------------------------------------------------- DRAW CUBE IN DIRECT MODE
 	{

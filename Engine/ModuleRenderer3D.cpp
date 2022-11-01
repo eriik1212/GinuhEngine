@@ -7,7 +7,7 @@
 #include "ModuleRenderer3D.h"
 #include "Glew/include/glew.h"
 #include "SDL/include/SDL_opengl.h"
-#include "ConsoleInfo.h"
+
 
 #include <gl/GL.h>
 #include <gl/GLU.h>

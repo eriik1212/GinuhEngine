@@ -11,6 +11,8 @@
 #include "ModuleMenus.h"
 #include "ModuleFilesManager.h"
 #include "ConsoleInfo.h"
+#include "GameObject.h"
+#include "ModuleMenuGameObject.h"
 
 #include <vector>
 using namespace std;
@@ -23,9 +25,11 @@ public:
 	ModuleSceneIntro* scene_intro;
 	ModuleRenderer3D* renderer3D;
 	ModuleCamera3D* camera;
+	ModuleMenuGameObject* menu_gameObject;
 	ModuleMenus* menus;
 	ModuleFilesManager* files_manager;
-
+	
+	
 private:
 
 	Timer	ms_timer;

@@ -17,6 +17,28 @@
 
 #define LOG(format, ...) log(__FILE__, __LINE__, format, __VA_ARGS__);
 
+// Deleting a buffer
+#define RELEASE( x )\
+    {\
+       if( x != nullptr )\
+       {\
+         delete x;\
+	     x = nullptr;\
+       }\
+    }
+
+// Deleting an array of buffers
+#define RELEASE_ARRAY( x )\
+	{\
+       if( x != nullptr )\
+       {\
+           delete[] x;\
+	       x = nullptr;\
+		 }\
+	 }
+
+
+
 void log(const char file[], int line, const char* format, ...);
 
 //void    ConsoleInfo::AddConsoleLog(const char file[], int line, const char* logText, ...);

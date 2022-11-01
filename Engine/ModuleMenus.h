@@ -115,10 +115,10 @@ public:
 	ConsoleInfo info;
     
 private:
-	bool aboutVisible = false;
+	bool aboutVisible = true;
 	void MenuAbout();
 
-	bool configVisible = false;
+	bool configVisible = true;
 	void MenuConfig();
 
 	bool consoleVisible = true;

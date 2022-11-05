@@ -13,9 +13,8 @@
 #include <string>
 #include <filesystem>
 
-#include "imgui/imgui.h"
-
 #define LOG(format, ...) log(__FILE__, __LINE__, format, __VA_ARGS__);
+void log(const char file[], int line, const char* format, ...);
 
 // Deleting a buffer
 #define RELEASE( x )\
@@ -36,10 +35,6 @@
 	       x = nullptr;\
 		 }\
 	 }
-
-
-
-void log(const char file[], int line, const char* format, ...);
 
 //void    ConsoleInfo::AddConsoleLog(const char file[], int line, const char* logText, ...);
 
@@ -70,3 +65,7 @@ enum update_status
 #define WIN_FULLSCREEN_DESKTOP false
 #define VSYNC true
 #define TITLE "GINUH ENGINE"
+
+
+class Application;
+extern Application* App;

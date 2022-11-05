@@ -31,6 +31,10 @@ bool ModuleFilesManager::Start()
 {
 	bool ret = true;
 
+	GameObject* Root = new GameObject(NULL, "World");
+
+	App->scene_intro->gameObjects[0] = Root;
+
 	// ------------------------------------- Load All Existing .fbx files -------------------------------------
 	std::string path = "Assets/";
 	for (const auto& entry : fs::directory_iterator(path))
@@ -59,9 +63,7 @@ bool ModuleFilesManager::Start()
 		}
 		else if (existent_filedir != nullptr && extension == ".png")
 		{
-
 			LoadTexture(existent_filedir);
-
 			App->menus->info.AddConsoleLog("File '%s' Loaded Succesfully", fileName_char);
 
 		}
@@ -111,7 +113,13 @@ update_status ModuleFilesManager::Update(float dt)
 			{
 				LoadFile(new_filedir);
 			}
-			else if (extension == ".png" && new_filedir != nullptr)	LoadTexture(new_filedir);
+			else if (extension == ".png" && new_filedir != nullptr)
+			{
+				for (int m = 0; m < meshList.size(); m++)
+				{
+					newMesh[m]->texture_id = LoadTexture(new_filedir);
+				}
+			}
 
 			App->menus->info.AddConsoleLog("File '%s', with Extension '%s' Dropped Succesfully", fileName_char, extension_char);
 
@@ -217,6 +225,15 @@ void ModuleFilesManager::LoadFile(const char* file_path)
 					delete newMesh[m];
 					newMesh[m] = nullptr;
 				}
+
+				//uint ID = App->scene_intro->CreateGameObject(App->scene_intro->gameObjects[m], scene->mMeshes[i]->mName.C_Str());
+				//dynamic_cast<C_Transform*>(App->scene_intro->gameObjects[ID]->GetComponent(Component::TYPE::TRANSFORM))->SetTransform(float3(0, 0, 0), float3(0, 0, 0), float3(1, 1, 1));
+				//dynamic_cast<C_Mesh*>(App->scene_intro->gameObjects[ID]->CreateComponent(Component::TYPE::MESH))->SetMesh(newMesh[m], scene->mMeshes[i]->mName.C_Str());
+
+				//dynamic_cast<C_Texture*>(App->scene_intro->gameObjects[ID]->CreateComponent(Component::TYPE::TEXTURE))->SetTexture(newMesh[m]->texPath);
+
+				//LoadMeshData(newMesh[m]);
+
 		}
 		App->menus->info.AddConsoleLog( "% s Pushed In List Successfully", file_path);
 		aiReleaseImport(scene);
@@ -346,6 +363,11 @@ uint ModuleFilesManager::LoadTexture(const char* filePath)
 		return 0;
 	}
 
+	for (int m = 0; m < meshList.size(); m++)
+	{
+		newMesh[m]->texPath = filePath;
+	}
+
 }
 
 void ModuleFilesManager::LoadMeshData(MeshData* mesh)
@@ -368,47 +390,3 @@ void ModuleFilesManager::LoadMeshData(MeshData* mesh)
 	//Push Mesh to the List
 	meshList.push_back(mesh);
 }
-
-//void ModuleFilesManager::CreatePrimitive(GameObject* parent, PrimitiveType type)
-//{
-//	if (parent == nullptr) parent = App->menu_gameObject->rootGameObject;
-//
-//	switch (type)
-//	{
-//	case PrimitiveType::PLANE:
-//	{
-//		GameObject* plane = LoadFile("Assets/plane.fbx");
-//		plane->SetParent(parent);
-//		plane->name = "Plane";
-//		break;
-//	}
-//	case PrimitiveType::CUBE:
-//	{
-//		GameObject* cube = MeshImporter::LoadMesh("Assets/cube.fbx");
-//		cube->SetParent(parent);
-//		cube->name = "Cube";
-//		break;
-//	}
-//	case PrimitiveType::SPHERE:
-//	{
-//		GameObject* sphere = MeshImporter::LoadMesh("Assets/sphere.fbx");
-//		sphere->SetParent(parent);
-//		sphere->name = "Sphere";
-//		break;
-//	}
-//	case PrimitiveType::CYLINDER:
-//	{
-//		GameObject* cylinder = MeshImporter::LoadMesh("Assets/cylinder.fbx");
-//		cylinder->SetParent(parent);
-//		cylinder->name = "Cylinder";
-//		break;
-//	}
-//	case PrimitiveType::CONE:
-//	{
-//		GameObject* cone = MeshImporter::LoadMesh("Assets/cone.fbx");
-//		cone->SetParent(parent);
-//		cone->name = "Cone";
-//		break;
-//	}
-//	}
-//}

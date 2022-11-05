@@ -29,7 +29,7 @@ public:
 		va_start(ap, logText);
 		vsprintf_s(tmp_string, 4096, logText, ap);
 		va_end(ap);
-		sprintf_s(tmp_string2, 4096, "\n%s(%d) : %s", "", "", tmp_string);
+		sprintf_s(tmp_string2, 4096, "\n%s(%d) : %s", __FILE__, __LINE__, tmp_string);
 		OutputDebugString(tmp_string2);
 
 		int old_size = Buf.size();

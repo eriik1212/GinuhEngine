@@ -32,5 +32,4 @@ public:
 	unsigned int frameBuff;
 	unsigned int textColorBuff;
 	unsigned int rbo;
-
 };

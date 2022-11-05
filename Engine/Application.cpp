@@ -10,8 +10,6 @@ Application::Application()
 	menus = new ModuleMenus(this);
 	files_manager = new ModuleFilesManager(this);
 	
-	
-
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
 	// They will CleanUp() in reverse order

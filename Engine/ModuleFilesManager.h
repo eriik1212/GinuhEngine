@@ -3,6 +3,9 @@
 
 #include "Module.h"
 #include "Globals.h"
+#include "C_Mesh.h"
+#include "C_Texture.h"
+
 #include "Glew/include/glew.h"
 
 #include "DevIL/include/il.h"
@@ -43,6 +46,11 @@ struct MeshData
 	uint num_vertex = 0;
 	float* vertex = nullptr;
 
+	uint texture_id;
+	const char* texPath;
+
+	const char* meshName;
+
 	void DrawMesh();
 };
 
@@ -70,7 +78,6 @@ public:
 
 	bool wireframe = false;
 	bool textureEnabled = true;
-
 
 private:
 	SDL_Event event;                        // Declare event handle

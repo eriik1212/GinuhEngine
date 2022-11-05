@@ -166,6 +166,21 @@
     <ClCompile Include="ExternalLibraries\ImGui\imgui_widgets.cpp">
       <Filter>ExternalLibraries\ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="C_Transform.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="C_Texture.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="C_Mesh.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -426,6 +441,21 @@
     <ClInclude Include="ExternalLibraries\ImGui\imstb_truetype.h">
       <Filter>ExternalLibraries\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="C_Transform.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="C_Texture.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="C_Mesh.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -460,6 +490,12 @@
     </Filter>
     <Filter Include="ExternalLibraries\ImGui">
       <UniqueIdentifier>{245948d4-6788-4ea3-b504-6a7c4fcc854f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Components">
+      <UniqueIdentifier>{60e13658-1c98-419a-9bf4-0f6dfaff691c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components">
+      <UniqueIdentifier>{dfd582fc-1f2e-4651-b54c-d07355042ef0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

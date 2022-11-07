@@ -40,11 +40,7 @@ public:
 	string name;
 	uint id = 0;
 
-
 	GameObject* parent = nullptr;
-
-
-	uint id_count = 0;
 
 private:
 	vector <GameObject*> children;

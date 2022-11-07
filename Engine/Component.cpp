@@ -16,7 +16,7 @@ Component::~Component()
 {
 }
 
-void Component::OnGui()
+void Component::PrintGui()
 {
 
 }

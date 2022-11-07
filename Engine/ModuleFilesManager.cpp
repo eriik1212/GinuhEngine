@@ -80,7 +80,7 @@ update_status ModuleFilesManager::PreUpdate(float dt)
 }
 
 update_status ModuleFilesManager::Update(float dt)
-{	
+{
 	// ------------------------------------------------------------------------ Drag & Drop LOGIC
 	SDL_EventState(SDL_DROPFILE, SDL_ENABLE);
 
@@ -120,9 +120,9 @@ update_status ModuleFilesManager::Update(float dt)
 			App->menus->info.AddConsoleLog("File '%s', with Extension '%s' Dropped Succesfully", fileName_char, extension_char);
 
 		}
-			SDL_free(dropped_filedir);    // Free dropped_filedir memory
-			
-			break;
+						   SDL_free(dropped_filedir);    // Free dropped_filedir memory
+
+						   break;
 		}
 
 	}
@@ -164,87 +164,88 @@ void ModuleFilesManager::LoadFile(const char* file_path)
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
+		GameObject* Root = new GameObject(NULL, fs::path(file_path).filename().string());
+
+		App->scene_intro->gameObjects[id_count] = Root;
+
 		for (int i = 0; i < scene->mNumMeshes; i++)
 		{
-			int m = meshList.size();
 
-				newMesh[m] = new MeshData();
-				// copy vertices
-				newMesh[m]->num_vertex = scene->mMeshes[i]->mNumVertices;
-				newMesh[m]->vertex = new float[newMesh[m]->num_vertex * VERTEX_FEATURES];
-				//memcpy(newMesh->vertex, scene->mMeshes[i]->mVertices, sizeof(float) * newMesh->num_vertex * 3);
-				App->menus->info.AddConsoleLog("New mesh with %d vertices", newMesh[m]->num_vertex);
+			newMesh[i] = new MeshData();
+			// copy vertices
+			newMesh[i]->num_vertex = scene->mMeshes[i]->mNumVertices;
+			newMesh[i]->vertex = new float[newMesh[i]->num_vertex * VERTEX_FEATURES];
+			//memcpy(newMesh->vertex, scene->mMeshes[i]->mVertices, sizeof(float) * newMesh->num_vertex * 3);
+			App->menus->info.AddConsoleLog("New mesh with %d vertices", newMesh[i]->num_vertex);
 
-				for (int v = 0; v < newMesh[m]->num_vertex; v++) {
-					// Vertex
-					newMesh[m]->vertex[v * VERTEX_FEATURES] = scene->mMeshes[i]->mVertices[v].x;
-					newMesh[m]->vertex[v * VERTEX_FEATURES + 1] = scene->mMeshes[i]->mVertices[v].y;
-					newMesh[m]->vertex[v * VERTEX_FEATURES + 2] = scene->mMeshes[i]->mVertices[v].z;
+			for (int v = 0; v < newMesh[i]->num_vertex; v++) {
+				// Vertex
+				newMesh[i]->vertex[v * VERTEX_FEATURES] = scene->mMeshes[i]->mVertices[v].x;
+				newMesh[i]->vertex[v * VERTEX_FEATURES + 1] = scene->mMeshes[i]->mVertices[v].y;
+				newMesh[i]->vertex[v * VERTEX_FEATURES + 2] = scene->mMeshes[i]->mVertices[v].z;
 
-					if (scene->mMeshes[i]->HasTextureCoords(0))
-					{
-						// UVs
-						newMesh[m]->vertex[v * VERTEX_FEATURES + 3] = scene->mMeshes[i]->mTextureCoords[0][v].x;
-						newMesh[m]->vertex[v * VERTEX_FEATURES + 4] = scene->mMeshes[i]->mTextureCoords[0][v].y;
-					}
-					// -------------------------------------------------------------------------------------- In a future
-					if (scene->mMeshes[i]->HasNormals())
-					{
-						newMesh[m]->vertex[v * VERTEX_FEATURES + 5] = scene->mMeshes[i]->mNormals[v].x;
-						newMesh[m]->vertex[v * VERTEX_FEATURES + 6] = scene->mMeshes[i]->mNormals[v].y;
-						newMesh[m]->vertex[v * VERTEX_FEATURES + 7] = scene->mMeshes[i]->mNormals[v].z;
-					}
-				}
-
-				// copy faces
-				if (scene->mMeshes[i]->HasFaces())
+				if (scene->mMeshes[i]->HasTextureCoords(0))
 				{
-					newMesh[m]->num_index = scene->mMeshes[i]->mNumFaces * 3;
-					newMesh[m]->index = new uint[newMesh[m]->num_index]; // assume each face is a triangle
+					// UVs
+					newMesh[i]->vertex[v * VERTEX_FEATURES + 3] = scene->mMeshes[i]->mTextureCoords[0][v].x;
+					newMesh[i]->vertex[v * VERTEX_FEATURES + 4] = scene->mMeshes[i]->mTextureCoords[0][v].y;
+				}
+				// -------------------------------------------------------------------------------------- In a future
+				if (scene->mMeshes[i]->HasNormals())
+				{
+					newMesh[i]->vertex[v * VERTEX_FEATURES + 5] = scene->mMeshes[i]->mNormals[v].x;
+					newMesh[i]->vertex[v * VERTEX_FEATURES + 6] = scene->mMeshes[i]->mNormals[v].y;
+					newMesh[i]->vertex[v * VERTEX_FEATURES + 7] = scene->mMeshes[i]->mNormals[v].z;
+				}
+			}
 
-					for (uint j = 0; j < scene->mMeshes[i]->mNumFaces; ++j)
+			// copy faces
+			if (scene->mMeshes[i]->HasFaces())
+			{
+				newMesh[i]->num_index = scene->mMeshes[i]->mNumFaces * 3;
+				newMesh[i]->index = new uint[newMesh[i]->num_index]; // assume each face is a triangle
+
+				for (uint j = 0; j < scene->mMeshes[i]->mNumFaces; ++j)
+				{
+					if (scene->mMeshes[i]->mFaces[j].mNumIndices != 3)
 					{
-						if (scene->mMeshes[i]->mFaces[j].mNumIndices != 3)
-						{
-							App->menus->info.AddConsoleLog( "WARNING, geometry face with != 3 indices!");
-						}
-						else
-						{
-							memcpy(&newMesh[m]->index[j * 3], scene->mMeshes[i]->mFaces[j].mIndices, 3 * sizeof(uint));
-						}
+						App->menus->info.AddConsoleLog("WARNING, geometry face with != 3 indices!");
 					}
-					LoadMeshData(newMesh[m]);
+					else
+					{
+						memcpy(&newMesh[i]->index[j * 3], scene->mMeshes[i]->mFaces[j].mIndices, 3 * sizeof(uint));
+					}
 				}
-				else {
-					App->menus->info.AddConsoleLog( "Scene %s, has no faces.", file_path);
+			}
+			else {
+				App->menus->info.AddConsoleLog("Scene %s, has no faces.", file_path);
 
-					delete newMesh[m];
-					newMesh[m] = nullptr;
-				}
+				delete newMesh[i];
+				newMesh[i] = nullptr;
+			}
 
-				uint ID = App->scene_intro->CreateGameObject(App->scene_intro->gameObjects[m], scene->mMeshes[i]->mName.C_Str());
-				dynamic_cast<C_Transform*>(App->scene_intro->gameObjects[ID]->GetComponent(Component::TYPE::TRANSFORM))->SetTransform(float3(0, 0, 0), float3(0, 0, 0), float3(1, 1, 1));
-				dynamic_cast<C_Mesh*>(App->scene_intro->gameObjects[ID]->CreateComponent(Component::TYPE::MESH))->SetMesh(newMesh[m], scene->mMeshes[i]->mName.C_Str());
+			uint ID = App->scene_intro->CreateGameObject(App->scene_intro->gameObjects[0], scene->mMeshes[i]->mName.C_Str());
+			dynamic_cast<C_Transform*>(App->scene_intro->gameObjects[ID]->GetComponent(Component::TYPE::TRANSFORM))->SetTransform(float3(0, 0, 0), float3(0, 0, 0), float3(1, 1, 1));
+			dynamic_cast<C_Mesh*>(App->scene_intro->gameObjects[ID]->CreateComponent(Component::TYPE::MESH))->SetMesh(newMesh[i], scene->mMeshes[i]->mName.C_Str());
 
-				//dynamic_cast<C_Texture*>(App->scene_intro->gameObjects[ID]->CreateComponent(Component::TYPE::TEXTURE))->SetTexture(newMesh[m]->texPath);
+			//dynamic_cast<C_Texture*>(App->scene_intro->gameObjects[ID]->CreateComponent(Component::TYPE::TEXTURE))->SetTexture(newMesh[i]->texPath);
 
-				//LoadMeshData(newMesh[m]);
-
+			LoadMeshData(newMesh[i]);
 		}
-		App->menus->info.AddConsoleLog( "% s Pushed In List Successfully", file_path);
+		App->menus->info.AddConsoleLog("% s Pushed In List Successfully", file_path);
 		aiReleaseImport(scene);
 
 	}
 	else
 	{
-		App->menus->info.AddConsoleLog( "Error loading scene % s. ERROR: %s", file_path, aiGetErrorString());
+		App->menus->info.AddConsoleLog("Error loading scene % s. ERROR: %s", file_path, aiGetErrorString());
 	}
-	
+
 }
 
 void ModuleFilesManager::Render()
 {
-	if(textureEnabled)
+	if (textureEnabled)
 		glEnable(GL_TEXTURE_2D);
 	else
 		glDisable(GL_TEXTURE_2D);
@@ -278,27 +279,18 @@ void MeshData::DrawMesh()
 	glTexCoordPointer(2, GL_FLOAT, sizeof(float) * VERTEX_FEATURES, (void*)(3 * sizeof(float)));
 	glNormalPointer(GL_FLOAT, sizeof(float) * VERTEX_FEATURES, NULL);
 
-	glPushMatrix();
-
 	// Draw
 	glDrawElements(GL_TRIANGLES, num_index, GL_UNSIGNED_INT, NULL);
 
-	glPopMatrix();
-
 	// ----------------------------------------------------------------------- DRAW TEXTURE CORRECTLY
 	for (int v = 0; v < num_vertex; v++) {
-		//glEnableClientState(GL_VERTEX_ARRAY);
+
 		glVertexPointer(3, GL_FLOAT, sizeof(float) * VERTEX_FEATURES, &vertex[v * VERTEX_FEATURES]);
-		glVertexPointer(3, GL_FLOAT, sizeof(float) * VERTEX_FEATURES, &vertex[v * VERTEX_FEATURES + 1]);
-		glVertexPointer(3, GL_FLOAT, sizeof(float) * VERTEX_FEATURES, &vertex[v * VERTEX_FEATURES + 2]);
 		glClientActiveTexture(GL_TEXTURE0);
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glTexCoordPointer(2, GL_FLOAT, sizeof(float) * VERTEX_FEATURES, &vertex[v * VERTEX_FEATURES + 3]);
-		glTexCoordPointer(2, GL_FLOAT, sizeof(float) * VERTEX_FEATURES, &vertex[v * VERTEX_FEATURES + 4]);
+		glTexCoordPointer(2, GL_FLOAT, sizeof(float) * VERTEX_FEATURES, &vertex[v * VERTEX_FEATURES]);
 		glEnableClientState(GL_NORMAL_ARRAY);
-		glNormalPointer(GL_FLOAT, sizeof(float) * VERTEX_FEATURES, &vertex[v * VERTEX_FEATURES + 5]);
-		glNormalPointer(GL_FLOAT, sizeof(float) * VERTEX_FEATURES, &vertex[v * VERTEX_FEATURES + 6]);
-		glNormalPointer(GL_FLOAT, sizeof(float) * VERTEX_FEATURES, &vertex[v * VERTEX_FEATURES + 7]);
+		glNormalPointer(GL_FLOAT, sizeof(float) * VERTEX_FEATURES, &vertex[v * VERTEX_FEATURES]);
 
 		//glDrawRangeElements(GL_TRIANGLES, vertex[v * VERTEX_FEATURES], vertex[v * VERTEX_FEATURES + 1], vertex[v * VERTEX_FEATURES + 2], GL_UNSIGNED_SHORT, index);
 
@@ -315,7 +307,7 @@ uint ModuleFilesManager::LoadTexture(const char* filePath)
 	ilInit();
 	iluInit();
 	ilutInit();
-	
+
 	// -------------------------------------- Loading Image
 	if (ilLoadImage(filePath))
 	{
@@ -335,7 +327,7 @@ uint ModuleFilesManager::LoadTexture(const char* filePath)
 		imgHeight = ilGetInteger(IL_IMAGE_HEIGHT);
 		int const type = ilGetInteger(IL_IMAGE_TYPE);
 		int const format = ilGetInteger(IL_IMAGE_FORMAT);
-		
+
 		// ---------------------------------------------------------------------------------------------------- Create Texture from ImageData
 		glTexImage2D(GL_TEXTURE_2D, 0, format, imgWidth, imgHeight, 0, format,
 			type, data);
@@ -354,7 +346,7 @@ uint ModuleFilesManager::LoadTexture(const char* filePath)
 	}
 	else
 	{
-		App->menus->info.AddConsoleLog( "DevIL ERROR: Could not Load Image. Error: %s", ilGetError());
+		App->menus->info.AddConsoleLog("DevIL ERROR: Could not Load Image. Error: %s", ilGetError());
 
 		return 0;
 	}

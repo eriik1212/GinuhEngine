@@ -129,8 +129,7 @@ private:
 	bool inspectorVisible = true;
 	void MenuInspector();
 
-	void DisplayGameObjects(GameObject* go);
-	
+	void PrintGameObjects(GameObject* go);
 
 
 	//--------------------------------------------- OPTIONS

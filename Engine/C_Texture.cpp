@@ -25,7 +25,7 @@ void C_Texture::SetTexture(const char* texture_name)
 }
 
 
-//void C_Texture::OnGui()
+//void C_Texture::PrintGui()
 //{
 //
 //	if (ImGui::CollapsingHeader("Texture"))

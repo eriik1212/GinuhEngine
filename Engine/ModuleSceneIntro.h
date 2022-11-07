@@ -20,4 +20,5 @@ public:
 	static std::map<uint, GameObject*> gameObjects;
 
 	GameObject* gameobject_selected = nullptr;
+
 };

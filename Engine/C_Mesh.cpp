@@ -27,7 +27,7 @@ void C_Mesh::SetMesh(MeshData* mesh, std::string mesh_name)
 }
 
 
-void C_Mesh::OnGui()
+void C_Mesh::PrintGui()
 {
 
 	if (ImGui::CollapsingHeader("Mesh"))

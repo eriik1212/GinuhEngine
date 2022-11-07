@@ -47,7 +47,6 @@ update_status ModuleMenus::Update(float dt)
 
 	PushLog(&fpsLog, FPS);
 	PushLog(&timeLog, MS);
-
 	return UPDATE_CONTINUE;
 }
 
@@ -716,11 +715,9 @@ void ModuleMenus::MenuHierarchy()
 		if (ImGui::Begin("Hierarchy", &pOpen_hierarchy))
 		{
 			ImGui::Text("GameObjects: \n");
-			//for (int g = 0; g < App->scene_intro->gameObjects.size(); g++)
+			for (int g = 0; g < App->scene_intro->gameObjects.size(); g++)
 			{
-
-				//DisplayGameObjects(App->scene_intro->gameObjects[0]);
-
+				PrintGameObjects(App->scene_intro->gameObjects[g]);
 			}
 		}
 		ImGui::End();
@@ -733,17 +730,21 @@ void ModuleMenus::MenuInspector()
 {
 	if (pOpen_inspector)
 	{
-		if (ImGui::Begin("Inspector", &pOpen_inspector))
+		ImGui::Begin("Inspector", &pOpen_inspector, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar);
+		if (App->scene_intro->gameobject_selected != NULL)
 		{
-			
-			
+			for (size_t i = 0; i < App->scene_intro->gameobject_selected->GetComponents().size(); i++)
+			{
+				App->scene_intro->gameobject_selected->GetComponentByNum(i)->PrintGui();
+			}
 		}
+
 		ImGui::End();
 	}
 	if (pOpen_inspector == NULL) inspectorVisible = !inspectorVisible; // Window is closed so function "MenuInspector()" stops being called
 }
 
-void ModuleMenus::DisplayGameObjects(GameObject* go)
+void ModuleMenus::PrintGameObjects(GameObject* go)
 {
 	ImGuiTreeNodeFlags TreeFlags = ImGuiTreeNodeFlags_OpenOnArrow;
 	if (go == App->scene_intro->gameobject_selected)
@@ -771,7 +772,7 @@ void ModuleMenus::DisplayGameObjects(GameObject* go)
 			}
 			for (size_t i = 0; i < go->GetChildren().size(); i++)
 			{
-				DisplayGameObjects(go->GetChild(i));
+				PrintGameObjects(go->GetChild(i));
 			}
 			ImGui::TreePop();
 		}

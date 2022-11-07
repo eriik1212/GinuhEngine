@@ -28,7 +28,7 @@ void C_Transform::SetTransform(float3 position, float3 rotation, float3 scale)
 	transform.scale = scale;
 }
 
-void C_Transform::OnGui()
+void C_Transform::PrintGui()
 {
 
 	if (ImGui::CollapsingHeader("Transform"))

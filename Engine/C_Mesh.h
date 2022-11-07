@@ -19,7 +19,7 @@ public:
 
 	void SetMesh(MeshData* mesh, std::string mesh_name);
 
-	void OnGui();
+	void PrintGui();
 
 	MeshData* GetMesh()
 	{

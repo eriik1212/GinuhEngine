@@ -29,7 +29,7 @@ public:
 	Component(GameObject* game_object, TYPE type);
 	virtual ~Component();
 
-	virtual void OnGui();
+	virtual void PrintGui();
 
 	TYPE GetType() { return type; }
 

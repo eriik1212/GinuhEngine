@@ -28,7 +28,7 @@ public:
 
 	void SetTransform(float3 position, float3 rotation, float3 scale);
 
-	void OnGui();
+	void PrintGui();
 
 	Transform transform;
 };

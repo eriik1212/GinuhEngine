@@ -5,6 +5,7 @@
 #include "Globals.h"
 #include "C_Mesh.h"
 #include "C_Texture.h"
+#include "GameObject.h"
 
 #include "Glew/include/glew.h"
 
@@ -78,6 +79,8 @@ public:
 
 	bool wireframe = false;
 	bool textureEnabled = true;
+
+	uint id_count = 0;
 
 private:
 	SDL_Event event;                        // Declare event handle

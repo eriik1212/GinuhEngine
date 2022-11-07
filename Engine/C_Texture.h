@@ -16,7 +16,7 @@ public:
 
 	void SetTexture(const char* texture_name);
 
-	//void OnGui();
+	//void PrintGui();
 
 
 	const char* name;

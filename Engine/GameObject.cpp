@@ -15,11 +15,10 @@
 
 GameObject::GameObject(GameObject* parent, std::string name)
 {
-	
-	App->scene_intro->gameObjects[id_count] = this;
+	App->scene_intro->gameObjects[id] = this;
 	this->name = name;
-	id = id_count;
-	id_count++;
+	//id = App->files_manager->id_count;
+	//App->files_manager->id_count++;
 	dynamic_cast<C_Transform*>(CreateComponent(Component::TYPE::TRANSFORM));
 	if (parent != nullptr) parent->AddChild(this);
 }
@@ -49,9 +48,9 @@ Component* GameObject::CreateComponent(Component::TYPE type)
 	case Component::TYPE::MESH:
 		new_component = new C_Mesh(this);
 		break;
-	case Component::TYPE::TEXTURE:
+	/*case Component::TYPE::TEXTURE:
 		new_component = new C_Texture(this);
-		break;
+		break;*/
 		/*case Component::TYPE::CAMERA:
 			new_component = new C_Camera(this);
 			break;*/

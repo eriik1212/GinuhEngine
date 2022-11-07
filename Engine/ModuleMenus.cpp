@@ -715,16 +715,17 @@ void ModuleMenus::MenuHierarchy()
 	{
 		if (ImGui::Begin("Hierarchy", &pOpen_hierarchy))
 		{
-			/*if (ImGui::Button("Create new Game Object", ImVec2(ImGui::GetWindowWidth(), 25)))
+			ImGui::Text("GameObjects: \n");
+			//for (int g = 0; g < App->scene_intro->gameObjects.size(); g++)
 			{
-				
-			}*/
-		
 
+				//DisplayGameObjects(App->scene_intro->gameObjects[0]);
+
+			}
 		}
 		ImGui::End();
 	}
-	if (pOpen_hierarchy == NULL) hierarchyVisible = !hierarchyVisible; // Window is closed so function "MenuConfig()" stops being called
+	if (pOpen_hierarchy == NULL) hierarchyVisible = !hierarchyVisible; // Window is closed so function "MenuHierarchy()" stops being called
 
 }
 
@@ -739,7 +740,42 @@ void ModuleMenus::MenuInspector()
 		}
 		ImGui::End();
 	}
-	if (pOpen_inspector == NULL) inspectorVisible = !inspectorVisible; // Window is closed so function "MenuConfig()" stops being called
+	if (pOpen_inspector == NULL) inspectorVisible = !inspectorVisible; // Window is closed so function "MenuInspector()" stops being called
+}
+
+void ModuleMenus::DisplayGameObjects(GameObject* go)
+{
+	ImGuiTreeNodeFlags TreeFlags = ImGuiTreeNodeFlags_OpenOnArrow;
+	if (go == App->scene_intro->gameobject_selected)
+	{
+		TreeFlags |= ImGuiTreeNodeFlags_Selected;
+	}
+	if (go->GetChildren().empty())
+	{
+		TreeFlags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+		ImGui::TreeNodeEx(go->name.c_str(), TreeFlags);
+
+		if (ImGui::IsItemHovered() && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+		{
+			App->scene_intro->gameobject_selected = go;
+		}
+
+	}
+	else
+	{
+		if (ImGui::TreeNodeEx(go->name.c_str(), TreeFlags))
+		{
+			if (ImGui::IsItemHovered() && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+			{
+				App->scene_intro->gameobject_selected = go;
+			}
+			for (size_t i = 0; i < go->GetChildren().size(); i++)
+			{
+				DisplayGameObjects(go->GetChild(i));
+			}
+			ImGui::TreePop();
+		}
+	}
 }
 
 void ModuleMenus::OpenLink(const char* url)

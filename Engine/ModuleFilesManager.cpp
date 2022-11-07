@@ -31,10 +31,6 @@ bool ModuleFilesManager::Start()
 {
 	bool ret = true;
 
-	GameObject* Root = new GameObject(NULL, "World");
-
-	App->scene_intro->gameObjects[0] = Root;
-
 	// ------------------------------------- Load All Existing .fbx files -------------------------------------
 	std::string path = "Assets/";
 	for (const auto& entry : fs::directory_iterator(path))
@@ -226,9 +222,9 @@ void ModuleFilesManager::LoadFile(const char* file_path)
 					newMesh[m] = nullptr;
 				}
 
-				//uint ID = App->scene_intro->CreateGameObject(App->scene_intro->gameObjects[m], scene->mMeshes[i]->mName.C_Str());
-				//dynamic_cast<C_Transform*>(App->scene_intro->gameObjects[ID]->GetComponent(Component::TYPE::TRANSFORM))->SetTransform(float3(0, 0, 0), float3(0, 0, 0), float3(1, 1, 1));
-				//dynamic_cast<C_Mesh*>(App->scene_intro->gameObjects[ID]->CreateComponent(Component::TYPE::MESH))->SetMesh(newMesh[m], scene->mMeshes[i]->mName.C_Str());
+				uint ID = App->scene_intro->CreateGameObject(App->scene_intro->gameObjects[m], scene->mMeshes[i]->mName.C_Str());
+				dynamic_cast<C_Transform*>(App->scene_intro->gameObjects[ID]->GetComponent(Component::TYPE::TRANSFORM))->SetTransform(float3(0, 0, 0), float3(0, 0, 0), float3(1, 1, 1));
+				dynamic_cast<C_Mesh*>(App->scene_intro->gameObjects[ID]->CreateComponent(Component::TYPE::MESH))->SetMesh(newMesh[m], scene->mMeshes[i]->mName.C_Str());
 
 				//dynamic_cast<C_Texture*>(App->scene_intro->gameObjects[ID]->CreateComponent(Component::TYPE::TEXTURE))->SetTexture(newMesh[m]->texPath);
 

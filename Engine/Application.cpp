@@ -28,16 +28,8 @@ Application::Application()
 	// Scene
 	AddModule(scene_intro);
 
-	//game obejct
-	//still working on it :)
-
 	// Renderer
 	AddModule(renderer3D);
-
-	
-
-	
-
 }
 
 Application::~Application()

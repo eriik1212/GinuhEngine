@@ -164,9 +164,9 @@ void ModuleFilesManager::LoadFile(const char* file_path)
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
-		GameObject* Root = new GameObject(NULL, fs::path(file_path).filename().string());
+		GameObject* Root = new GameObject(App->scene_intro->gameObjects[0], fs::path(file_path).filename().string());
 
-		App->scene_intro->gameObjects[id_count] = Root;
+		App->scene_intro->gameObjects[1] = Root;
 
 		for (int i = 0; i < scene->mNumMeshes; i++)
 		{
@@ -224,7 +224,7 @@ void ModuleFilesManager::LoadFile(const char* file_path)
 				newMesh[i] = nullptr;
 			}
 
-			uint ID = App->scene_intro->CreateGameObject(App->scene_intro->gameObjects[0], scene->mMeshes[i]->mName.C_Str());
+			uint ID = App->scene_intro->CreateGameObject(App->scene_intro->gameObjects[1], scene->mMeshes[i]->mName.C_Str());
 			dynamic_cast<C_Transform*>(App->scene_intro->gameObjects[ID]->GetComponent(Component::TYPE::TRANSFORM))->SetTransform(float3(0, 0, 0), float3(0, 0, 0), float3(1, 1, 1));
 			dynamic_cast<C_Mesh*>(App->scene_intro->gameObjects[ID]->CreateComponent(Component::TYPE::MESH))->SetMesh(newMesh[i], scene->mMeshes[i]->mName.C_Str());
 

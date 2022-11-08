@@ -715,10 +715,9 @@ void ModuleMenus::MenuHierarchy()
 		if (ImGui::Begin("Hierarchy", &pOpen_hierarchy))
 		{
 			ImGui::Text("GameObjects: \n");
-			for (int g = 0; g < App->scene_intro->gameObjects.size(); g++)
-			{
-				PrintGameObjects(App->scene_intro->gameObjects[g]);
-			}
+			// We manage the "GameObject[0]" as the scene, so all others GameObjects are its children
+			// We "only" print the Root, and it "automatically" print its children
+			PrintGameObjects(App->scene_intro->gameObjects[0]);
 		}
 		ImGui::End();
 	}

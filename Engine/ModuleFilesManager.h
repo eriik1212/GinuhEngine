@@ -80,7 +80,7 @@ public:
 	bool wireframe = false;
 	bool textureEnabled = true;
 
-	uint id_count = 0;
+	uint id_count = 1;
 
 private:
 	SDL_Event event;                        // Declare event handle

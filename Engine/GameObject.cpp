@@ -1,24 +1,18 @@
 #pragma once
-#include "Globals.h"
 #include "Application.h"
 #include "GameObject.h"
 #include "Component.h"
 #include "C_Transform.h"
 #include "C_Mesh.h"
 #include "C_Texture.h"
-#include "ModuleFilesManager.h"
-
-#include <iostream>
-#include <string>
-#include <vector>
-
+#include "ModuleSceneIntro.h"
 
 GameObject::GameObject(GameObject* parent, std::string name)
 {
-	App->scene_intro->gameObjects[id] = this;
+	App->scene_intro->gameObjects[id_count] = this;
 	this->name = name;
-	//id = App->files_manager->id_count;
-	//App->files_manager->id_count++;
+	id = id_count;
+	id_count++;
 	dynamic_cast<C_Transform*>(CreateComponent(Component::TYPE::TRANSFORM));
 	if (parent != nullptr) parent->AddChild(this);
 }

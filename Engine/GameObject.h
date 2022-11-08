@@ -1,9 +1,9 @@
 #pragma once
 #include "Globals.h"
 #include "Application.h"
-#include "Module.h"
 #include "Component.h"
 #include "C_Transform.h"
+#include "ModuleSceneIntro.h"
 
 #include <iostream>
 #include <string>
@@ -11,6 +11,8 @@
 #include <map>
 
 using namespace std;
+
+class ModuleSceneIntro;
 
 class GameObject
 {
@@ -40,6 +42,7 @@ public:
 	string name;
 	uint id = 0;
 
+	uint id_count;
 	GameObject* parent = nullptr;
 
 private:

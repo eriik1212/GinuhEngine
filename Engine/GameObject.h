@@ -12,8 +12,6 @@
 
 using namespace std;
 
-class ModuleSceneIntro;
-
 class GameObject
 {
 public:
@@ -48,5 +46,7 @@ public:
 private:
 	vector <GameObject*> children;
 	vector<Component*> components;
+
+	Component* new_component;
 
 };

@@ -39,6 +39,9 @@ int main(int argc, char ** argv)
 			//LOG("-------------- Application Creation --------------");
 			App->menus->info.AddConsoleLog( "-------------- Application Creation --------------");
 			
+			//Detect Memory Leaks
+			//_CrtSetBreakAlloc(190);
+
 			break;
 
 		case MAIN_START:

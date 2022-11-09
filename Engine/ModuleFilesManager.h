@@ -48,7 +48,6 @@ struct MeshData
 	float* vertex = nullptr;
 
 	uint texture_id;
-	const char* texPath;
 
 	const char* meshName;
 
@@ -86,10 +85,10 @@ private:
 	SDL_Event event;                        // Declare event handle
 	char* dropped_filedir = "";                  // Pointer for directory of dropped file
 	const char* assets_dir = "Assets/";
+	char* texPath = "";
 
 	MeshData* newMesh[MAX_MESHES];
 	vector<MeshData*> meshList;
-
 };
 
 static ILuint ImgId;

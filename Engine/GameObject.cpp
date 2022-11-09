@@ -25,14 +25,15 @@ GameObject::~GameObject()
 		{
 			delete components[i];
 			components[i] = nullptr;
+
 		}
 	}
 	components.clear();
+
 }
 
 Component* GameObject::CreateComponent(Component::TYPE type)
 {
-	Component* new_component;
 	switch (type)
 	{
 	case Component::TYPE::TRANSFORM:
@@ -42,9 +43,9 @@ Component* GameObject::CreateComponent(Component::TYPE type)
 	case Component::TYPE::MESH:
 		new_component = new C_Mesh(this);
 		break;
-	/*case Component::TYPE::TEXTURE:
+	case Component::TYPE::TEXTURE:
 		new_component = new C_Texture(this);
-		break;*/
+		break;
 		/*case Component::TYPE::CAMERA:
 			new_component = new C_Camera(this);
 			break;*/

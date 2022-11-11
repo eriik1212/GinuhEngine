@@ -152,6 +152,8 @@ bool ModuleFilesManager::CleanUp()
 		newMesh[m] = nullptr;
 	}
 
+	delete GameObjectRoot;
+	GameObjectRoot = nullptr;
 
 	meshList.clear();
 
@@ -164,9 +166,9 @@ void ModuleFilesManager::LoadFile(const char* file_path)
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
-		GameObject* Root = new GameObject(App->scene_intro->gameObjects[0], fs::path(file_path).filename().string());
+		GameObjectRoot = new GameObject(App->scene_intro->gameObjects[0], fs::path(file_path).filename().string());
 
-		App->scene_intro->gameObjects[1] = Root;
+		App->scene_intro->gameObjects[1] = GameObjectRoot;
 
 		for (int i = 0; i < scene->mNumMeshes; i++)
 		{

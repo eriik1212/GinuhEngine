@@ -18,13 +18,15 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
-{}
+{
+	
+}
 
 bool ModuleSceneIntro::Init()
 {
-	GameObject* Root = new GameObject(NULL, "Scene");
+	SceneRoot = new GameObject(NULL, "Scene");
 
-	App->scene_intro->gameObjects[0] = Root;
+	App->scene_intro->gameObjects[0] = SceneRoot;
 
 	return true;
 }
@@ -49,6 +51,9 @@ bool ModuleSceneIntro::CleanUp()
 	//LOG("Unloading Intro scene");
 	App->menus->info.AddConsoleLog( "Unloading Intro scene");
 
+	delete SceneRoot;
+	SceneRoot = nullptr;
+
 	return true;
 }
 
@@ -72,8 +77,7 @@ update_status ModuleSceneIntro::Update(float dt)
 
 uint ModuleSceneIntro::CreateGameObject(GameObject* parent, std::string name)
 {
-	GameObject* go = new GameObject(parent, name);
+	NewGameObject = new GameObject(parent, name);
 
-	return go->id;
+	return NewGameObject->id;
 }
-

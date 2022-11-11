@@ -7,16 +7,6 @@
 #include "C_Texture.h"
 #include "ModuleSceneIntro.h"
 
-GameObject::GameObject(GameObject* parent, std::string name)
-{
-	App->scene_intro->gameObjects[id_count] = this;
-	this->name = name;
-	id = id_count;
-	id_count++;
-	dynamic_cast<C_Transform*>(CreateComponent(Component::TYPE::TRANSFORM));
-	if (parent != nullptr) parent->AddChild(this);
-}
-
 GameObject::~GameObject()
 {
 	for (size_t i = 0; i < components.size(); i++)
@@ -30,6 +20,16 @@ GameObject::~GameObject()
 	}
 	components.clear();
 
+}
+
+GameObject::GameObject(GameObject* parent, std::string name)
+{
+	App->scene_intro->gameObjects[id_count] = this;
+	this->name = name;
+	id = id_count;
+	id_count++;
+	dynamic_cast<C_Transform*>(CreateComponent(Component::TYPE::TRANSFORM));
+	if (parent != nullptr) parent->AddChild(this);
 }
 
 Component* GameObject::CreateComponent(Component::TYPE type)
@@ -59,20 +59,20 @@ Component* GameObject::CreateComponent(Component::TYPE type)
 
 Component* GameObject::GetComponent(Component::TYPE type)
 {
-	for (auto component : components) // check all components
+	for (auto component : components)
 	{
 		if (component->GetType() == type)
 		{
 			return component;
 		}
 	}
-	return NULL; // component not find
+	return NULL;
 }
 
 vector <GameObject*> GameObject::GetChildren()
 {
 
-	return children; // component not find
+	return children;
 }
 
 GameObject* GameObject::GetChild(int n)

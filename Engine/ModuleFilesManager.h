@@ -89,6 +89,8 @@ private:
 
 	MeshData* newMesh[MAX_MESHES];
 	vector<MeshData*> meshList;
+
+	GameObject* GameObjectRoot;
 };
 
 static ILuint ImgId;

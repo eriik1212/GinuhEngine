@@ -17,6 +17,9 @@ public:
 
 	uint CreateGameObject(GameObject* parent, std::string name);
 
+	GameObject* SceneRoot;
+	GameObject* NewGameObject;
+
 	static std::map<uint, GameObject*> gameObjects;
 
 	GameObject* gameobject_selected = nullptr;

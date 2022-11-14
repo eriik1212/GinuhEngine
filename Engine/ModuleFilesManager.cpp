@@ -172,6 +172,7 @@ void ModuleFilesManager::LoadFile(const char* file_path)
 
 		for (int i = 0; i < scene->mNumMeshes; i++)
 		{
+			uint ID = App->scene_intro->CreateGameObject(App->scene_intro->gameObjects[1], scene->mMeshes[i]->mName.C_Str());
 
 			newMesh[i] = new MeshData();
 			// copy vertices
@@ -226,10 +227,10 @@ void ModuleFilesManager::LoadFile(const char* file_path)
 				newMesh[i] = nullptr;
 			}
 
-			uint ID = App->scene_intro->CreateGameObject(App->scene_intro->gameObjects[1], scene->mMeshes[i]->mName.C_Str());
-			dynamic_cast<C_Transform*>(App->scene_intro->gameObjects[ID]->GetComponent(Component::TYPE::TRANSFORM))->SetTransform(float3(0, 0, 0), float3(0, 0, 0), float3(1, 1, 1));
-			dynamic_cast<C_Mesh*>(App->scene_intro->gameObjects[ID]->CreateComponent(Component::TYPE::MESH))->SetMesh(newMesh[i], scene->mMeshes[i]->mName.C_Str());
-			dynamic_cast<C_Texture*>(App->scene_intro->gameObjects[ID]->CreateComponent(Component::TYPE::TEXTURE))->SetTexture(texPath);
+				NodeManager(scene->mRootNode, GameObjectRoot);
+
+			dynamic_cast<C_Mesh*>(App->scene_intro->gameObjects[ID]->CreateComponent(Component::C_TYPE::MESH))->SetMesh(newMesh[i], scene->mMeshes[i]->mName.C_Str());
+			dynamic_cast<C_Texture*>(App->scene_intro->gameObjects[ID]->CreateComponent(Component::C_TYPE::TEXTURE))->SetTexture(texPath);
 
 			LoadMeshData(newMesh[i]);
 		}
@@ -242,6 +243,29 @@ void ModuleFilesManager::LoadFile(const char* file_path)
 		App->menus->info.AddConsoleLog("Error loading scene % s. ERROR: %s", file_path, aiGetErrorString());
 	}
 
+}
+
+void ModuleFilesManager::NodeManager(aiNode* rootNode, GameObject* goParent)
+{
+	aiVector3D translation, scaling;
+	aiQuaternion quatRot;
+	rootNode->mTransformation.Decompose(scaling, quatRot, translation);
+
+	float3 pos(translation.x, translation.y, translation.z);
+	float3 scale(scaling.x, scaling.y, scaling.z);
+	Quat rot(quatRot.x, quatRot.y, quatRot.z, quatRot.w);
+
+	goParent->transform->SetTransform(pos, rot, scale);
+
+	if (rootNode->mNumChildren > 0)
+	{
+		for (int n = 0; n < rootNode->mNumChildren; n++)
+		{
+			NodeManager(rootNode->mChildren[n], goParent);
+			//dynamic_cast<C_Transform*>(App->scene_intro->gameObjects[goID]->GetComponent(Component::C_TYPE::TRANSFORM))->SetTransform(pos, rot, scale);
+
+		}
+	}
 }
 
 void ModuleFilesManager::Render()
@@ -259,14 +283,16 @@ void ModuleFilesManager::Render()
 	}
 	else		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	for (int i = 0; i < meshList.size(); i++) {
+	/*for (int i = 0; i < meshList.size(); i++) {
 		meshList[i]->DrawMesh();
 
-	}
+	}*/
 }
 
-void MeshData::DrawMesh()
+void MeshData::DrawMesh(const float* globalTransform)
 {
+	glPushMatrix();
+	glMultMatrixf(globalTransform);
 
 	glEnable(GL_TEXTURE_COORD_ARRAY);
 	glEnableClientState(GL_VERTEX_ARRAY);
@@ -301,6 +327,9 @@ void MeshData::DrawMesh()
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisable(GL_TEXTURE_COORD_ARRAY);
+
+	glPopMatrix();
+
 }
 
 uint ModuleFilesManager::LoadTexture(const char* filePath)

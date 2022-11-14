@@ -69,6 +69,8 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	App->files_manager->Render();
 
+	UpdateGO();
+
 	//FrameBuffer
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -80,4 +82,23 @@ uint ModuleSceneIntro::CreateGameObject(GameObject* parent, std::string name)
 	NewGameObject = new GameObject(parent, name);
 
 	return NewGameObject->id;
+}
+
+void ModuleSceneIntro::UpdateGO()
+{
+	RecursiveUpdate(SceneRoot);
+
+}
+
+void ModuleSceneIntro::RecursiveUpdate(GameObject* goToUpdate)
+{
+	if (goToUpdate->isActive())
+	{
+		goToUpdate->Update();
+
+		for (uint i = 0; i < goToUpdate->children.size(); i++)
+		{
+			RecursiveUpdate(goToUpdate->children[i]);
+		}
+	}
 }

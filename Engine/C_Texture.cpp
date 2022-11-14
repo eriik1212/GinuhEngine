@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 
-C_Texture::C_Texture(GameObject* gameObject) : Component(gameObject, TYPE::TEXTURE)
+C_Texture::C_Texture(GameObject* gameObject) : Component(gameObject, C_TYPE::TEXTURE)
 {
 
 }

@@ -10,7 +10,7 @@
 #include <string>
 #include <vector>
 
-C_Mesh::C_Mesh(GameObject* gameObject) : Component(gameObject, TYPE::MESH)
+C_Mesh::C_Mesh(GameObject* gameObject) : Component(gameObject, C_TYPE::MESH)
 {
 
 }
@@ -20,10 +20,25 @@ C_Mesh::~C_Mesh()
 
 }
 
+void C_Mesh::Update()
+{
+	if (mesh == nullptr)
+		return;
+	else
+		RenderMesh();
+}
+
 void C_Mesh::SetMesh(MeshData* mesh, std::string mesh_name)
 {
 	this->mesh = mesh;
 	name = mesh_name;
+}
+
+void C_Mesh::RenderMesh()
+{
+	C_Transform* transform = go->transform;
+
+	mesh->DrawMesh(transform->GetGlobalTransposed());
 }
 
 

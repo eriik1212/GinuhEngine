@@ -7,6 +7,18 @@
 #include "C_Texture.h"
 #include "ModuleSceneIntro.h"
 
+GameObject::GameObject(GameObject* parent, std::string name) : parent(parent), active(true)
+{
+	App->scene_intro->gameObjects[id_count] = this;
+	this->name = name;
+	id = id_count;
+	id_count++;
+
+	transform = dynamic_cast<C_Transform*>(CreateComponent(Component::C_TYPE::TRANSFORM));
+
+	if (parent != nullptr) parent->AddChild(this);
+}
+
 GameObject::~GameObject()
 {
 	for (size_t i = 0; i < components.size(); i++)
@@ -22,28 +34,18 @@ GameObject::~GameObject()
 
 }
 
-GameObject::GameObject(GameObject* parent, std::string name)
-{
-	App->scene_intro->gameObjects[id_count] = this;
-	this->name = name;
-	id = id_count;
-	id_count++;
-	dynamic_cast<C_Transform*>(CreateComponent(Component::TYPE::TRANSFORM));
-	if (parent != nullptr) parent->AddChild(this);
-}
-
-Component* GameObject::CreateComponent(Component::TYPE type)
+Component* GameObject::CreateComponent(Component::C_TYPE type)
 {
 	switch (type)
 	{
-	case Component::TYPE::TRANSFORM:
+	case Component::C_TYPE::TRANSFORM:
 		new_component = new C_Transform(this);
 		break;
 
-	case Component::TYPE::MESH:
+	case Component::C_TYPE::MESH:
 		new_component = new C_Mesh(this);
 		break;
-	case Component::TYPE::TEXTURE:
+	case Component::C_TYPE::TEXTURE:
 		new_component = new C_Texture(this);
 		break;
 		/*case Component::TYPE::CAMERA:
@@ -57,7 +59,7 @@ Component* GameObject::CreateComponent(Component::TYPE type)
 	return new_component;
 }
 
-Component* GameObject::GetComponent(Component::TYPE type)
+Component* GameObject::GetComponent(Component::C_TYPE type)
 {
 	for (auto component : components)
 	{
@@ -88,9 +90,31 @@ bool GameObject::AddChild(GameObject* child)
 	return true;
 }
 
+void GameObject::Enable()
+{
+	active = true;
+
+	if (parent != nullptr)
+		parent->Enable();
+}
+
 void GameObject::Update()
 {
+	for (uint i = 0; i < components.size(); i++)
+	{
+		components[i]->Update();
+	}
+}
 
+
+void GameObject::Disable()
+{
+	active = false;
+}
+
+bool GameObject::isActive()
+{
+	return active;
 }
 
 vector <Component*> GameObject::GetComponents()

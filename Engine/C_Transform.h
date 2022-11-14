@@ -10,31 +10,35 @@
 
 #include "ExternalLibraries/MathGeoLib/include/MathGeoLib.h"
 
+class GameObject;
 
 struct Transform
 {
-	float3 position;
+	float3 position, scale, eulerRot;
 
-	float3 rotation;
+	Quat quatRot;
 
-	float3 scale;
+	float4x4 globalPos;
+	float4x4 localPos;
+
+	float4x4 globalPosTransposed;
 };
 
 class C_Transform : public Component
 {
 public:
+
 	C_Transform(GameObject* gameObject);
 	~C_Transform();
 
-	// ---------------------------------------------------------- IN PROGRESS
-	/*static C_Transform origin() {};
+	void Update() override;
 
-	C_Transform combine(C_Transform& other) {};*/
-
-	void SetTransform(float3 position, float3 rotation, float3 scale);
+	void SetTransform(float3 pos, Quat quatRot, float3 scale);
+	float* GetGlobalTransposed();
 
 	void PrintGui();
 
 	Transform transform;
+
 };
 

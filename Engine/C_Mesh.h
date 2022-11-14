@@ -17,7 +17,11 @@ public:
 	C_Mesh(GameObject* gameObject);
 	~C_Mesh();
 
+	void Update() override;
+
 	void SetMesh(MeshData* mesh, std::string mesh_name);
+
+	void RenderMesh();
 
 	void PrintGui();
 

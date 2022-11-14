@@ -51,7 +51,7 @@ struct MeshData
 
 	const char* meshName;
 
-	void DrawMesh();
+	void DrawMesh(const float* globalTransform);
 };
 
 
@@ -72,6 +72,7 @@ public:
 	void LoadMeshData(MeshData* mesh);
 	uint LoadTexture(const char* filePath);
 
+	void NodeManager(aiNode* rootNode, GameObject* goParent);
 	
 	// ------------------------------------ Draw
 	void Render();
@@ -89,6 +90,8 @@ private:
 
 	MeshData* newMesh[MAX_MESHES];
 	vector<MeshData*> meshList;
+
+	//vector<Texture*> textureList;
 
 	GameObject* GameObjectRoot;
 };

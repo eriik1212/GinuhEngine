@@ -24,4 +24,7 @@ public:
 
 	GameObject* gameobject_selected = nullptr;
 
+private:
+	void UpdateGO();
+	void RecursiveUpdate(GameObject* goToUpdate);
 };

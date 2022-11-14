@@ -17,7 +17,7 @@ class GameObject;
 class Component
 {
 public:
-	enum class TYPE
+	enum class C_TYPE
 	{
 		NONE,
 		TRANSFORM,
@@ -26,15 +26,19 @@ public:
 	};
 
 
-	Component(GameObject* game_object, TYPE type);
+	Component(GameObject* game_object, C_TYPE type);
 	virtual ~Component();
+
+	virtual void Enable();
+	virtual void Update();
+	virtual void Disable();
 
 	virtual void PrintGui();
 
-	TYPE GetType() { return type; }
+	C_TYPE GetType() { return type; }
 
-private:
+protected:
 
-	TYPE type = TYPE::NONE;
+	C_TYPE type = C_TYPE::NONE;
 	GameObject* go = nullptr;
 };

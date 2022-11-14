@@ -9,9 +9,17 @@
 #include <string>
 #include <vector>
 
-C_Transform::C_Transform(GameObject* gameObject) : Component(gameObject, TYPE::TRANSFORM)
+C_Transform::C_Transform(GameObject* gameObject) : Component(gameObject, C_TYPE::TRANSFORM)
 {
+	transform.globalPos.SetIdentity();
+	transform.localPos.SetIdentity();
 
+	transform.localPos.Decompose(transform.position, transform.quatRot, transform.scale);
+	transform.quatRot.Normalize();
+
+	transform.eulerRot = transform.quatRot.ToEulerXYZ();
+
+	transform.globalPosTransposed = transform.globalPos.Transposed();
 }
 
 C_Transform::~C_Transform()
@@ -19,57 +27,62 @@ C_Transform::~C_Transform()
 
 }
 
-void C_Transform::SetTransform(float3 position, float3 rotation, float3 scale)
+void C_Transform::Update()
 {
-	transform.position = position;
+	// ---------------------------------------------------------------------------------------------------------------------------- Define rotation (QUAT from EULER)
+	transform.quatRot = Quat::FromEulerXYZ(transform.eulerRot.x * DEGTORAD, transform.eulerRot.y * DEGTORAD, transform.eulerRot.z * DEGTORAD);
+	transform.quatRot.Normalize();
 
-	transform.rotation = rotation;
+	// -------------------------------------------------------------------------------------------------------------- Define the Local Position
+	transform.localPos = float4x4::FromTRS(transform.position, transform.quatRot, transform.scale);
 
+	if (this->go->parent != nullptr)
+	{
+		if (this->go->parent->transform != nullptr)
+		{
+			// We apply the posicion formula
+			this->transform.globalPos = this->go->parent->transform->transform.globalPos * this->transform.localPos;
+			this->transform.globalPosTransposed = this->transform.globalPos.Transposed();
+		}
+	}
+}
+
+void C_Transform::SetTransform(float3 pos, Quat quatRot, float3 scale)
+{
+	transform.position = pos;
+	transform.quatRot = quatRot.Normalized();
 	transform.scale = scale;
+
+	transform.eulerRot = transform.quatRot.ToEulerXYZ() * RADTODEG;
+
+	transform.localPos = float4x4::FromTRS(transform.position, transform.quatRot, transform.scale);
+
+	if (go->parent->transform != nullptr) {
+		transform.globalPos = go->parent->transform->transform.globalPos * transform.localPos;
+	}
+	transform.globalPosTransposed = transform.globalPos.Transposed();
+}
+
+float* C_Transform::GetGlobalTransposed()
+{
+	return transform.globalPosTransposed.ptr();
 }
 
 void C_Transform::PrintGui()
 {
 
-	if (ImGui::CollapsingHeader("Transform"))
+	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
 	{
-		ImGui::Text("Position:");
+		ImGui::Text("Position: ");
 		ImGui::SameLine();
+		ImGui::DragFloat3("##Pos", &transform.position[0], 0.1f);
 
-		ImGui::Text(std::to_string(transform.position.x).c_str());
+		ImGui::Text("Rotation: ");
 		ImGui::SameLine();
-
-		ImGui::Text(std::to_string(transform.position.y).c_str());
-		ImGui::SameLine();
-
-		ImGui::Text(std::to_string(transform.position.z).c_str());
-
-
-
-		ImGui::Text("Rotation:");
-		ImGui::SameLine();
-
-		ImGui::Text(std::to_string(transform.rotation.x).c_str());
-		ImGui::SameLine();
-
-		ImGui::Text(std::to_string(transform.rotation.y).c_str());
-		ImGui::SameLine();
-
-		ImGui::Text(std::to_string(transform.rotation.z).c_str());
-
-
+		ImGui::DragFloat3("##Rot", &transform.eulerRot[0], 0.1f);
 
 		ImGui::Text("Scale:");
 		ImGui::SameLine();
-
-		ImGui::Text(std::to_string(transform.scale.x).c_str());
-		ImGui::SameLine();
-
-		ImGui::Text(std::to_string(transform.scale.y).c_str());
-		ImGui::SameLine();
-
-		ImGui::Text(std::to_string(transform.scale.z).c_str());
-
+		ImGui::DragFloat3("##Sca", &transform.scale[0], 0.1f);
 	}
-
 }

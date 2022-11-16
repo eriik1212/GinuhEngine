@@ -28,7 +28,7 @@ void C_Mesh::Update()
 		RenderMesh();
 }
 
-void C_Mesh::SetMesh(MeshData* mesh, std::string mesh_name)
+void C_Mesh::SetMesh(MeshData* mesh, string mesh_name)
 {
 	this->mesh = mesh;
 	name = mesh_name;
@@ -36,20 +36,22 @@ void C_Mesh::SetMesh(MeshData* mesh, std::string mesh_name)
 
 void C_Mesh::RenderMesh()
 {
-	C_Transform* transform = go->transform;
-
-	mesh->DrawMesh(transform->GetGlobalTransposed());
+	mesh->DrawMesh(go->transform->GetGlobalTransposed());
 }
 
 
 void C_Mesh::PrintGui()
 {
 
-	if (ImGui::CollapsingHeader("Mesh"))
+	if (ImGui::CollapsingHeader("Mesh", ImGuiTreeNodeFlags_DefaultOpen))
 	{
+		ImGui::Text("Enabled: "); ImGui::SameLine(); ImGui::Checkbox("##Enabled", &enabled);
+
+		if (ImGui::Button("Remove"))
+			go->RemoveComponent(this);
+
 		ImGui::Text("Mesh Name:");
 		ImGui::SameLine();
-
 		ImGui::Text(name.c_str());
 
 	}

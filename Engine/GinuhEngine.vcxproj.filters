@@ -175,7 +175,7 @@
     <ClCompile Include="C_Transform.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="C_Texture.cpp">
+    <ClCompile Include="C_Material.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="C_Mesh.cpp">
@@ -450,7 +450,7 @@
     <ClInclude Include="C_Transform.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="C_Texture.h">
+    <ClInclude Include="C_Material.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="C_Mesh.h">

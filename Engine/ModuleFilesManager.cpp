@@ -32,7 +32,7 @@ bool ModuleFilesManager::Start()
 	bool ret = true;
 
 	// ------------------------------------- Load All Existing .fbx files -------------------------------------
-	std::string path = "Assets/";
+	string path = "Assets/";
 	for (const auto& entry : fs::directory_iterator(path))
 	{
 		// We get the FileName and Extension
@@ -57,6 +57,7 @@ bool ModuleFilesManager::Start()
 			App->menus->info.AddConsoleLog("File '%s' Loaded Succesfully", fileName_char);
 
 		}
+		// Load Texture Here???
 		else if (existent_filedir != nullptr && (extension == ".png" || extension == ".dds"))
 		{
 			LoadTexture(existent_filedir);
@@ -111,10 +112,11 @@ update_status ModuleFilesManager::Update(float dt)
 			}
 			else if (extension == ".png" && new_filedir != nullptr)
 			{
-				for (int m = 0; m < meshList.size(); m++)
+				//for (int m = 0; m < meshList.size(); m++)
 				{
-					newMesh[m]->texture_id = LoadTexture(new_filedir);
+					newMesh->texture_id = LoadTexture(new_filedir);
 				}
+
 			}
 
 			App->menus->info.AddConsoleLog("File '%s', with Extension '%s' Dropped Succesfully", fileName_char, extension_char);
@@ -146,14 +148,11 @@ bool ModuleFilesManager::CleanUp()
 	aiDetachAllLogStreams();
 
 	//newMesh->~MeshData();
-	for (int m = 0; m < meshList.size(); m++)
+	//for (int m = 0; m < meshList.size(); m++)
 	{
-		delete newMesh[m];
-		newMesh[m] = nullptr;
+		delete newMesh;
+		newMesh = nullptr;
 	}
-
-	delete GameObjectRoot;
-	GameObjectRoot = nullptr;
 
 	meshList.clear();
 
@@ -166,47 +165,47 @@ void ModuleFilesManager::LoadFile(const char* file_path)
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
-		GameObjectRoot = new GameObject(App->scene_intro->gameObjects[0], fs::path(file_path).filename().string());
+		GameObject* GameObjectRoot = new GameObject(App->scene_intro->gameObjects[0], fs::path(file_path).filename().string());
 
-		App->scene_intro->gameObjects[1] = GameObjectRoot;
+		//App->scene_intro->gameObjects[1] = GameObjectRoot;
 
 		for (int i = 0; i < scene->mNumMeshes; i++)
 		{
-			uint ID = App->scene_intro->CreateGameObject(App->scene_intro->gameObjects[1], scene->mMeshes[i]->mName.C_Str());
+			GameObject* GameObjectChild = new GameObject(GameObjectRoot, scene->mMeshes[i]->mName.C_Str());
 
-			newMesh[i] = new MeshData();
+			newMesh = new MeshData();
 			// copy vertices
-			newMesh[i]->num_vertex = scene->mMeshes[i]->mNumVertices;
-			newMesh[i]->vertex = new float[newMesh[i]->num_vertex * VERTEX_FEATURES];
+			newMesh->num_vertex = scene->mMeshes[i]->mNumVertices;
+			newMesh->vertex = new float[newMesh->num_vertex * VERTEX_FEATURES];
 			//memcpy(newMesh->vertex, scene->mMeshes[i]->mVertices, sizeof(float) * newMesh->num_vertex * 3);
-			App->menus->info.AddConsoleLog("New mesh with %d vertices", newMesh[i]->num_vertex);
+			App->menus->info.AddConsoleLog("New mesh with %d vertices", newMesh->num_vertex);
 
-			for (int v = 0; v < newMesh[i]->num_vertex; v++) {
+			for (int v = 0; v < newMesh->num_vertex; v++) {
 				// Vertex
-				newMesh[i]->vertex[v * VERTEX_FEATURES] = scene->mMeshes[i]->mVertices[v].x;
-				newMesh[i]->vertex[v * VERTEX_FEATURES + 1] = scene->mMeshes[i]->mVertices[v].y;
-				newMesh[i]->vertex[v * VERTEX_FEATURES + 2] = scene->mMeshes[i]->mVertices[v].z;
+				newMesh->vertex[v * VERTEX_FEATURES] = scene->mMeshes[i]->mVertices[v].x;
+				newMesh->vertex[v * VERTEX_FEATURES + 1] = scene->mMeshes[i]->mVertices[v].y;
+				newMesh->vertex[v * VERTEX_FEATURES + 2] = scene->mMeshes[i]->mVertices[v].z;
 
 				if (scene->mMeshes[i]->HasTextureCoords(0))
 				{
 					// UVs
-					newMesh[i]->vertex[v * VERTEX_FEATURES + 3] = scene->mMeshes[i]->mTextureCoords[0][v].x;
-					newMesh[i]->vertex[v * VERTEX_FEATURES + 4] = scene->mMeshes[i]->mTextureCoords[0][v].y;
+					newMesh->vertex[v * VERTEX_FEATURES + 3] = scene->mMeshes[i]->mTextureCoords[0][v].x;
+					newMesh->vertex[v * VERTEX_FEATURES + 4] = scene->mMeshes[i]->mTextureCoords[0][v].y;
 				}
 				// -------------------------------------------------------------------------------------- In a future
 				if (scene->mMeshes[i]->HasNormals())
 				{
-					newMesh[i]->vertex[v * VERTEX_FEATURES + 5] = scene->mMeshes[i]->mNormals[v].x;
-					newMesh[i]->vertex[v * VERTEX_FEATURES + 6] = scene->mMeshes[i]->mNormals[v].y;
-					newMesh[i]->vertex[v * VERTEX_FEATURES + 7] = scene->mMeshes[i]->mNormals[v].z;
+					newMesh->vertex[v * VERTEX_FEATURES + 5] = scene->mMeshes[i]->mNormals[v].x;
+					newMesh->vertex[v * VERTEX_FEATURES + 6] = scene->mMeshes[i]->mNormals[v].y;
+					newMesh->vertex[v * VERTEX_FEATURES + 7] = scene->mMeshes[i]->mNormals[v].z;
 				}
 			}
 
 			// copy faces
 			if (scene->mMeshes[i]->HasFaces())
 			{
-				newMesh[i]->num_index = scene->mMeshes[i]->mNumFaces * 3;
-				newMesh[i]->index = new uint[newMesh[i]->num_index]; // assume each face is a triangle
+				newMesh->num_index = scene->mMeshes[i]->mNumFaces * 3;
+				newMesh->index = new uint[newMesh->num_index]; // assume each face is a triangle
 
 				for (uint j = 0; j < scene->mMeshes[i]->mNumFaces; ++j)
 				{
@@ -216,23 +215,46 @@ void ModuleFilesManager::LoadFile(const char* file_path)
 					}
 					else
 					{
-						memcpy(&newMesh[i]->index[j * 3], scene->mMeshes[i]->mFaces[j].mIndices, 3 * sizeof(uint));
+						memcpy(&newMesh->index[j * 3], scene->mMeshes[i]->mFaces[j].mIndices, 3 * sizeof(uint));
 					}
+				}
+
+				// extract materials/textures
+				if (scene->HasMaterials())
+				{
+					const aiMesh* mesh = scene->mMeshes[i];
+
+					aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+					uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);
+					aiString path;
+					material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+
+					aiString sourcePath;
+					sourcePath.Set("Assets/");
+
+					sourcePath.Append(path.C_Str());
+
+					LOG(sourcePath.C_Str());
+
+					// ------------------------------------ Load Texture Here???
+					// 
+					//LoadTexture(sourcePath.C_Str());
+
+					dynamic_cast<C_Material*>(GameObjectChild->CreateComponent(Component::C_TYPE::MATERIAL))->SetTexture(sourcePath.C_Str());
 				}
 			}
 			else {
 				App->menus->info.AddConsoleLog("Scene %s, has no faces.", file_path);
 
-				delete newMesh[i];
-				newMesh[i] = nullptr;
+				delete newMesh;
+				newMesh = nullptr;
 			}
 
-				NodeManager(scene->mRootNode, GameObjectRoot);
+			NodeManager(scene, scene->mRootNode, GameObjectRoot);
 
-			dynamic_cast<C_Mesh*>(App->scene_intro->gameObjects[ID]->CreateComponent(Component::C_TYPE::MESH))->SetMesh(newMesh[i], scene->mMeshes[i]->mName.C_Str());
-			dynamic_cast<C_Texture*>(App->scene_intro->gameObjects[ID]->CreateComponent(Component::C_TYPE::TEXTURE))->SetTexture(texPath);
+			dynamic_cast<C_Mesh*>(GameObjectChild->CreateComponent(Component::C_TYPE::MESH))->SetMesh(newMesh, scene->mMeshes[i]->mName.C_Str());
 
-			LoadMeshData(newMesh[i]);
+			LoadMeshData(newMesh);
 		}
 		App->menus->info.AddConsoleLog("% s Pushed In List Successfully", file_path);
 		aiReleaseImport(scene);
@@ -245,7 +267,7 @@ void ModuleFilesManager::LoadFile(const char* file_path)
 
 }
 
-void ModuleFilesManager::NodeManager(aiNode* rootNode, GameObject* goParent)
+void ModuleFilesManager::NodeManager(const aiScene* rootScene, aiNode* rootNode, GameObject* goParent)
 {
 	aiVector3D translation, scaling;
 	aiQuaternion quatRot;
@@ -257,42 +279,21 @@ void ModuleFilesManager::NodeManager(aiNode* rootNode, GameObject* goParent)
 
 	goParent->transform->SetTransform(pos, rot, scale);
 
+	// We make it recursive for its children
 	if (rootNode->mNumChildren > 0)
 	{
 		for (int n = 0; n < rootNode->mNumChildren; n++)
 		{
-			NodeManager(rootNode->mChildren[n], goParent);
+			NodeManager(rootScene, rootNode->mChildren[n], goParent);
 			//dynamic_cast<C_Transform*>(App->scene_intro->gameObjects[goID]->GetComponent(Component::C_TYPE::TRANSFORM))->SetTransform(pos, rot, scale);
+			//dynamic_cast<C_Material*>(App->scene_intro->gameObjects[goID]->CreateComponent(Component::C_TYPE::MATERIAL))->SetTexture();
 
 		}
 	}
 }
 
-void ModuleFilesManager::Render()
-{
-	if (textureEnabled)
-		glEnable(GL_TEXTURE_2D);
-	else
-		glDisable(GL_TEXTURE_2D);
-
-	// Wireframe View
-	if (wireframe)
-	{
-		glDisable(GL_TEXTURE_2D);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	}
-	else		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-	/*for (int i = 0; i < meshList.size(); i++) {
-		meshList[i]->DrawMesh();
-
-	}*/
-}
-
 void MeshData::DrawMesh(const float* globalTransform)
 {
-	glPushMatrix();
-	glMultMatrixf(globalTransform);
 
 	glEnable(GL_TEXTURE_COORD_ARRAY);
 	glEnableClientState(GL_VERTEX_ARRAY);
@@ -302,34 +303,26 @@ void MeshData::DrawMesh(const float* globalTransform)
 	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
 
+	// ----------------------------------------------------------------------- DRAW TEXTURE CORRECTLY
 	glVertexPointer(3, GL_FLOAT, sizeof(float) * VERTEX_FEATURES, NULL);
+	glClientActiveTexture(GL_TEXTURE0);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glTexCoordPointer(2, GL_FLOAT, sizeof(float) * VERTEX_FEATURES, (void*)(3 * sizeof(float)));
+	glEnableClientState(GL_NORMAL_ARRAY);
 	glNormalPointer(GL_FLOAT, sizeof(float) * VERTEX_FEATURES, NULL);
+
+	glPushMatrix();
+	glMultMatrixf(globalTransform);
 
 	// Draw
 	glDrawElements(GL_TRIANGLES, num_index, GL_UNSIGNED_INT, NULL);
 
-	// ----------------------------------------------------------------------- DRAW TEXTURE CORRECTLY
-	for (int v = 0; v < num_vertex; v++) {
-
-		glVertexPointer(3, GL_FLOAT, sizeof(float) * VERTEX_FEATURES, &vertex[v * VERTEX_FEATURES]);
-		glClientActiveTexture(GL_TEXTURE0);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glTexCoordPointer(2, GL_FLOAT, sizeof(float) * VERTEX_FEATURES, &vertex[v * VERTEX_FEATURES]);
-		glEnableClientState(GL_NORMAL_ARRAY);
-		glNormalPointer(GL_FLOAT, sizeof(float) * VERTEX_FEATURES, &vertex[v * VERTEX_FEATURES]);
-
-		//glDrawRangeElements(GL_TRIANGLES, vertex[v * VERTEX_FEATURES], vertex[v * VERTEX_FEATURES + 1], vertex[v * VERTEX_FEATURES + 2], GL_UNSIGNED_SHORT, index);
-
-	}
+	glPopMatrix();
 
 	// ----------------------------------------------------------------------- UnBind Buffers
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisable(GL_TEXTURE_COORD_ARRAY);
-
-	glPopMatrix();
-
 }
 
 uint ModuleFilesManager::LoadTexture(const char* filePath)
@@ -376,7 +369,7 @@ uint ModuleFilesManager::LoadTexture(const char* filePath)
 	}
 	else
 	{
-		App->menus->info.AddConsoleLog("DevIL ERROR: Could not Load Image. Error: %s", ilGetError());
+		//App->menus->info.AddConsoleLog("DevIL ERROR: Could not Load Image. Error: %s", ilGetError());
 
 		return 0;
 	}

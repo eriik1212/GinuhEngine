@@ -131,6 +131,7 @@ private:
 
 	void PrintGameObjects(GameObject* go);
 
+	GameObject* relocatedGO;
 
 	//--------------------------------------------- OPTIONS
 	//window
@@ -159,13 +160,8 @@ private:
 	
 
 	//FPS
-
-	std::vector<float> fpsLog;
-	std::vector<float> timeLog;
-
-	
-	
-
+	vector<float> fpsLog;
+	vector<float> timeLog;
 
 };
 

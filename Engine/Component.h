@@ -22,16 +22,18 @@ public:
 		NONE,
 		TRANSFORM,
 		MESH,
-		TEXTURE,
+		MATERIAL,
 	};
 
 
 	Component(GameObject* game_object, C_TYPE type);
 	virtual ~Component();
 
-	virtual void Enable();
+	bool IsEnabled() {
+		return enabled;
+	}
+
 	virtual void Update();
-	virtual void Disable();
 
 	virtual void PrintGui();
 
@@ -39,6 +41,7 @@ public:
 
 protected:
 
+	bool enabled;
 	C_TYPE type = C_TYPE::NONE;
 	GameObject* go = nullptr;
 };

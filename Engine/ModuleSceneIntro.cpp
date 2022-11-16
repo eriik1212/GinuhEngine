@@ -11,7 +11,7 @@
 
 #include "ModuleFilesManager.h"
 
-std::map<uint, GameObject*> ModuleSceneIntro::gameObjects;
+map<uint, GameObject*> ModuleSceneIntro::gameObjects;
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -67,7 +67,18 @@ update_status ModuleSceneIntro::Update(float dt)
 	p.axis = true;
 	p.Render();
 
-	App->files_manager->Render();
+	if (textureEnabled)
+		glEnable(GL_TEXTURE_2D);
+	else
+		glDisable(GL_TEXTURE_2D);
+
+	// Wireframe View
+	if (wireframe)
+	{
+		glDisable(GL_TEXTURE_2D);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	}
+	else		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	UpdateGO();
 
@@ -77,7 +88,7 @@ update_status ModuleSceneIntro::Update(float dt)
 	return UPDATE_CONTINUE;
 }
 
-uint ModuleSceneIntro::CreateGameObject(GameObject* parent, std::string name)
+uint ModuleSceneIntro::CreateGameObject(GameObject* parent, string name)
 {
 	NewGameObject = new GameObject(parent, name);
 

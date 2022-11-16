@@ -521,14 +521,14 @@ void ModuleMenus::MenuConfig()
 				{
 					if (texture2D)
 					{
-						App->files_manager->textureEnabled = true;
+						App->scene_intro->textureEnabled = true;
 						//glEnable(GL_TEXTURE_2D); //TEXTURE 2D ENABLED
 						App->menus->info.AddConsoleLog("Texture 2D Enabled");
 
 					}
 					else
 					{
-						App->files_manager->textureEnabled = false;
+						App->scene_intro->textureEnabled = false;
 						//glDisable(GL_TEXTURE_2D); //TEXTURE 2D DISABLED
 						App->menus->info.AddConsoleLog("Texture 2D Disabled");
 
@@ -538,13 +538,13 @@ void ModuleMenus::MenuConfig()
 				{
 					if (wireframeView)
 					{
-						App->files_manager->wireframe = true; //WIREFRAME VIEW ENABLED
+						App->scene_intro->wireframe = true; //WIREFRAME VIEW ENABLED
 						App->menus->info.AddConsoleLog("Wireframe View Enabled");
 
 					}
 					else
 					{
-						App->files_manager->wireframe = false; //WIREFRAME VIEW DISABLED
+						App->scene_intro->wireframe = false; //WIREFRAME VIEW DISABLED
 						App->menus->info.AddConsoleLog("Wireframe View Disabled");
 
 					}
@@ -712,9 +712,10 @@ void ModuleMenus::MenuHierarchy()
 {
 	if (pOpen_hierarchy)
 	{
-		if (ImGui::Begin("Hierarchy", &pOpen_hierarchy))
+		if (ImGui::Begin("Hierarchy", &pOpen_hierarchy, ImGuiWindowFlags_AlwaysAutoResize))
 		{
 			ImGui::Text("GameObjects: \n");
+
 			// We manage the "GameObject[0]" as the scene, so all others GameObjects are its children
 			// We "only" print the Root, and it "automatically" print its children
 			PrintGameObjects(App->scene_intro->gameObjects[0]);
@@ -729,7 +730,7 @@ void ModuleMenus::MenuInspector()
 {
 	if (pOpen_inspector)
 	{
-		ImGui::Begin("Inspector", &pOpen_inspector, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar);
+		ImGui::Begin("Inspector", &pOpen_inspector, ImGuiWindowFlags_AlwaysAutoResize);
 		if (App->scene_intro->gameobject_selected != NULL)
 		{
 			for (size_t i = 0; i < App->scene_intro->gameobject_selected->GetComponents().size(); i++)
@@ -746,13 +747,16 @@ void ModuleMenus::MenuInspector()
 void ModuleMenus::PrintGameObjects(GameObject* go)
 {
 	ImGuiTreeNodeFlags TreeFlags = ImGuiTreeNodeFlags_OpenOnArrow;
+
 	if (go == App->scene_intro->gameobject_selected)
 	{
 		TreeFlags |= ImGuiTreeNodeFlags_Selected;
 	}
+
 	if (go->GetChildren().empty())
 	{
 		TreeFlags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+
 		ImGui::TreeNodeEx(go->name.c_str(), TreeFlags);
 
 		if (ImGui::IsItemHovered() && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
@@ -776,6 +780,31 @@ void ModuleMenus::PrintGameObjects(GameObject* go)
 			ImGui::TreePop();
 		}
 	}
+
+	if (ImGui::BeginDragDropSource())
+	{
+		ImGui::SetDragDropPayload("GAME_OBJECT", go, sizeof(GameObject*));
+
+		relocatedGO = go;
+
+		ImGui::Text("Changing Hierarchy...");
+
+		ImGui::EndDragDropSource();
+	}
+
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GAME_OBJECT"))
+		{
+			GameObject* dropGO = (GameObject*)payload->Data;
+
+			relocatedGO->RelocateGO(go);
+
+			relocatedGO = nullptr;
+		}
+
+		ImGui::EndDragDropTarget();
+	}
 }
 
 void ModuleMenus::OpenLink(const char* url)
@@ -784,7 +813,7 @@ void ModuleMenus::OpenLink(const char* url)
 
 }
 
-void ModuleMenus::PushLog(std::vector<float>* Log, float toPush) //Function to keep actualizing the ms and fps Log
+void ModuleMenus::PushLog(vector<float>* Log, float toPush) //Function to keep actualizing the ms and fps Log
 {
 
 	if (Log->size() > 100)

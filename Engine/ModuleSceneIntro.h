@@ -15,16 +15,21 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 
-	uint CreateGameObject(GameObject* parent, std::string name);
+	bool wireframe = false;
+	bool textureEnabled = true;
+
+	uint CreateGameObject(GameObject* parent, string name);
 
 	GameObject* SceneRoot;
 	GameObject* NewGameObject;
 
-	static std::map<uint, GameObject*> gameObjects;
+	static map<uint, GameObject*> gameObjects;
 
 	GameObject* gameobject_selected = nullptr;
 
 private:
+
 	void UpdateGO();
 	void RecursiveUpdate(GameObject* goToUpdate);
+
 };

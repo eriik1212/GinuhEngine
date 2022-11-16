@@ -9,6 +9,8 @@
 #include <string>
 #include <vector>
 
+using namespace std;
+
 struct MeshData;
 
 class C_Mesh : public Component
@@ -19,7 +21,7 @@ public:
 
 	void Update() override;
 
-	void SetMesh(MeshData* mesh, std::string mesh_name);
+	void SetMesh(MeshData* mesh, string mesh_name);
 
 	void RenderMesh();
 
@@ -30,6 +32,6 @@ public:
 		return mesh;
 	}
 
-	std::string name;
+	string name;
 	MeshData* mesh;
 };

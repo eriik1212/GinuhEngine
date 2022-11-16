@@ -4,7 +4,7 @@
 #include "Module.h"
 #include "Globals.h"
 #include "C_Mesh.h"
-#include "C_Texture.h"
+#include "C_Material.h"
 #include "GameObject.h"
 
 #include "Glew/include/glew.h"
@@ -23,7 +23,6 @@
 
 using namespace std;
 
-#define MAX_MESHES 100
 #define VERTEX_FEATURES 8
 
 struct MeshData
@@ -72,13 +71,7 @@ public:
 	void LoadMeshData(MeshData* mesh);
 	uint LoadTexture(const char* filePath);
 
-	void NodeManager(aiNode* rootNode, GameObject* goParent);
-	
-	// ------------------------------------ Draw
-	void Render();
-
-	bool wireframe = false;
-	bool textureEnabled = true;
+	void NodeManager(const aiScene* rootScene, aiNode* rootNode, GameObject* goParent);
 
 	uint id_count = 1;
 
@@ -88,12 +81,9 @@ private:
 	const char* assets_dir = "Assets/";
 	char* texPath = "";
 
-	MeshData* newMesh[MAX_MESHES];
+	MeshData* newMesh;
 	vector<MeshData*> meshList;
 
-	//vector<Texture*> textureList;
-
-	GameObject* GameObjectRoot;
 };
 
 static ILuint ImgId;

@@ -8,11 +8,11 @@
 #include <string>
 #include <vector>
 
-class C_Texture : public Component
+class C_Material : public Component
 {
 public:
-	C_Texture(GameObject* gameObject);
-	~C_Texture();
+	C_Material(GameObject* gameObject);
+	~C_Material();
 
 	void SetTexture(const char* texture_name);
 

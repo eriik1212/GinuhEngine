@@ -18,7 +18,7 @@ class C_Transform;
 class GameObject
 {
 public:
-	GameObject(GameObject* parent, std::string name);
+	GameObject(GameObject* parent, string name);
 
 	~GameObject();
 	
@@ -31,18 +31,20 @@ public:
 	Component* CreateComponent(Component::C_TYPE);
 	Component* GetComponent(Component::C_TYPE);
 
-	Component* GetComponentByNum(int i)
-	{
-		return components[i];
-	}
+	Component* GetComponentByNum(int i);
+
 	vector <Component*> GetComponents();
 
+	void RemoveComponent(Component* component);
 
 	GameObject* GetChild(int n);
 	vector <GameObject*> GetChildren();
 
 	bool AddChild(GameObject* child);
+	void RemoveChild(GameObject* child);
 
+	void RelocateGO(GameObject* relocatedParent);
+	bool isChild(GameObject* from);
 
 	bool active;
 	string name;
@@ -60,4 +62,5 @@ private:
 
 	Component* new_component;
 
+	Component* toDelete = nullptr;
 };

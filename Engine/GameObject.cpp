@@ -4,10 +4,10 @@
 #include "Component.h"
 #include "C_Transform.h"
 #include "C_Mesh.h"
-#include "C_Texture.h"
+#include "C_Material.h"
 #include "ModuleSceneIntro.h"
 
-GameObject::GameObject(GameObject* parent, std::string name) : parent(parent), active(true)
+GameObject::GameObject(GameObject* parent, string name) : parent(parent), active(true)
 {
 	App->scene_intro->gameObjects[id_count] = this;
 	this->name = name;
@@ -45,8 +45,8 @@ Component* GameObject::CreateComponent(Component::C_TYPE type)
 	case Component::C_TYPE::MESH:
 		new_component = new C_Mesh(this);
 		break;
-	case Component::C_TYPE::TEXTURE:
-		new_component = new C_Texture(this);
+	case Component::C_TYPE::MATERIAL:
+		new_component = new C_Material(this);
 		break;
 		/*case Component::TYPE::CAMERA:
 			new_component = new C_Camera(this);
@@ -71,6 +71,11 @@ Component* GameObject::GetComponent(Component::C_TYPE type)
 	return NULL;
 }
 
+Component* GameObject::GetComponentByNum(int i)
+{
+	return components[i];
+}
+
 vector <GameObject*> GameObject::GetChildren()
 {
 
@@ -79,7 +84,6 @@ vector <GameObject*> GameObject::GetChildren()
 
 GameObject* GameObject::GetChild(int n)
 {
-
 	return children[n];
 }
 
@@ -88,6 +92,38 @@ bool GameObject::AddChild(GameObject* child)
 	children.push_back(child);
 
 	return true;
+}
+
+void GameObject::RemoveChild(GameObject* child)
+{
+	children.erase(find(children.begin(), children.end(), child));
+}
+
+void GameObject::RelocateGO(GameObject* relocatedParent)
+{
+	if (this != nullptr)
+	{
+		if (parent != nullptr)
+		{
+			if (isChild(relocatedParent))
+			{
+				return;
+			}
+			parent->RemoveChild(this);
+			parent = relocatedParent;
+
+		}
+		
+		relocatedParent->AddChild(this);
+	}
+}
+
+bool GameObject::isChild(GameObject* fromThis)
+{
+	if (this->parent == fromThis)
+		return true;
+	else
+		return false;
 }
 
 void GameObject::Enable()
@@ -100,9 +136,17 @@ void GameObject::Enable()
 
 void GameObject::Update()
 {
+	if (toDelete != nullptr)
+	{
+		components.erase(find(components.begin(), components.end(), toDelete));
+		delete toDelete;
+		toDelete = nullptr;
+	}
+
 	for (uint i = 0; i < components.size(); i++)
 	{
-		components[i]->Update();
+		if (components[i]->IsEnabled())
+			components[i]->Update();
 	}
 }
 
@@ -120,4 +164,9 @@ bool GameObject::isActive()
 vector <Component*> GameObject::GetComponents()
 {
 	return components;
+}
+
+void GameObject::RemoveComponent(Component* component)
+{
+	toDelete = component;
 }

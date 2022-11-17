@@ -5,16 +5,38 @@ David Boces ([VoZeS](https://github.com/VoZeS))
 
 Erik Martin ([eriik1212](https://github.com/eriik1212))
 
+## Controls
+Unity-like camera controls:
+* While Right clicking, “WASD” fps-like movement and free look around must be enabled.
+* Alt+Left click to orbit the object.
+* Holding SHIFT duplicates movement speed.
+
+## Engine Functionality
+* Baker house is automatically loaded.
+* Engine accepts drag and drop of fbx files from anywhere in the hard drive. It accepts fbx, png.
+* Console: the window LOG the geometry loading process from ASSIMP and the
+external libraries initialization process.
+* The engine has a screen to create basic shapes.
+* Engine has a configuration screen that allows user to:
+- See a graph for the frames per second and modify them.
+- Configurate all variables on each module (renderer, window, input, textures).
+- See information of output of memory consumption, hardware detection and software
+versions (SDL, OpenGL, DevIL).
+* Engine have an about screen.
+
 ## Third party Libraries Used:
 * [SDL](https://github.com/libsdl-org/SDLS) 2.24.0.0
 * [Glew](https://github.com/nigels-com/glew) 2.1.0.0
 * [ImGui](https://github.com/ocornut/imgui) 1.88
 * [JSON Parser](https://github.com/json-parser/json-parser) 1.1.0
 * [MathGeoLib](https://github.com/juj/MathGeoLib) 1.15
+* [Assimp](https://github.com/assimp/assimp) 3.1.1
+* [DevIL](https://github.com/DentonW/DevIL) 1.8.0
+* [Physfs](https://github.com/devkitPro/physfs) 3.0.2
 
 ## MIT License
 
-Copyright (c) 2022 Erik Martín Garzón
+Copyright (c) 2022 Erik Martín Garzón & David Boces Obis
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

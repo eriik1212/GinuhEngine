@@ -296,7 +296,7 @@ void ModuleMenus::MenuAbout()
 			ImGui::SameLine();
 			ImGui::Text("v. 1.15");
 
-			//---------------------------------------- MATHGEOLIB
+			//---------------------------------------- ASSIMP
 			ImGui::Bullet();
 			if (ImGui::Button("Assimp"))
 			{
@@ -305,7 +305,7 @@ void ModuleMenus::MenuAbout()
 			ImGui::SameLine();
 			ImGui::Text("v. 3.1.1");
 
-			//---------------------------------------- MATHGEOLIB
+			//---------------------------------------- DEVIL
 			ImGui::Bullet();
 			if (ImGui::Button("DevIL"))
 			{
@@ -314,7 +314,7 @@ void ModuleMenus::MenuAbout()
 			ImGui::SameLine();
 			ImGui::Text("v. 1.8.0");
 
-			//---------------------------------------- MATHGEOLIB
+			//---------------------------------------- PHYSFS
 			ImGui::Bullet();
 			if (ImGui::Button("PhysFS"))
 			{

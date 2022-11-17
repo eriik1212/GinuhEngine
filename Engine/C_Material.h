@@ -14,10 +14,12 @@ public:
 	C_Material(GameObject* gameObject);
 	~C_Material();
 
-	void SetTexture(const char* texture_name);
+	void SetTexture(const char* texture_name, uint textID);
 
 	void PrintGui();
 
-
 	const char* name;
+
+private:
+	uint textureID;
 };

@@ -21,7 +21,6 @@ public:
 	uint CreateGameObject(GameObject* parent, string name);
 
 	GameObject* SceneRoot;
-	GameObject* NewGameObject;
 
 	static map<uint, GameObject*> gameObjects;
 

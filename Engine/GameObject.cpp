@@ -49,7 +49,7 @@ Component* GameObject::CreateComponent(Component::C_TYPE type)
 		new_component = new C_Material(this);
 		break;
 		/*case Component::TYPE::CAMERA:
-			new_component = new C_Camera(this);
+			Component* new_component = new C_Camera(this);
 			break;*/
 	default:
 		LOG("component type error");

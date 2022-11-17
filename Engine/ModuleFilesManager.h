@@ -81,9 +81,9 @@ private:
 	const char* assets_dir = "Assets/";
 	char* texPath = "";
 
-	MeshData* newMesh;
 	vector<MeshData*> meshList;
 
+	uint textID;
 };
 
 static ILuint ImgId;

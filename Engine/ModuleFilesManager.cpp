@@ -60,7 +60,17 @@ bool ModuleFilesManager::Start()
 		// Load Texture Here???
 		else if (existent_filedir != nullptr && (extension == ".png" || extension == ".dds"))
 		{
-			LoadTexture(existent_filedir);
+			textID = LoadTexture(existent_filedir);
+
+			/*for (int i = 0; i < App->scene_intro->gameObjects.size(); i++)
+			{
+				C_Mesh* mesh = dynamic_cast<C_Mesh*>(App->scene_intro->gameObjects[i]->CreateComponent(Component::C_TYPE::MESH));
+				mesh->GetMesh()->texture_id = LoadTexture(existent_filedir);
+				dynamic_cast<C_Material*>(App->scene_intro->gameobject_selected->GetComponent(Component::C_TYPE::MATERIAL))->SetTexture(existent_filedir);
+
+			}*/
+			
+
 			App->menus->info.AddConsoleLog("File '%s' Loaded Succesfully", fileName_char);
 
 		}
@@ -109,22 +119,24 @@ update_status ModuleFilesManager::Update(float dt)
 			if (extension == ".fbx" && new_filedir != nullptr)
 			{
 				LoadFile(new_filedir);
+
 			}
 			else if (extension == ".png" && new_filedir != nullptr)
 			{
-				//for (int m = 0; m < meshList.size(); m++)
-				{
-					newMesh->texture_id = LoadTexture(new_filedir);
-				}
+				//newMesh->texture_id = LoadTexture(new_filedir);
+
+				C_Mesh* mesh = dynamic_cast<C_Mesh*>(App->scene_intro->gameobject_selected->GetComponent(Component::C_TYPE::MESH));
+				mesh->GetMesh()->texture_id = LoadTexture(new_filedir);
+				dynamic_cast<C_Material*>(App->scene_intro->gameobject_selected->GetComponent(Component::C_TYPE::MATERIAL))->SetTexture(new_filedir, textID);
 
 			}
 
 			App->menus->info.AddConsoleLog("File '%s', with Extension '%s' Dropped Succesfully", fileName_char, extension_char);
 
 		}
-						   SDL_free(dropped_filedir);    // Free dropped_filedir memory
+			SDL_free(dropped_filedir);    // Free dropped_filedir memory
 
-						   break;
+			break;
 		}
 
 	}
@@ -149,10 +161,10 @@ bool ModuleFilesManager::CleanUp()
 
 	//newMesh->~MeshData();
 	//for (int m = 0; m < meshList.size(); m++)
-	{
-		delete newMesh;
-		newMesh = nullptr;
-	}
+	//{
+		//delete newMesh;
+		//newMesh = nullptr;
+	//}
 
 	meshList.clear();
 
@@ -173,7 +185,7 @@ void ModuleFilesManager::LoadFile(const char* file_path)
 		{
 			GameObject* GameObjectChild = new GameObject(GameObjectRoot, scene->mMeshes[i]->mName.C_Str());
 
-			newMesh = new MeshData();
+			MeshData* newMesh = new MeshData();
 			// copy vertices
 			newMesh->num_vertex = scene->mMeshes[i]->mNumVertices;
 			newMesh->vertex = new float[newMesh->num_vertex * VERTEX_FEATURES];
@@ -240,7 +252,7 @@ void ModuleFilesManager::LoadFile(const char* file_path)
 					// 
 					//LoadTexture(sourcePath.C_Str());
 
-					dynamic_cast<C_Material*>(GameObjectChild->CreateComponent(Component::C_TYPE::MATERIAL))->SetTexture(sourcePath.C_Str());
+					dynamic_cast<C_Material*>(GameObjectChild->CreateComponent(Component::C_TYPE::MATERIAL))->SetTexture(sourcePath.C_Str(), textID);
 				}
 			}
 			else {
@@ -253,6 +265,8 @@ void ModuleFilesManager::LoadFile(const char* file_path)
 			NodeManager(scene, scene->mRootNode, GameObjectRoot);
 
 			dynamic_cast<C_Mesh*>(GameObjectChild->CreateComponent(Component::C_TYPE::MESH))->SetMesh(newMesh, scene->mMeshes[i]->mName.C_Str());
+
+			newMesh->texture_id = ImgId;
 
 			LoadMeshData(newMesh);
 		}
@@ -342,26 +356,40 @@ uint ModuleFilesManager::LoadTexture(const char* filePath)
 
 		ilLoadImage(filePath);
 
-		//ilBindImage(ImgId);
-		BYTE* data = ilGetData();
-
-		ILuint imgWidth, imgHeight;
-		imgWidth = ilGetInteger(IL_IMAGE_WIDTH);
-		imgHeight = ilGetInteger(IL_IMAGE_HEIGHT);
-		int const type = ilGetInteger(IL_IMAGE_TYPE);
-		int const format = ilGetInteger(IL_IMAGE_FORMAT);
-
-		// ---------------------------------------------------------------------------------------------------- Create Texture from ImageData
-		glTexImage2D(GL_TEXTURE_2D, 0, format, imgWidth, imgHeight, 0, format,
-			type, data);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-
 		ImgId = ilutGLBindTexImage();
-		glBindTexture(GL_TEXTURE_2D, ImgId);
+
+		ilBindImage(0);
 		ilDeleteImages(1, &ImgId);
+
+		// ------------------------------------------ It prints also de grid (WRONG!)
+		//ilEnable(IL_FILE_OVERWRITE);
+		//ilSaveImage(filePath);
+
+		//ilGenImages(1, &ImgId);
+		//ilBindImage(ImgId);
+
+		//ilLoadImage(filePath);
+
+		////ilBindImage(ImgId);
+		//BYTE* data = ilGetData();
+
+		//ILuint imgWidth, imgHeight;
+		//imgWidth = ilGetInteger(IL_IMAGE_WIDTH);
+		//imgHeight = ilGetInteger(IL_IMAGE_HEIGHT);
+		//int const type = ilGetInteger(IL_IMAGE_TYPE);
+		//int const format = ilGetInteger(IL_IMAGE_FORMAT);
+
+		//// ---------------------------------------------------------------------------------------------------- Create Texture from ImageData
+		//glTexImage2D(GL_TEXTURE_2D, 0, format, imgWidth, imgHeight, 0, format,
+		//	type, data);
+		//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
+		//ImgId = ilutGLBindTexImage();
+		//glBindTexture(GL_TEXTURE_2D, ImgId);
+		//ilDeleteImages(1, &ImgId);
 
 		App->menus->info.AddConsoleLog("TEX ID: %d", ImgId);
 

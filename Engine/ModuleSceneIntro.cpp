@@ -90,7 +90,7 @@ update_status ModuleSceneIntro::Update(float dt)
 
 uint ModuleSceneIntro::CreateGameObject(GameObject* parent, string name)
 {
-	NewGameObject = new GameObject(parent, name);
+	GameObject* NewGameObject = new GameObject(parent, name);
 
 	return NewGameObject->id;
 }

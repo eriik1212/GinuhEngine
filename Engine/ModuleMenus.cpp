@@ -734,7 +734,7 @@ void ModuleMenus::MenuInspector()
 
 void ModuleMenus::PrintGameObjects(GameObject* go)
 {
-	ImGuiTreeNodeFlags TreeFlags = ImGuiTreeNodeFlags_OpenOnArrow;
+	ImGuiTreeNodeFlags TreeFlags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
 
 	if (go == App->scene_intro->gameobject_selected)
 	{
@@ -747,19 +747,43 @@ void ModuleMenus::PrintGameObjects(GameObject* go)
 
 		ImGui::TreeNodeEx(go->name.c_str(), TreeFlags);
 
+		if (ImGui::BeginPopupContextItem())
+		{
+			ImGui::Text("This a popup for \"%s\"", App->scene_intro->gameobject_selected->name);
+			if (ImGui::Button("Delete GO"))
+				App->scene_intro->gameobject_selected->~GameObject();
+			if (ImGui::Button("Close"))
+				ImGui::CloseCurrentPopup();
+			ImGui::EndPopup();
+		}
+		if (ImGui::IsItemHovered())
+			ImGui::SetTooltip("Right-click to edit Game Object");
+
 		if (ImGui::IsItemHovered() && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
 		{
 			App->scene_intro->gameobject_selected = go;
 		}
-
 	}
 	else
 	{
 		if (ImGui::TreeNodeEx(go->name.c_str(), TreeFlags))
 		{
+			if (ImGui::BeginPopupContextItem())
+			{
+				ImGui::Text("This a popup for \"%s\"", App->scene_intro->gameobject_selected->name);
+				if (ImGui::Button("Delete GO"))
+					App->scene_intro->gameobject_selected->~GameObject();
+				if (ImGui::Button("Close"))
+					ImGui::CloseCurrentPopup();
+				ImGui::EndPopup();
+			}
+			if (ImGui::IsItemHovered())
+				ImGui::SetTooltip("Right-click to edit Game Object");
+
 			if (ImGui::IsItemHovered() && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
 			{
 				App->scene_intro->gameobject_selected = go;
+
 			}
 			for (size_t i = 0; i < go->GetChildren().size(); i++)
 			{

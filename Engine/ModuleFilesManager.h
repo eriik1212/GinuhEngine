@@ -21,6 +21,8 @@
 #pragma comment (lib, "DevIL/libx86/ILU.lib" )
 #pragma comment (lib, "DevIL/libx86/ILUT.lib" )
 
+#include <map>
+
 using namespace std;
 
 #define VERTEX_FEATURES 8
@@ -46,11 +48,11 @@ struct MeshData
 	uint num_vertex = 0;
 	float* vertex = nullptr;
 
-	uint texture_id;
+	uint texture_id = 0;
 
 	const char* meshName;
 
-	void DrawMesh(const float* globalTransform);
+	void DrawMesh(const float* globalTransform, uint imgID);
 };
 
 
@@ -84,6 +86,9 @@ private:
 	vector<MeshData*> meshList;
 
 	uint textID;
+
+	static map<std::string, uint> loaded_textures;			//Know which textures have we loaded, to NOT load again
+
 };
 
 static ILuint ImgId;

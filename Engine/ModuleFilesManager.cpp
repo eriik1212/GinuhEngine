@@ -1,9 +1,9 @@
 #include "Application.h"
 #include "ModuleFilesManager.h"
 
-
-
 namespace fs = std::filesystem;
+
+std::map<std::string, uint> ModuleFilesManager::loaded_textures;
 
 ModuleFilesManager::ModuleFilesManager(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -58,22 +58,17 @@ bool ModuleFilesManager::Start()
 
 		}
 		// Load Texture Here???
-		else if (existent_filedir != nullptr && (extension == ".png" || extension == ".dds"))
-		{
-			textID = LoadTexture(existent_filedir);
+		//else if (existent_filedir != nullptr && (extension == ".png" || extension == ".dds"))
+		//{
+		//	textID = LoadTexture(existent_filedir);
 
-			/*for (int i = 0; i < App->scene_intro->gameObjects.size(); i++)
-			{
-				C_Mesh* mesh = dynamic_cast<C_Mesh*>(App->scene_intro->gameObjects[i]->CreateComponent(Component::C_TYPE::MESH));
-				mesh->GetMesh()->texture_id = LoadTexture(existent_filedir);
-				dynamic_cast<C_Material*>(App->scene_intro->gameobject_selected->GetComponent(Component::C_TYPE::MATERIAL))->SetTexture(existent_filedir);
+		//	//C_Mesh* mesh = dynamic_cast<C_Mesh*>(App->scene_intro->gameobject_selected->CreateComponent(Component::C_TYPE::MESH));
+		//	//mesh->GetMesh()->texture_id = LoadTexture(existent_filedir);
+		//	//dynamic_cast<C_Material*>(App->scene_intro->gameobject_selected->GetComponent(Component::C_TYPE::MATERIAL))->SetTexture(existent_filedir, textID);
 
-			}*/
-			
+		//	App->menus->info.AddConsoleLog("File '%s' Loaded Succesfully", fileName_char);
 
-			App->menus->info.AddConsoleLog("File '%s' Loaded Succesfully", fileName_char);
-
-		}
+		//}
 		else
 		{
 			App->menus->info.AddConsoleLog("File '%s' cannot be loaded", fileName_char);
@@ -121,15 +116,15 @@ update_status ModuleFilesManager::Update(float dt)
 				LoadFile(new_filedir);
 
 			}
-			else if (extension == ".png" && new_filedir != nullptr)
-			{
-				//newMesh->texture_id = LoadTexture(new_filedir);
+			//else if (extension == ".png" && new_filedir != nullptr)
+			//{
+			//	//newMesh->texture_id = LoadTexture(new_filedir);
 
-				C_Mesh* mesh = dynamic_cast<C_Mesh*>(App->scene_intro->gameobject_selected->GetComponent(Component::C_TYPE::MESH));
-				mesh->GetMesh()->texture_id = LoadTexture(new_filedir);
-				dynamic_cast<C_Material*>(App->scene_intro->gameobject_selected->GetComponent(Component::C_TYPE::MATERIAL))->SetTexture(new_filedir, textID);
+			//	C_Mesh* mesh = dynamic_cast<C_Mesh*>(App->scene_intro->gameobject_selected->GetComponent(Component::C_TYPE::MESH));
+			//	mesh->GetMesh()->texture_id = LoadTexture(new_filedir);
+			//	dynamic_cast<C_Material*>(App->scene_intro->gameobject_selected->GetComponent(Component::C_TYPE::MATERIAL))->SetTexture(new_filedir, textID);
 
-			}
+			//}
 
 			App->menus->info.AddConsoleLog("File '%s', with Extension '%s' Dropped Succesfully", fileName_char, extension_char);
 
@@ -250,9 +245,9 @@ void ModuleFilesManager::LoadFile(const char* file_path)
 
 					// ------------------------------------ Load Texture Here???
 					// 
-					//LoadTexture(sourcePath.C_Str());
+					newMesh->texture_id = LoadTexture(sourcePath.C_Str());
 
-					dynamic_cast<C_Material*>(GameObjectChild->CreateComponent(Component::C_TYPE::MATERIAL))->SetTexture(sourcePath.C_Str(), textID);
+					dynamic_cast<C_Material*>(GameObjectChild->CreateComponent(Component::C_TYPE::MATERIAL))->SetTexture(sourcePath.C_Str(), newMesh->texture_id);
 				}
 			}
 			else {
@@ -264,9 +259,8 @@ void ModuleFilesManager::LoadFile(const char* file_path)
 
 			NodeManager(scene, scene->mRootNode, GameObjectRoot);
 
-			dynamic_cast<C_Mesh*>(GameObjectChild->CreateComponent(Component::C_TYPE::MESH))->SetMesh(newMesh, scene->mMeshes[i]->mName.C_Str());
 
-			newMesh->texture_id = ImgId;
+			dynamic_cast<C_Mesh*>(GameObjectChild->CreateComponent(Component::C_TYPE::MESH))->SetMesh(newMesh, scene->mMeshes[i]->mName.C_Str());
 
 			LoadMeshData(newMesh);
 		}
@@ -306,12 +300,12 @@ void ModuleFilesManager::NodeManager(const aiScene* rootScene, aiNode* rootNode,
 	}
 }
 
-void MeshData::DrawMesh(const float* globalTransform)
+void MeshData::DrawMesh(const float* globalTransform, uint imgID)
 {
 
 	glEnable(GL_TEXTURE_COORD_ARRAY);
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindTexture(GL_TEXTURE_2D, ImgId);
+	glBindTexture(GL_TEXTURE_2D, imgID);
 
 	// ----------------------------------------------------------------------- Bind Buffers
 	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
@@ -345,6 +339,12 @@ uint ModuleFilesManager::LoadTexture(const char* filePath)
 	iluInit();
 	ilutInit();
 
+	// Check loaded textures
+	if (loaded_textures.find(filePath) != loaded_textures.end())
+	{
+		return loaded_textures[filePath];
+	}
+
 	// -------------------------------------- Loading Image
 	if (ilLoadImage(filePath))
 	{
@@ -361,6 +361,7 @@ uint ModuleFilesManager::LoadTexture(const char* filePath)
 		ilBindImage(0);
 		ilDeleteImages(1, &ImgId);
 
+		loaded_textures[filePath] = ImgId;
 		// ------------------------------------------ It prints also de grid (WRONG!)
 		//ilEnable(IL_FILE_OVERWRITE);
 		//ilSaveImage(filePath);

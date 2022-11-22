@@ -27,10 +27,7 @@ public:
 
 	void PrintGui();
 
-	MeshData* GetMesh()
-	{
-		return mesh;
-	}
+	MeshData* GetMesh();
 
 	string name;
 	MeshData* mesh;

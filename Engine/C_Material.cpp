@@ -9,9 +9,9 @@
 #include <string>
 #include <vector>
 
-C_Material::C_Material(GameObject* gameObject) : name("Undefined"), textureID(0), Component(gameObject, C_TYPE::MATERIAL)
+C_Material::C_Material(GameObject* gameObject) : name("Undefined"), Component(gameObject, C_TYPE::MATERIAL)
 {
-
+	textureID = 0;
 }
 
 C_Material::~C_Material()
@@ -23,7 +23,7 @@ void C_Material::SetTexture(const char* texture_name, uint textID)
 {
 	name = texture_name;
 
-	//textureID = 
+	textureID = textID;
 }
 
 void C_Material::PrintGui()
@@ -40,7 +40,7 @@ void C_Material::PrintGui()
 		ImGui::SameLine();
 		ImGui::Text(name);
 		
-		ImGui::Text("Texture ID:");
+		ImGui::Text("Texture ID: ");
 		ImGui::SameLine();
 		ImGui::Text("%d", textureID);
 

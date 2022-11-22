@@ -76,18 +76,6 @@ update_status ModuleMenus::PostUpdate(float dt)
 	//ImGui::Begin("GinuhEngine", 0, ImGuiWindowFlags_MenuBar);
 	if (ImGui::BeginMainMenuBar())
 	{
-		/*if (ImGui::BeginMenu("Files"))
-		{
-			if (ImGui::MenuItem("New"))
-			{
-
-			}
-			if (ImGui::MenuItem("Open"))
-			{
-
-			}
-			ImGui::EndMenu();
-		}*/
 		if (ImGui::BeginMenu("Create"))
 		{
 			if (ImGui::MenuItem("Cube"))

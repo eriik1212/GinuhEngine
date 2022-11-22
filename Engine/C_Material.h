@@ -20,6 +20,8 @@ public:
 
 	const char* name;
 
+	C_Mesh* meshComp = nullptr;
+
 private:
-	uint textureID;
+	uint textureID = 0;
 };

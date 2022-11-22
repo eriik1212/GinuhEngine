@@ -36,7 +36,7 @@ void C_Mesh::SetMesh(MeshData* mesh, string mesh_name)
 
 void C_Mesh::RenderMesh()
 {
-	mesh->DrawMesh(go->transform->GetGlobalTransposed());
+	mesh->DrawMesh(go->transform->GetGlobalTransposed(), mesh->texture_id);
 }
 
 
@@ -59,4 +59,9 @@ void C_Mesh::PrintGui()
 		ImGui::Text("%d", mesh->texture_id);
 	}
 
+}
+
+MeshData* C_Mesh::GetMesh()
+{
+	return mesh;
 }

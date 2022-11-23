@@ -51,7 +51,7 @@ public:
 	uint id = 0;
 
 	uint id_count;
-	GameObject* parent = nullptr;
+	GameObject* parent;
 	C_Transform* transform = nullptr;
 
 	vector <GameObject*> children;

@@ -14,14 +14,21 @@ public:
 	C_Material(GameObject* gameObject);
 	~C_Material();
 
-	void SetTexture(const char* texture_name, uint textID);
+	void SetTexture(const char* texture_name, MeshData* meshNode);
+
+	void Update() override;
 
 	void PrintGui();
 
-	const char* name;
+	void UpdateStatus();
 
-	C_Mesh* meshComp = nullptr;
+	string name;
+
+	MeshData* mesh;
 
 private:
+
 	uint textureID = 0;
+	uint auxID = 0;
+
 };

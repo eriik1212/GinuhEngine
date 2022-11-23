@@ -21,7 +21,7 @@ GameObject::GameObject(GameObject* parent, string name) : parent(parent), active
 
 GameObject::~GameObject()
 {
-	for (size_t i = 0; i < components.size(); i++)
+	for (uint i = 0; i < components.size(); i++)
 	{
 		if (components[i] != nullptr)
 		{
@@ -32,6 +32,14 @@ GameObject::~GameObject()
 	}
 	components.clear();
 
+	for (uint j = 0; j < this->GetChildren().size(); j++)
+	{
+		RemoveChild(this->GetChild(j));
+	}
+	this->GetChildren().clear();
+
+	if(this->parent != nullptr)
+		this->parent->RemoveChild(this);	//Little strange (GO->Parent->RemoveChild() ---> Is itself) But works!!
 }
 
 Component* GameObject::CreateComponent(Component::C_TYPE type)
@@ -78,7 +86,6 @@ Component* GameObject::GetComponentByNum(int i)
 
 vector <GameObject*> GameObject::GetChildren()
 {
-
 	return children;
 }
 
@@ -111,10 +118,8 @@ void GameObject::RelocateGO(GameObject* relocatedParent)
 			}
 			parent->RemoveChild(this);
 			parent = relocatedParent;
-
+			relocatedParent->AddChild(this);
 		}
-		
-		relocatedParent->AddChild(this);
 	}
 }
 

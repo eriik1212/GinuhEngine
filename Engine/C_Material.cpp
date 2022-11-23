@@ -19,11 +19,17 @@ C_Material::~C_Material()
 
 }
 
-void C_Material::SetTexture(const char* texture_name, uint textID)
+void C_Material::SetTexture(const char* texture_name, MeshData* meshNode)
 {
 	name = texture_name;
+	mesh = meshNode;
+	textureID = meshNode->texture_id;
+	auxID = meshNode->texture_id;
+}
 
-	textureID = textID;
+void C_Material::Update()
+{
+
 }
 
 void C_Material::PrintGui()
@@ -34,11 +40,14 @@ void C_Material::PrintGui()
 		ImGui::Text("Enabled: "); ImGui::SameLine(); ImGui::Checkbox("##Enabled", &enabled);
 
 		if (ImGui::Button("Remove"))
+		{
+			mesh->texture_id = 0;
 			go->RemoveComponent(this);
+		}
 
 		ImGui::Text("Texture Name:");
 		ImGui::SameLine();
-		ImGui::Text(name);
+		ImGui::Text(name.c_str());
 		
 		ImGui::Text("Texture ID: ");
 		ImGui::SameLine();
@@ -46,4 +55,22 @@ void C_Material::PrintGui()
 
 	}
 
+	UpdateStatus();
+
+}
+
+void C_Material::UpdateStatus()
+{
+
+	if (!enabled)
+	{
+		//auxID = textureID;
+		auxID = 0;
+		mesh->texture_id = auxID;
+	}
+	else
+	{
+		mesh->texture_id = textureID;
+		auxID = mesh->texture_id;
+	}
 }

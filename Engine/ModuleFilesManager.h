@@ -87,7 +87,7 @@ private:
 
 	uint textID;
 
-	static map<std::string, uint> loaded_textures;			//Know which textures have we loaded, to NOT load again
+	static map<string, uint> loaded_textures;			//Know which textures have we loaded, to NOT load again
 
 };
 

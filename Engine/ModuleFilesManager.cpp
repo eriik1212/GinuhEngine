@@ -247,7 +247,7 @@ void ModuleFilesManager::LoadFile(const char* file_path)
 					// 
 					newMesh->texture_id = LoadTexture(sourcePath.C_Str());
 
-					dynamic_cast<C_Material*>(GameObjectChild->CreateComponent(Component::C_TYPE::MATERIAL))->SetTexture(sourcePath.C_Str(), newMesh->texture_id);
+					dynamic_cast<C_Material*>(GameObjectChild->CreateComponent(Component::C_TYPE::MATERIAL))->SetTexture(sourcePath.C_Str(), newMesh);
 				}
 			}
 			else {

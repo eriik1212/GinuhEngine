@@ -53,10 +53,6 @@ void C_Mesh::PrintGui()
 		ImGui::Text("Mesh Name:");
 		ImGui::SameLine();
 		ImGui::Text(name.c_str());
-
-		ImGui::Text("Texture ID: ");
-		ImGui::SameLine();
-		ImGui::Text("%d", mesh->texture_id);
 	}
 
 }

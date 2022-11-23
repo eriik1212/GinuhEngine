@@ -704,6 +704,9 @@ void ModuleMenus::MenuHierarchy()
 		{
 			ImGui::Text("GameObjects: \n");
 
+			if (ImGui::Button("Create Empty Game Object to Scene"))
+				GameObject* newGO = new GameObject(App->scene_intro->gameObjects[0], "Empty");
+
 			// We manage the "GameObject[0]" as the scene, so all others GameObjects are its children
 			// We "only" print the Root, and it "automatically" print its children
 			PrintGameObjects(App->scene_intro->gameObjects[0]);
@@ -721,6 +724,16 @@ void ModuleMenus::MenuInspector()
 		ImGui::Begin("Inspector", &pOpen_inspector, ImGuiWindowFlags_AlwaysAutoResize);
 		if (App->scene_intro->gameobject_selected != NULL)
 		{
+			strcpy(newName, App->scene_intro->gameobject_selected->name.c_str());
+			if (ImGui::InputText("##Name", &newName[0], sizeof(newName)))
+			{
+				if (newName[0] != '\0')
+					App->scene_intro->gameobject_selected->name = newName;
+			}
+			ImGui::SameLine();
+
+			ImGui::Checkbox("Active", &App->scene_intro->gameobject_selected->active);
+
 			for (size_t i = 0; i < App->scene_intro->gameobject_selected->GetComponents().size(); i++)
 			{
 				App->scene_intro->gameobject_selected->GetComponentByNum(i)->PrintGui();
@@ -739,48 +752,36 @@ void ModuleMenus::PrintGameObjects(GameObject* go)
 	if (go == App->scene_intro->gameobject_selected)
 	{
 		TreeFlags |= ImGuiTreeNodeFlags_Selected;
+
 	}
 
 	if (go->GetChildren().empty())
 	{
+		//BeginDrag(App->scene_intro->gameobject_selected);
+		//BeginDrop(go);
+
 		TreeFlags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
 
 		ImGui::TreeNodeEx(go->name.c_str(), TreeFlags);
 
-		if (ImGui::BeginPopupContextItem())
-		{
-			ImGui::Text("This a popup for \"%s\"", App->scene_intro->gameobject_selected->name);
-			if (ImGui::Button("Delete GO"))
-				App->scene_intro->gameobject_selected->~GameObject();
-			if (ImGui::Button("Close"))
-				ImGui::CloseCurrentPopup();
-			ImGui::EndPopup();
-		}
-		if (ImGui::IsItemHovered())
-			ImGui::SetTooltip("Right-click to edit Game Object");
+		OptionsPanelGO(go);
 
-		if (ImGui::IsItemHovered() && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+		if (ImGui::IsItemHovered() && (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN || App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_DOWN))
 		{
 			App->scene_intro->gameobject_selected = go;
 		}
 	}
 	else
 	{
+
 		if (ImGui::TreeNodeEx(go->name.c_str(), TreeFlags))
 		{
-			if (ImGui::BeginPopupContextItem())
-			{
-				ImGui::Text("This a popup for \"%s\"", App->scene_intro->gameobject_selected->name);
-				if (ImGui::Button("Delete GO"))
-					App->scene_intro->gameobject_selected->~GameObject();
-				if (ImGui::Button("Close"))
-					ImGui::CloseCurrentPopup();
-				ImGui::EndPopup();
-			}
-			if (ImGui::IsItemHovered())
-				ImGui::SetTooltip("Right-click to edit Game Object");
+			//BeginDrag(App->scene_intro->gameobject_selected);
+			BeginDrop(go);
 
-			if (ImGui::IsItemHovered() && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+			OptionsPanelGO(go);
+
+			if (ImGui::IsItemHovered() && (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN || App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_DOWN))
 			{
 				App->scene_intro->gameobject_selected = go;
 
@@ -793,30 +794,62 @@ void ModuleMenus::PrintGameObjects(GameObject* go)
 		}
 	}
 
+	BeginDrag(App->scene_intro->gameobject_selected);
+	BeginDrop(go);
+}
+
+void ModuleMenus::BeginDrag(GameObject* GO)
+{
 	if (ImGui::BeginDragDropSource())
 	{
-		ImGui::SetDragDropPayload("GAME_OBJECT", go, sizeof(GameObject*));
+		ImGui::SetDragDropPayload("GAME_OBJECT", GO, sizeof(GameObject*));
 
-		relocatedGO = go;
+		relocatedGO = GO;
 
 		ImGui::Text("Changing Hierarchy...");
 
 		ImGui::EndDragDropSource();
 	}
+}
 
+void ModuleMenus::BeginDrop(GameObject* GO)
+{
 	if (ImGui::BeginDragDropTarget())
 	{
 		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GAME_OBJECT"))
 		{
 			GameObject* dropGO = (GameObject*)payload->Data;
 
-			relocatedGO->RelocateGO(go);
+			relocatedGO->RelocateGO(GO);
 
 			relocatedGO = nullptr;
 		}
 
 		ImGui::EndDragDropTarget();
 	}
+}
+
+void ModuleMenus::OptionsPanelGO(GameObject* GO)
+{
+	if (ImGui::BeginPopupContextItem())
+	{
+		if (App->scene_intro->gameObjects[0] != GO)
+		{
+			ImGui::Text("Edit OPTIONS for \"%s\"", App->scene_intro->gameobject_selected->name.c_str());
+			if (ImGui::Button("Create Empty GO"))
+				GameObject* newGO = new GameObject(App->scene_intro->gameobject_selected, "Empty");
+
+			if (ImGui::Button("Delete GO"))
+				App->scene_intro->gameobject_selected->~GameObject(); 
+
+			if (ImGui::Button("Close"))
+				ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
+	if (ImGui::IsItemHovered(ImGuiHoveredFlags_DelayNormal) && App->scene_intro->gameObjects[0] != GO)
+		ImGui::SetTooltip("Right-click to edit Game Object");
 }
 
 void ModuleMenus::OpenLink(const char* url)

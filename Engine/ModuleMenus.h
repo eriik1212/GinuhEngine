@@ -9,6 +9,8 @@
 #include "ImGui/imgui_impl_sdl.h"
 #include "ImGui/imgui_impl_opengl3.h"
 
+#define NAME_SIZE 50
+
 class ConsoleInfo
 {
 public:
@@ -129,9 +131,15 @@ private:
 	bool inspectorVisible = true;
 	void MenuInspector();
 
+	char newName[NAME_SIZE];
+
 	void PrintGameObjects(GameObject* go);
 
+	void BeginDrag(GameObject* GO);
+	void BeginDrop(GameObject* GO);
 	GameObject* relocatedGO;
+
+	void OptionsPanelGO(GameObject* GO);
 
 	//--------------------------------------------- OPTIONS
 	//window

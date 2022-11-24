@@ -738,6 +738,21 @@ void ModuleMenus::MenuInspector()
 			{
 				App->scene_intro->gameobject_selected->GetComponentByNum(i)->PrintGui();
 			}
+
+			if (ImGui::BeginPopup("Add Component"))
+			{
+				if (ImGui::BeginPopupContextItem("Components"))
+				{
+					
+					if (ImGui::TabItemButton("Hello"))
+					{
+
+					}
+
+					ImGui::EndPopup();
+				}
+				ImGui::EndPopup();
+			}
 		}
 
 		ImGui::End();

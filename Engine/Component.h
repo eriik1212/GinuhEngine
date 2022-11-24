@@ -41,7 +41,7 @@ public:
 
 protected:
 
-	bool enabled;
+	bool enabled = true;
 	C_TYPE type = C_TYPE::NONE;
 	GameObject* go = nullptr;
 };

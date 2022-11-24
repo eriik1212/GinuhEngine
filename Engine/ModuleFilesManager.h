@@ -77,6 +77,8 @@ public:
 
 	uint id_count = 1;
 
+	static vector<string> allText;
+
 private:
 	SDL_Event event;                        // Declare event handle
 	char* dropped_filedir = "";                  // Pointer for directory of dropped file
@@ -89,9 +91,9 @@ private:
 
 	static map<string, uint> loaded_textures;			//Know which textures have we loaded, to NOT load again
 
+
 };
 
 static ILuint ImgId;
-
 
 #endif

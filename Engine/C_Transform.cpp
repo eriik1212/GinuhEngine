@@ -84,5 +84,24 @@ void C_Transform::PrintGui()
 		ImGui::Text("Scale:");
 		ImGui::SameLine();
 		ImGui::DragFloat3("##Sca", &transform.scale[0], 0.1f);
+
+		
+		if (ImGui::Button("Reset Transform", ImVec2(ImGui::GetWindowSize().x, 20.0f)))
+			ResetTransform();
+
+		ImGui::Spacing();
 	}
+}
+
+void C_Transform::ResetTransform()
+{
+	transform.globalPos.SetIdentity();
+	transform.localPos.SetIdentity();
+
+	transform.localPos.Decompose(transform.position, transform.quatRot, transform.scale);
+	transform.quatRot.Normalize();
+
+	transform.eulerRot = transform.quatRot.ToEulerXYZ();
+
+	transform.globalPosTransposed = transform.globalPos.Transposed();
 }

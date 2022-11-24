@@ -3,6 +3,7 @@
 #include "Application.h"
 #include "GameObject.h"
 #include "Component.h"
+#include "ModuleFilesManager.h"
 
 #include <iostream>
 #include <string>
@@ -26,9 +27,10 @@ public:
 
 	MeshData* mesh;
 
+
 private:
 
 	uint textureID = 0;
 	uint auxID = 0;
-
 };
+

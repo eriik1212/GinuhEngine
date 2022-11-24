@@ -4,6 +4,7 @@
 namespace fs = std::filesystem;
 
 std::map<std::string, uint> ModuleFilesManager::loaded_textures;
+vector<string> ModuleFilesManager::allText;
 
 ModuleFilesManager::ModuleFilesManager(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -58,17 +59,13 @@ bool ModuleFilesManager::Start()
 
 		}
 		// Load Texture Here???
-		//else if (existent_filedir != nullptr && (extension == ".png" || extension == ".dds"))
-		//{
-		//	textID = LoadTexture(existent_filedir);
+		else if (existent_filedir != nullptr && (extension == ".png" || extension == ".dds"))
+		{
+			LoadTexture(existent_filedir);
 
-		//	//C_Mesh* mesh = dynamic_cast<C_Mesh*>(App->scene_intro->gameobject_selected->CreateComponent(Component::C_TYPE::MESH));
-		//	//mesh->GetMesh()->texture_id = LoadTexture(existent_filedir);
-		//	//dynamic_cast<C_Material*>(App->scene_intro->gameobject_selected->GetComponent(Component::C_TYPE::MATERIAL))->SetTexture(existent_filedir, textID);
+			App->menus->info.AddConsoleLog("File '%s' Loaded Succesfully", fileName_char);
 
-		//	App->menus->info.AddConsoleLog("File '%s' Loaded Succesfully", fileName_char);
-
-		//}
+		}
 		else
 		{
 			App->menus->info.AddConsoleLog("File '%s' cannot be loaded", fileName_char);
@@ -116,15 +113,15 @@ update_status ModuleFilesManager::Update(float dt)
 				LoadFile(new_filedir);
 
 			}
-			//else if (extension == ".png" && new_filedir != nullptr)
-			//{
-			//	//newMesh->texture_id = LoadTexture(new_filedir);
+			else if (extension == ".png" && new_filedir != nullptr)
+			{
+				LoadTexture(new_filedir);
 
-			//	C_Mesh* mesh = dynamic_cast<C_Mesh*>(App->scene_intro->gameobject_selected->GetComponent(Component::C_TYPE::MESH));
-			//	mesh->GetMesh()->texture_id = LoadTexture(new_filedir);
-			//	dynamic_cast<C_Material*>(App->scene_intro->gameobject_selected->GetComponent(Component::C_TYPE::MATERIAL))->SetTexture(new_filedir, textID);
+				/*C_Mesh* mesh = dynamic_cast<C_Mesh*>(App->scene_intro->gameobject_selected->GetComponent(Component::C_TYPE::MESH));
+				mesh->GetMesh()->texture_id = LoadTexture(new_filedir);
+				dynamic_cast<C_Material*>(App->scene_intro->gameobject_selected->GetComponent(Component::C_TYPE::MATERIAL))->SetTexture(new_filedir, textID);*/
 
-			//}
+			}
 
 			App->menus->info.AddConsoleLog("File '%s', with Extension '%s' Dropped Succesfully", fileName_char, extension_char);
 
@@ -360,6 +357,8 @@ uint ModuleFilesManager::LoadTexture(const char* filePath)
 
 		ilBindImage(0);
 		ilDeleteImages(1, &ImgId);
+
+		allText.push_back(filePath);
 
 		loaded_textures[filePath] = ImgId;
 		// ------------------------------------------ It prints also de grid (WRONG!)

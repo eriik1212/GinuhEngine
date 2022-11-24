@@ -35,6 +35,7 @@ public:
 
 	void SetTransform(float3 pos, Quat quatRot, float3 scale);
 	float* GetGlobalTransposed();
+	void ResetTransform();
 
 	void PrintGui();
 

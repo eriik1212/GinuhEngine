@@ -22,9 +22,9 @@ C_Mesh::~C_Mesh()
 
 void C_Mesh::Update()
 {
-	if (mesh == nullptr)
+	if (mesh == nullptr || !enabled)
 		return;
-	else
+	else if(mesh != nullptr || enabled)
 		RenderMesh();
 }
 
@@ -45,14 +45,19 @@ void C_Mesh::PrintGui()
 
 	if (ImGui::CollapsingHeader("Mesh", ImGuiTreeNodeFlags_DefaultOpen))
 	{
-		ImGui::Text("Enabled: "); ImGui::SameLine(); ImGui::Checkbox("##Enabled", &enabled);
+		ImGui::TextColored(ImVec4(255, 255, 0, 255), "Enabled: "); ImGui::SameLine(); ImGui::Checkbox("##Enabled", &enabled);
 
-		if (ImGui::Button("Remove"))
-			go->RemoveComponent(this);
+		ImGui::Spacing();
 
 		ImGui::Text("Mesh Name:");
 		ImGui::SameLine();
 		ImGui::Text(name.c_str());
+
+		ImGui::Spacing();
+		if (ImGui::Button("Remove Component"))
+			go->RemoveComponent(this);
+		ImGui::Spacing();
+
 	}
 
 }

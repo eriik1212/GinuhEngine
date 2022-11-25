@@ -78,6 +78,7 @@ public:
 	uint id_count = 1;
 
 	static vector<string> allText;
+	static map<string, uint> loaded_textures;			//Know which textures have we loaded, to NOT load again
 
 private:
 	SDL_Event event;                        // Declare event handle
@@ -89,7 +90,6 @@ private:
 
 	uint textID;
 
-	static map<string, uint> loaded_textures;			//Know which textures have we loaded, to NOT load again
 
 
 };

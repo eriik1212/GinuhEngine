@@ -108,8 +108,7 @@ public:
 		pOpen_about = true,
 		pOpen_console = true,
 		pOpen_hierarchy = true,
-		pOpen_inspector = true,
-		pOpen_component = true;
+		pOpen_inspector = true;
 
 	bool vsync = VSYNC;
 
@@ -143,6 +142,9 @@ private:
 	GameObject* relocatedGO;
 
 	void OptionsPanelGO(GameObject* GO);
+
+	// -------------------------------------------- IMGUI_LOGIC
+	bool ButtonCenteredOnLine(const char* label, float alignment = 0.5f);
 
 	//--------------------------------------------- OPTIONS
 	//window

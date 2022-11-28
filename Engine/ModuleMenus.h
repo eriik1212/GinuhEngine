@@ -110,7 +110,6 @@ public:
 		pOpen_hierarchy = true,
 		pOpen_inspector = true;
 
-
 	bool vsync = VSYNC;
 
 	ConsoleInfo info;
@@ -131,6 +130,9 @@ private:
 	bool inspectorVisible = true;
 	void MenuInspector();
 
+	bool addComponentVisible = false;
+	void AddComponentCombo();
+
 	char newName[NAME_SIZE];
 
 	void PrintGameObjects(GameObject* go);
@@ -140,6 +142,9 @@ private:
 	GameObject* relocatedGO;
 
 	void OptionsPanelGO(GameObject* GO);
+
+	// -------------------------------------------- IMGUI_LOGIC
+	bool ButtonCenteredOnLine(const char* label, float alignment = 0.5f);
 
 	//--------------------------------------------- OPTIONS
 	//window

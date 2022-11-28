@@ -81,37 +81,37 @@ update_status ModuleMenus::PostUpdate(float dt)
 			if (ImGui::MenuItem("Cube"))
 			{
 				App->files_manager->LoadFile("Assets/Primitives/cube.fbx");
-				
-				
+
+
 			}
 			if (ImGui::MenuItem("Plane"))
 			{
 				App->files_manager->LoadFile("Assets/Primitives/plane.fbx");
-				
-				
+
+
 			}
 			if (ImGui::MenuItem("Cylinder"))
 			{
 				App->files_manager->LoadFile("Assets/Primitives/cylinder.fbx");
-				
-				
+
+
 			}
 			if (ImGui::MenuItem("Cone"))
 			{
 				App->files_manager->LoadFile("Assets/Primitives/cone.fbx");
-				
+
 			}
 			if (ImGui::MenuItem("Sphere"))
 			{
 				App->files_manager->LoadFile("Assets/Primitives/sphere.fbx");
-				
-				
-			}	
+
+
+			}
 			if (ImGui::MenuItem("Torus"))
 			{
 				App->files_manager->LoadFile("Assets/Primitives/torus.fbx");
-				
-			}	
+
+			}
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Windows"))
@@ -181,7 +181,7 @@ update_status ModuleMenus::PostUpdate(float dt)
 	// --------------------------------------------------------------------------- WINDOW SCENE
 	ImGui::Begin("Scene", 0, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 	ImGui::BeginChild("##ID", ImVec2(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h));
-	
+
 	ImVec2 wsize = ImGui::GetWindowSize();
 
 	ImGui::Image((ImTextureID)App->renderer3D->textColorBuff, ImGui::GetContentRegionAvail(), ImVec2(0, 1), ImVec2(1, 0));
@@ -200,7 +200,7 @@ update_status ModuleMenus::PostUpdate(float dt)
 bool ModuleMenus::CleanUp()
 {
 	//LOG("Destroying ModuleMenus");
-	App->menus->info.AddConsoleLog( "Destroying Module Menus");
+	App->menus->info.AddConsoleLog("Destroying Module Menus");
 
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
@@ -340,15 +340,15 @@ void ModuleMenus::MenuConfig()
 			if (ImGui::CollapsingHeader("Application"))
 			{
 				//Header
-				ImGui::LabelText( "Ginuh Engine", "App Name:");
-				ImGui::LabelText( "UPC CITM", "Organisation:");
+				ImGui::LabelText("Ginuh Engine", "App Name:");
+				ImGui::LabelText("UPC CITM", "Organisation:");
 				ImGui::SliderInt("Max FPS", &App->limitFPS, 1, 165);
 
 				ImGui::Text("Limit Framerate: ");
 
 				char title[25];
 				sprintf_s(title, 25, "Framerate %1.f", fpsLog[fpsLog.size() - 1]);
-				ImGui::PlotHistogram("##framerate", &fpsLog[0],fpsLog.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
+				ImGui::PlotHistogram("##framerate", &fpsLog[0], fpsLog.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
 				sprintf_s(title, 25, "Milliseconds %0.f", timeLog[timeLog.size() - 1]);
 				ImGui::PlotHistogram("##milliseconds", &timeLog[0], timeLog.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
 			}
@@ -360,12 +360,12 @@ void ModuleMenus::MenuConfig()
 					{
 						SDL_SetWindowFullscreen(App->window->window, SDL_WINDOW_FULLSCREEN); //FULLSCREEN ENABLED
 						SDL_SetWindowSize(App->window->window, 1920, 1080);
-						App->menus->info.AddConsoleLog( "FullScreen Enabled");
+						App->menus->info.AddConsoleLog("FullScreen Enabled");
 
 					}
 					else
 					{
-						
+
 						SDL_SetWindowFullscreen(App->window->window, 0); //FULLSCREEN DISABLED
 						SDL_SetWindowSize(App->window->window, SCREEN_WIDTH, SCREEN_HEIGHT);
 						App->menus->info.AddConsoleLog("FullScreen Disabled");
@@ -739,25 +739,65 @@ void ModuleMenus::MenuInspector()
 				App->scene_intro->gameobject_selected->GetComponentByNum(i)->PrintGui();
 			}
 
-			if (ImGui::BeginPopup("Add Component"))
+			ImGui::Spacing();
+			
+			if (ButtonCenteredOnLine("Add Component"))
 			{
-				if (ImGui::BeginPopupContextItem("Components"))
+				addComponentVisible = !addComponentVisible;
+
+				if (addComponentVisible)
 				{
-					
-					if (ImGui::TabItemButton("Hello"))
-					{
+					ImGui::OpenPopup("New Component");
+				}
+				else
+				{
+					ImGui::CloseCurrentPopup();
+				}
+			}
 
-					}
-
+			if (addComponentVisible)
+			{
+				//ImGui::SetNextWindowPos(ImVec2(200.0f, 250.0f));
+				if (ImGui::BeginPopup("New Component"))
+				{
+					AddComponentCombo();
 					ImGui::EndPopup();
 				}
-				ImGui::EndPopup();
+				if (!ImGui::IsPopupOpen("New Component"))
+				{
+					addComponentVisible = false;
+					ImGui::CloseCurrentPopup();
+				}
 			}
 		}
 
 		ImGui::End();
 	}
 	if (pOpen_inspector == NULL) inspectorVisible = !inspectorVisible; // Window is closed so function "MenuInspector()" stops being called
+}
+
+void ModuleMenus::AddComponentCombo()
+{
+	const char* current_item = nullptr;
+
+	// ----------------------------------------- CHANGE TEXTURE
+	ImGui::TextColored(ImVec4(0, 255, 0, 255), "Choose Texture: ");
+	ImGui::Spacing();
+	if (ImGui::BeginCombo("##combo", current_item)) // The second parameter is the label previewed before opening the combo.
+	{
+		for (int n = 0; n < ModuleFilesManager::allText.size(); n++)
+		{
+			bool is_selected = (current_item == ModuleFilesManager::allText[n].c_str());
+			if (ImGui::Selectable(ModuleFilesManager::allText[n].c_str(), is_selected))
+			{
+				current_item = ModuleFilesManager::allText[n].c_str();
+			}
+			if (is_selected)
+				ImGui::SetItemDefaultFocus();
+		}
+		ImGui::EndCombo();
+	}
+	ImGui::Spacing();
 }
 
 void ModuleMenus::PrintGameObjects(GameObject* go)
@@ -855,7 +895,7 @@ void ModuleMenus::OptionsPanelGO(GameObject* GO)
 				GameObject* newGO = new GameObject(App->scene_intro->gameobject_selected, "Empty");
 
 			if (ImGui::Button("Delete GO"))
-				App->scene_intro->gameobject_selected->~GameObject(); 
+				App->scene_intro->gameobject_selected->~GameObject();
 
 			if (ImGui::Button("Close"))
 				ImGui::CloseCurrentPopup();
@@ -865,6 +905,20 @@ void ModuleMenus::OptionsPanelGO(GameObject* GO)
 	}
 	if (ImGui::IsItemHovered(ImGuiHoveredFlags_DelayNormal) && App->scene_intro->gameObjects[0] != GO)
 		ImGui::SetTooltip("Right-click to edit Game Object");
+}
+
+bool ModuleMenus::ButtonCenteredOnLine(const char* label, float alignment)
+{
+	ImGuiStyle& style = ImGui::GetStyle();
+
+	float size = ImGui::CalcTextSize(label).x + style.FramePadding.x * 2.0f;
+	float avail = ImGui::GetContentRegionAvail().x;
+
+	float off = (avail - size) * alignment;
+	if (off > 0.0f)
+		ImGui::SetCursorPosX(ImGui::GetCursorPosX() + off);
+
+	return ImGui::Button(label);
 }
 
 void ModuleMenus::OpenLink(const char* url)

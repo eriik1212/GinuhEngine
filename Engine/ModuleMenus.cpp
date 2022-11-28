@@ -177,6 +177,7 @@ update_status ModuleMenus::PostUpdate(float dt)
 	if (consoleVisible) MenuConsole();
 	if (hierarchyVisible) MenuHierarchy();
 	if (inspectorVisible) MenuInspector();
+	if (addComponentVisible) AddComponentCombo();
 
 	// --------------------------------------------------------------------------- WINDOW SCENE
 	ImGui::Begin("Scene", 0, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
@@ -739,25 +740,56 @@ void ModuleMenus::MenuInspector()
 				App->scene_intro->gameobject_selected->GetComponentByNum(i)->PrintGui();
 			}
 
-			if (ImGui::BeginPopup("Add Component"))
+			ImGui::Spacing();
+
+			if (ImGui::Button("Add Component"))
 			{
-				if (ImGui::BeginPopupContextItem("Components"))
-				{
-					
-					if (ImGui::TabItemButton("Hello"))
-					{
+				//ImGui::OpenPopup("popup");
 
-					}
+				pOpen_component = true; // Window can close
 
-					ImGui::EndPopup();
-				}
-				ImGui::EndPopup();
+				addComponentVisible = !addComponentVisible;
 			}
 		}
 
 		ImGui::End();
 	}
 	if (pOpen_inspector == NULL) inspectorVisible = !inspectorVisible; // Window is closed so function "MenuInspector()" stops being called
+}
+
+void ModuleMenus::AddComponentCombo()
+{
+	const char* current_item = nullptr;
+
+	if (pOpen_component)
+	{
+		//ImGui::Begin("Add Component", &pOpen_component, ImGuiWindowFlags_NoDocking);
+		if (ImGui::BeginPopupModal("popup", &pOpen_component))
+		{
+			// ----------------------------------------- CHANGE TEXTURE
+			ImGui::TextColored(ImVec4(0, 255, 0, 255), "Choose Texture: ");
+			ImGui::Spacing();
+			if (ImGui::BeginCombo("##combo", current_item)) // The second parameter is the label previewed before opening the combo.
+			{
+				for (int n = 0; n < ModuleFilesManager::allText.size(); n++)
+				{
+					bool is_selected = (current_item == ModuleFilesManager::allText[n].c_str());
+					if (ImGui::Selectable(ModuleFilesManager::allText[n].c_str(), is_selected))
+					{
+						current_item = ModuleFilesManager::allText[n].c_str();
+					}
+					if (is_selected)
+						ImGui::SetItemDefaultFocus();
+				}
+				ImGui::EndCombo();
+			}
+			ImGui::Spacing();
+		}
+		
+		
+		//ImGui::End();
+	}
+	if (pOpen_component == NULL) addComponentVisible = !addComponentVisible; // Window is closed so function "AddComponentCombo()" stops being called
 }
 
 void ModuleMenus::PrintGameObjects(GameObject* go)

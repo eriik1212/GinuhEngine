@@ -23,6 +23,7 @@ public:
 		TRANSFORM,
 		MESH,
 		MATERIAL,
+		CAMERA
 	};
 
 

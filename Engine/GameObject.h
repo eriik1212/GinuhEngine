@@ -46,21 +46,22 @@ public:
 	void RelocateGO(GameObject* relocatedParent);
 	bool isChild(GameObject* from);
 
+	void DeleteGO();
+
 	bool active;
 	string name;
 	uint id = 0;
 
-	uint id_count;
 	GameObject* parent;
 	C_Transform* transform = nullptr;
 
 	vector <GameObject*> children;
+	vector <GameObject*> go;
 
 private:
+	uint id_count = 1; // Scene = 0
 
 	vector<Component*> components;
-
-	Component* new_component;
 
 	Component* toDelete = nullptr;
 };

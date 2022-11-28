@@ -89,6 +89,7 @@
     <ClInclude Include="Application.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Component.h" />
+    <ClInclude Include="C_Camera.h" />
     <ClInclude Include="C_Mesh.h" />
     <ClInclude Include="C_Material.h" />
     <ClInclude Include="C_Transform.h" />
@@ -166,7 +167,9 @@
     <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="MaterialImporter.h" />
     <ClInclude Include="MemLeaks.h" />
+    <ClInclude Include="MeshImporter.h" />
     <ClInclude Include="ModuleCamera3D.h" />
     <ClInclude Include="ModuleFilesManager.h" />
     <ClInclude Include="ModuleMenus.h" />
@@ -182,6 +185,7 @@
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Component.cpp" />
+    <ClCompile Include="C_Camera.cpp" />
     <ClCompile Include="C_Mesh.cpp" />
     <ClCompile Include="C_Material.cpp" />
     <ClCompile Include="C_Transform.cpp" />
@@ -230,6 +234,8 @@
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="log.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MaterialImporter.cpp" />
+    <ClCompile Include="MeshImporter.cpp" />
     <ClCompile Include="ModuleCamera3D.cpp" />
     <ClCompile Include="ModuleInput.cpp" />
     <ClCompile Include="ModuleFilesManager.cpp" />

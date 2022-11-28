@@ -181,6 +181,15 @@
     <ClCompile Include="C_Mesh.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
+    <ClCompile Include="C_Camera.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialImporter.cpp">
+      <Filter>Source Files\Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshImporter.cpp">
+      <Filter>Source Files\Importers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -456,6 +465,15 @@
     <ClInclude Include="C_Mesh.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
+    <ClInclude Include="C_Camera.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialImporter.h">
+      <Filter>Header Files\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshImporter.h">
+      <Filter>Header Files\Importers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -496,6 +514,12 @@
     </Filter>
     <Filter Include="Source Files\Components">
       <UniqueIdentifier>{dfd582fc-1f2e-4651-b54c-d07355042ef0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Importers">
+      <UniqueIdentifier>{934529df-4500-4d89-b2d8-6e98a958d098}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Importers">
+      <UniqueIdentifier>{d16b4099-a469-4bb9-a2cc-aa45e996d76e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

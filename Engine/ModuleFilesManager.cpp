@@ -252,10 +252,10 @@ void ModuleFilesManager::LoadFile(const char* file_path)
 
 				delete newMesh;
 				newMesh = nullptr;
+
 			}
 
 			NodeManager(scene, scene->mRootNode, GameObjectRoot);
-
 
 			dynamic_cast<C_Mesh*>(GameObjectChild->CreateComponent(Component::C_TYPE::MESH))->SetMesh(newMesh, scene->mMeshes[i]->mName.C_Str());
 
@@ -264,6 +264,7 @@ void ModuleFilesManager::LoadFile(const char* file_path)
 		App->menus->info.AddConsoleLog("% s Pushed In List Successfully", file_path);
 		aiReleaseImport(scene);
 
+		
 	}
 	else
 	{

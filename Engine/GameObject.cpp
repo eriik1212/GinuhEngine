@@ -5,6 +5,7 @@
 #include "C_Transform.h"
 #include "C_Mesh.h"
 #include "C_Material.h"
+#include "C_Camera.h"
 #include "ModuleSceneIntro.h"
 
 GameObject::GameObject(GameObject* parent, string name) : parent(parent), active(true)
@@ -15,6 +16,8 @@ GameObject::GameObject(GameObject* parent, string name) : parent(parent), active
 	id_count++;
 
 	transform = dynamic_cast<C_Transform*>(CreateComponent(Component::C_TYPE::TRANSFORM));
+
+	go.push_back(this);
 
 	if (parent != nullptr) parent->AddChild(this);
 }
@@ -44,6 +47,8 @@ GameObject::~GameObject()
 
 Component* GameObject::CreateComponent(Component::C_TYPE type)
 {
+	Component* new_component;
+
 	switch (type)
 	{
 	case Component::C_TYPE::TRANSFORM:
@@ -56,14 +61,15 @@ Component* GameObject::CreateComponent(Component::C_TYPE type)
 	case Component::C_TYPE::MATERIAL:
 		new_component = new C_Material(this);
 		break;
-		/*case Component::TYPE::CAMERA:
-			Component* new_component = new C_Camera(this);
-			break;*/
+		case Component::C_TYPE::CAMERA:
+			new_component = new C_Camera(this);
+			break;
 	default:
 		LOG("component type error");
 		break;
 	}
 	components.push_back(new_component);
+
 	return new_component;
 }
 
@@ -129,6 +135,10 @@ bool GameObject::isChild(GameObject* fromThis)
 		return true;
 	else
 		return false;
+}
+
+void GameObject::DeleteGO()
+{
 }
 
 void GameObject::Enable()

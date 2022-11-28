@@ -71,6 +71,13 @@ void C_Material::PrintGui()
 			}
 			ImGui::EndCombo();
 		}
+		ImGui::SameLine();
+		if (ImGui::Button("Remove Texture"))
+		{
+			current_item = "";
+			name = current_item;
+
+		}
 		ImGui::Spacing();
 		// Show Texture Image
 		ImGui::ImageButton((ImTextureID)ModuleFilesManager::loaded_textures[current_item], ImVec2(100.0f, 100.0f));

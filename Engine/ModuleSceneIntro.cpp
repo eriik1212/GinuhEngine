@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleSceneIntro.h"
 #include "Primitive.h"
+#include "GameObject.h"
 
 #include "Glew/include/glew.h"
 #include "SDL/include/SDL_opengl.h"
@@ -26,7 +27,7 @@ bool ModuleSceneIntro::Init()
 {
 	SceneRoot = new GameObject(NULL, "Scene");
 
-	App->scene_intro->gameObjects[0] = SceneRoot;
+	gameObjects[0] = SceneRoot;
 
 	return true;
 }

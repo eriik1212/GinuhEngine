@@ -25,7 +25,7 @@ public:
 
 	string name;
 
-	MeshData* mesh;
+	MeshData* mesh = nullptr;
 
 
 private:

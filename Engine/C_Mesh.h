@@ -30,5 +30,6 @@ public:
 	MeshData* GetMesh();
 
 	string name;
-	MeshData* mesh;
+
+	MeshData* mesh = nullptr;
 };

@@ -36,8 +36,15 @@ void C_Camera::PrintGui()
 		ImGui::Spacing();
 
 		ImGui::Spacing();
-		if (ImGui::Button("Remove Component"))
+		
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 0.0f, 0.0f, 0.5f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(1.0f, 0.5f, 0.5f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
+
+		if (ImGui::Button("Remove Component", ImVec2(ImGui::GetWindowSize().x, 20.0f)))
 			go->RemoveComponent(this);
+		ImGui::PopStyleColor(3);
+
 		ImGui::Spacing();
 
 	}

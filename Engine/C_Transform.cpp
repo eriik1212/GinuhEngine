@@ -85,6 +85,7 @@ void C_Transform::PrintGui()
 		ImGui::SameLine();
 		ImGui::DragFloat3("##Sca", &transform.scale[0], 0.1f);
 
+		ImGui::Spacing();
 		
 		if (ImGui::Button("Reset Transform", ImVec2(ImGui::GetWindowSize().x, 20.0f)))
 			ResetTransform();

@@ -9,7 +9,19 @@
 #include "ImGui/imgui_impl_sdl.h"
 #include "ImGui/imgui_impl_opengl3.h"
 
+#include "GameObject.h"
+#include "Component.h"
+
+#include "C_Camera.h"
+#include "C_Transform.h"
+#include "C_Material.h"
+#include "C_Mesh.h"
+
 #define NAME_SIZE 50
+
+class GameObject;
+class Component;
+class C_Mesh;
 
 class ConsoleInfo
 {
@@ -114,6 +126,9 @@ public:
 
 	ConsoleInfo info;
     
+	//--------------------------------------------------------------------- IMGUI LOGIC
+	bool ButtonCenteredOnLine(const char* label, float alignment = 0.5f);
+
 private:
 	bool aboutVisible = true;
 	void MenuAbout();
@@ -142,9 +157,6 @@ private:
 	GameObject* relocatedGO;
 
 	void OptionsPanelGO(GameObject* GO);
-
-	// -------------------------------------------- IMGUI_LOGIC
-	bool ButtonCenteredOnLine(const char* label, float alignment = 0.5f);
 
 	//--------------------------------------------- OPTIONS
 	//window

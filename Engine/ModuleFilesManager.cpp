@@ -178,6 +178,9 @@ void ModuleFilesManager::LoadFile(const char* file_path)
 			GameObject* GameObjectChild = new GameObject(GameObjectRoot, scene->mMeshes[i]->mName.C_Str());
 
 			MeshData* newMesh = new MeshData();
+
+			newMesh->meshName = scene->mMeshes[i]->mName.C_Str();
+
 			// copy vertices
 			newMesh->num_vertex = scene->mMeshes[i]->mNumVertices;
 			newMesh->vertex = new float[newMesh->num_vertex * VERTEX_FEATURES];

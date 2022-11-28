@@ -7,10 +7,13 @@
 #include "ImGui/imgui_impl_sdl.h"
 #include "ImGui/imgui_impl_opengl3.h"
 
-
 #include <iostream>
 #include <string>
 #include <vector>
+
+#define NUM_COMPONENTS_TYPES 4
+
+using namespace std;
 
 class GameObject;
 
@@ -40,9 +43,12 @@ public:
 
 	C_TYPE GetType() { return type; }
 
+	string componentName;
+
 protected:
 
 	bool enabled = true;
 	C_TYPE type = C_TYPE::NONE;
 	GameObject* go = nullptr;
+
 };

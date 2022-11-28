@@ -56,7 +56,7 @@ void C_Material::PrintGui()
 		// ----------------------------------------- CHANGE TEXTURE
 		ImGui::TextColored(ImVec4(0,255,0,255), "Choose Texture: ");
 		ImGui::Spacing();
-		if (ImGui::BeginCombo("##combo", current_item)) // The second parameter is the label previewed before opening the combo.
+		if (ImGui::BeginCombo("##combo_texture", current_item)) // The second parameter is the label previewed before opening the combo.
 		{
 			for (int n = 0; n < ModuleFilesManager::allText.size(); n++)
 			{
@@ -82,15 +82,25 @@ void C_Material::PrintGui()
 		// Show Texture Image
 		ImGui::ImageButton((ImTextureID)ModuleFilesManager::loaded_textures[current_item], ImVec2(100.0f, 100.0f));
 		
-		ImGui::Spacing();
-		if (ImGui::Button("Remove Component"))
-		{
-			mesh->texture_id = 0;
-			go->RemoveComponent(this);
-		}
+		textureID = ModuleFilesManager::loaded_textures[current_item];
+
 		ImGui::Spacing();
 
-		textureID = ModuleFilesManager::loaded_textures[current_item];
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 0.0f, 0.0f, 0.5f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(1.0f, 0.5f, 0.5f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
+
+		if (ImGui::Button("Remove Component", ImVec2(ImGui::GetWindowSize().x, 20.0f)))
+		{
+			textureID = 0;
+
+			go->RemoveComponent(this);
+
+		}
+		ImGui::PopStyleColor(3);
+
+		ImGui::Spacing();
+
 
 	}
 
@@ -100,16 +110,23 @@ void C_Material::PrintGui()
 
 void C_Material::UpdateStatus()
 {
-
-	if (!enabled)
+	if (mesh != nullptr)
 	{
-		//auxID = textureID;
-		auxID = 0;
-		mesh->texture_id = auxID;
+		if (!enabled)
+		{
+			//auxID = textureID;
+			auxID = 0;
+			mesh->texture_id = auxID;
+		}
+		else
+		{
+			mesh->texture_id = textureID;
+			auxID = mesh->texture_id;
+		}
 	}
 	else
 	{
-		mesh->texture_id = textureID;
-		auxID = mesh->texture_id;
+		
 	}
+	
 }

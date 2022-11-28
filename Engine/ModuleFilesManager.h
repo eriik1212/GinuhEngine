@@ -80,17 +80,15 @@ public:
 	static vector<string> allText;
 	static map<string, uint> loaded_textures;			//Know which textures have we loaded, to NOT load again
 
+	vector<MeshData*> meshList;
+
 private:
 	SDL_Event event;                        // Declare event handle
 	char* dropped_filedir = "";                  // Pointer for directory of dropped file
 	const char* assets_dir = "Assets/";
 	char* texPath = "";
 
-	vector<MeshData*> meshList;
-
 	uint textID;
-
-
 
 };
 

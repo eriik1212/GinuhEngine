@@ -4,9 +4,8 @@
 #include "Application.h"
 #include "ModuleMenus.h"
 
-//#include "ModuleMenuGameObject.h"
-
 #include <Windows.h>
+
 
 ModuleMenus::ModuleMenus(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -740,14 +739,16 @@ void ModuleMenus::MenuInspector()
 			}
 
 			ImGui::Spacing();
-			
+			ImGui::Separator();
+			ImGui::Spacing();
+
 			if (ButtonCenteredOnLine("Add Component"))
 			{
 				addComponentVisible = !addComponentVisible;
 
 				if (addComponentVisible)
 				{
-					ImGui::OpenPopup("New Component");
+					ImGui::OpenPopup("##NewComponent");
 				}
 				else
 				{
@@ -758,12 +759,12 @@ void ModuleMenus::MenuInspector()
 			if (addComponentVisible)
 			{
 				//ImGui::SetNextWindowPos(ImVec2(200.0f, 250.0f));
-				if (ImGui::BeginPopup("New Component"))
+				if (ImGui::BeginPopup("##NewComponent"))
 				{
 					AddComponentCombo();
 					ImGui::EndPopup();
 				}
-				if (!ImGui::IsPopupOpen("New Component"))
+				if (!ImGui::IsPopupOpen("##NewComponent"))
 				{
 					addComponentVisible = false;
 					ImGui::CloseCurrentPopup();
@@ -778,22 +779,37 @@ void ModuleMenus::MenuInspector()
 
 void ModuleMenus::AddComponentCombo()
 {
-	const char* current_item = nullptr;
+	// ---------------------------------------------------------------------------------- ADD NEW COMPONENT
+	const char* title_combo = "Components";
 
-	// ----------------------------------------- CHANGE TEXTURE
-	ImGui::TextColored(ImVec4(0, 255, 0, 255), "Choose Texture: ");
+	std::string componentNames[NUM_COMPONENTS_TYPES - 1] = { "Material", "Mesh", "Camera"};
+
+	ImGui::TextColored(ImVec4(255, 255, 0, 255), "Choose A New Component: ");
 	ImGui::Spacing();
-	if (ImGui::BeginCombo("##combo", current_item)) // The second parameter is the label previewed before opening the combo.
+	if (ImGui::BeginCombo("##combo_components", title_combo))
 	{
-		for (int n = 0; n < ModuleFilesManager::allText.size(); n++)
+		for (int n = 0; n < NUM_COMPONENTS_TYPES - 1; n++)
 		{
-			bool is_selected = (current_item == ModuleFilesManager::allText[n].c_str());
-			if (ImGui::Selectable(ModuleFilesManager::allText[n].c_str(), is_selected))
+			if (ImGui::Selectable(componentNames[n].c_str()))
 			{
-				current_item = ModuleFilesManager::allText[n].c_str();
+				switch (n)
+				{
+					case 0:
+						if (App->scene_intro->gameobject_selected->GetComponent(Component::C_TYPE::MATERIAL) == nullptr)
+							App->scene_intro->gameobject_selected->CreateComponent(Component::C_TYPE::MATERIAL);
+						break;	
+					case 1:
+						if (App->scene_intro->gameobject_selected->GetComponent(Component::C_TYPE::MESH) == nullptr)
+							App->scene_intro->gameobject_selected->CreateComponent(Component::C_TYPE::MESH);
+						break;
+					case 2:
+						if (App->scene_intro->gameobject_selected->GetComponent(Component::C_TYPE::CAMERA) == nullptr)
+							App->scene_intro->gameobject_selected->CreateComponent(Component::C_TYPE::CAMERA);
+						break;
+					default:
+						break;
+				}
 			}
-			if (is_selected)
-				ImGui::SetItemDefaultFocus();
 		}
 		ImGui::EndCombo();
 	}

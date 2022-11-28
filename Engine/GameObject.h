@@ -59,9 +59,8 @@ public:
 	vector <GameObject*> go;
 
 private:
+
 	uint id_count = 1; // Scene = 0
-
 	vector<Component*> components;
-
 	Component* toDelete = nullptr;
 };

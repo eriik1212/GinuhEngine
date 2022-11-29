@@ -1,7 +1,11 @@
 #include "Application.h"
 
+extern Application* AppExtern = nullptr;
+
 Application::Application()
 {
+	AppExtern = this;
+
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
 	scene_intro = new ModuleSceneIntro(this);

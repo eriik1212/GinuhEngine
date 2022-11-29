@@ -10,7 +10,7 @@
 
 GameObject::GameObject(GameObject* parent, string name) : parent(parent), active(true)
 {
-	App->scene_intro->gameObjects[id_count] = this;
+	AppExtern->scene_intro->gameObjects[id_count] = this;
 	this->name = name;
 	id = id_count;
 	id_count++;

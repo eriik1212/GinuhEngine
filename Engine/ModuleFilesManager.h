@@ -2,6 +2,7 @@
 #define __ModuleFilesManager_H__
 
 #include "Module.h"
+#include "Application.h"
 #include "Globals.h"
 #include "C_Mesh.h"
 #include "C_Material.h"
@@ -24,8 +25,19 @@
 #include <map>
 
 using namespace std;
+namespace fs = std::filesystem;
+
 
 #define VERTEX_FEATURES 8
+
+#define ASSETS_PATH "Assets/"
+#define LIBRARY_PATH "Library/"
+#define MODELS_PATH "Library/Models/"
+#define MESHES_PATH "Library/Meshes/"
+#define TEXTURES_PATH "Library/Textures/"
+#define SCENES_PATH "Library/Scenes/"
+#define SCRIPTS_PATH "Library/Scripts/"
+#define MATERIALS_PATH "Library/Materials/"
 
 struct MeshData
 {
@@ -69,23 +81,30 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
-	void LoadFile(const char* filePath);
-	void LoadMeshData(MeshData* mesh);
-	uint LoadTexture(const char* filePath);
+	string GetFileName(string path, bool wExtension = false);
 
-	void NodeManager(const aiScene* rootScene, aiNode* rootNode, GameObject* goParent);
+	//void LoadFile(const char* filePath);
+	//void LoadMeshData(MeshData* mesh);
+	//uint LoadTexture(const char* filePath);
+
+	//void NodeManager(const aiScene* rootScene, aiNode* rootNode, GameObject* goParent);
 
 	uint id_count = 1;
 
 	static vector<string> allText;
 	static map<string, uint> loaded_textures;			//Know which textures have we loaded, to NOT load again
 
-	vector<MeshData*> meshList;
+	//vector<MeshData*> meshList;
+
+	//-------------------------------------------------------------------------- PHYSFS Logic
+	bool FS_Exists(const string file);
+	void PFS_CreateLibrary();
+	bool FS_IsDirectory(const string file);
 
 private:
 	SDL_Event event;                        // Declare event handle
 	char* dropped_filedir = "";                  // Pointer for directory of dropped file
-	const char* assets_dir = "Assets/";
+	const char* assets_dir = ASSETS_PATH;
 	char* texPath = "";
 
 	uint textID;

@@ -126,7 +126,7 @@ void C_Material::UpdateStatus()
 	}
 	else
 	{
-		
+		// TODO
 	}
 	
 }

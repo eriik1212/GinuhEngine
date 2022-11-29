@@ -184,7 +184,7 @@
     <ClCompile Include="C_Camera.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="MaterialImporter.cpp">
+    <ClCompile Include="TextureImporter.cpp">
       <Filter>Source Files\Importers</Filter>
     </ClCompile>
     <ClCompile Include="MeshImporter.cpp">
@@ -468,7 +468,7 @@
     <ClInclude Include="C_Camera.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="MaterialImporter.h">
+    <ClInclude Include="TextureImporter.h">
       <Filter>Header Files\Importers</Filter>
     </ClInclude>
     <ClInclude Include="MeshImporter.h">

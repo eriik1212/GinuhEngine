@@ -68,5 +68,5 @@ enum update_status
 #define TITLE "GINUH ENGINE"
 
 
-class Application;
-extern Application* App;
+//class Application;
+//extern Application* App;

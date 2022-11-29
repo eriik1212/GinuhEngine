@@ -15,6 +15,14 @@
 #include <vector>
 using namespace std;
 
+class ModuleWindow;
+class ModuleInput;
+class ModuleSceneIntro;
+class ModuleRenderer3D;
+class ModuleCamera3D;
+class ModuleMenus;
+class ModuleFilesManager;
+
 class Application
 {
 public:
@@ -55,3 +63,5 @@ private:
 	void PrepareUpdate();
 	void FinishUpdate();
 };
+
+extern Application* AppExtern;

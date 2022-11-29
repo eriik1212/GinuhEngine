@@ -4,6 +4,9 @@
 #include "Application.h"
 #include "ModuleMenus.h"
 
+#include "MeshImporter.h"
+#include "TextureImporter.h"
+
 #include <Windows.h>
 
 
@@ -79,36 +82,36 @@ update_status ModuleMenus::PostUpdate(float dt)
 		{
 			if (ImGui::MenuItem("Cube"))
 			{
-				App->files_manager->LoadFile("Assets/Primitives/cube.fbx");
+				MeshImporter::ImportMesh("Assets/Primitives/cube.fbx");
 
 
 			}
 			if (ImGui::MenuItem("Plane"))
 			{
-				App->files_manager->LoadFile("Assets/Primitives/plane.fbx");
+				MeshImporter::ImportMesh("Assets/Primitives/plane.fbx");
 
 
 			}
 			if (ImGui::MenuItem("Cylinder"))
 			{
-				App->files_manager->LoadFile("Assets/Primitives/cylinder.fbx");
+				MeshImporter::ImportMesh("Assets/Primitives/cylinder.fbx");
 
 
 			}
 			if (ImGui::MenuItem("Cone"))
 			{
-				App->files_manager->LoadFile("Assets/Primitives/cone.fbx");
+				MeshImporter::ImportMesh("Assets/Primitives/cone.fbx");
 
 			}
 			if (ImGui::MenuItem("Sphere"))
 			{
-				App->files_manager->LoadFile("Assets/Primitives/sphere.fbx");
+				MeshImporter::ImportMesh("Assets/Primitives/sphere.fbx");
 
 
 			}
 			if (ImGui::MenuItem("Torus"))
 			{
-				App->files_manager->LoadFile("Assets/Primitives/torus.fbx");
+				MeshImporter::ImportMesh("Assets/Primitives/torus.fbx");
 
 			}
 			ImGui::EndMenu();

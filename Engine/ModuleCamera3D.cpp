@@ -7,13 +7,24 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(ap
 {
 	CalculateViewMatrix();
 
-	X = vec3(1.0f, 0.0f, 0.0f);
-	Y = vec3(0.0f, 1.0f, 0.0f);
-	Z = vec3(0.0f, 0.0f, 1.0f);
+	frustum.type = PerspectiveFrustum;
+	frustum.nearPlaneDistance = 0.1f;
+	frustum.farPlaneDistance = 600.f;
+	frustum.front = float3::unitZ;
+	frustum.up = float3::unitY;
+	frustum.verticalFov = 60.0f * DEGTORAD;
+	frustum.horizontalFov = 2.0f * atanf(tanf(frustum.verticalFov / 2.0f) * 1.7f); //That 1.7 comes from 16/9 aspect ratio
 
-	Position = vec3(0.0f, 0.0f, 5.0f);
-	Reference = vec3(0.0f, 0.0f, 0.0f);
+	frustum.pos = float3(0, 0, -10);
 }
+
+
+
+
+
+
+	
+
 
 ModuleCamera3D::~ModuleCamera3D()
 {}
@@ -52,14 +63,14 @@ update_status ModuleCamera3D::Update(float dt)
 	//if(App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT) newPos.y -= speed;
 
 	// While Right clicking, “WASD” fps-like movement and free look around must be enabled.
-	if(App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT) newPos -= Z * speed;
-	if(App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT && App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT) newPos += Z * speed;
+	if(App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT) frustum.pos += frustum.front * speed;
+	if(App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT && App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT) frustum.pos -= frustum.front * speed;
 
-	if(App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT) newPos -= X * speed;
-	if(App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT) newPos += X * speed;
+	if(App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT) frustum.pos -= frustum.WorldRight() * speed;
+	if(App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT) frustum.pos += frustum.WorldRight() * speed;
 
 	// Scrool Zoom
-	if (App->input->GetMouseZ() != 0) newPos -= Z * speed * App->input->GetMouseZ();
+	if (App->input->GetMouseZ() != 0) frustum.pos -= frustum.front * speed * App->input->GetMouseZ();
 
 	Position += newPos;
 	Reference += newPos;
@@ -73,6 +84,10 @@ update_status ModuleCamera3D::Update(float dt)
 		int dy = -App->input->GetMouseYMotion();
 
 		float Sensitivity = 0.25f;
+
+		//Getting the rotation from the frustum world matrix
+		Quat dir;
+		frustum.WorldMatrix().Decompose(float3(), dir, float3());
 
 		Position -= Reference;
 
@@ -100,6 +115,11 @@ update_status ModuleCamera3D::Update(float dt)
 		}
 
 		Position = Reference + Z * length(Position);
+
+
+		float4x4 rm = frustum.WorldMatrix();
+		rm.SetRotatePart(dir.Normalized());
+		frustum.SetWorldMatrix(rm.Float3x4Part());
 	}
 
 	// Recalculate matrix -------------
@@ -109,55 +129,54 @@ update_status ModuleCamera3D::Update(float dt)
 }
 
 // -----------------------------------------------------------------
-void ModuleCamera3D::Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference)
+void ModuleCamera3D::Look(const float3 &Position, const float3 &Reference, bool RotateAroundReference)
 {
-	this->Position = Position;
-	this->Reference = Reference;
+	frustum.pos = Position;
+	reference = Reference;
 
-	Z = normalize(Position - Reference);
-	X = normalize(cross(vec3(0.0f, 1.0f, 0.0f), Z));
-	Y = cross(Z, X);
+	LookAt(reference);
 
 	if(!RotateAroundReference)
 	{
-		this->Reference = this->Position;
-		this->Position += Z * 0.05f;
+		reference = Position;
 	}
 
-	CalculateViewMatrix();
+	
 }
 
 // -----------------------------------------------------------------
-void ModuleCamera3D::LookAt( const vec3 &Spot)
+void ModuleCamera3D::LookAt( const float3 &Spot)
 {
-	Reference = Spot;
+	reference = Spot;
 
-	Z = normalize(Position - Reference);
-	X = normalize(cross(vec3(0.0f, 1.0f, 0.0f), Z));
-	Y = cross(Z, X);
+	reference = Spot;
+	frustum.front = (Spot - frustum.pos).Normalized();
+	float3 X = float3(0, 1, 0).Cross(frustum.front).Normalized();
+	frustum.up = frustum.front.Cross(X);
 
-	CalculateViewMatrix();
+	
 }
 
 
 // -----------------------------------------------------------------
-void ModuleCamera3D::Move(const vec3 &Movement)
+void ModuleCamera3D::Move(const float3 &Movement)
 {
-	Position += Movement;
-	Reference += Movement;
-
-	CalculateViewMatrix();
+	frustum.pos += Movement;
 }
 
 // -----------------------------------------------------------------
 float* ModuleCamera3D::GetViewMatrix()
 {
-	return &ViewMatrix;
+	return ViewMatrix.ptr();
 }
 
 // -----------------------------------------------------------------
 void ModuleCamera3D::CalculateViewMatrix()
 {
-	ViewMatrix = mat4x4(X.x, Y.x, Z.x, 0.0f, X.y, Y.y, Z.y, 0.0f, X.z, Y.z, Z.z, 0.0f, -dot(X, Position), -dot(Y, Position), -dot(Z, Position), 1.0f);
-	ViewMatrixInverse = inverse(ViewMatrix);
+	//ViewMatrix = mat4x4(X.x, Y.x, Z.x, 0.0f, X.y, Y.y, Z.y, 0.0f, X.z, Y.z, Z.z, 0.0f, -dot(X, Position), -dot(Y, Position), -dot(Z, Position), 1.0f);
+	//ViewMatrixInverse = inverse(ViewMatrix);
+
+	ViewMatrix = frustum.ViewMatrix();
+	ViewMatrix.Transpose();
+	
 }

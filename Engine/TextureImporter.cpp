@@ -1,5 +1,6 @@
 #include "TextureImporter.h"
 #include "Application.h"
+#include "PhysFS/include/physfs.h"
 
 std::map<std::string, uint> ModuleFilesManager::loaded_textures;
 vector<string> ModuleFilesManager::allText;
@@ -17,24 +18,24 @@ uint TextureImporter::ImportTexture(const char* filePath)
 	}
 
 	// -------------------------------------- Loading Image
-	//if (ilLoadImage(filePath))
-	//{
-	//	ilEnable(IL_FILE_OVERWRITE);
-	//	ilSaveImage(filePath);
+	if (ilLoadImage(filePath))
+	{
+		ilEnable(IL_FILE_OVERWRITE);
+		ilSaveImage(filePath);
 
-	//	ilGenImages(1, &ImgId);
-	//	ilBindImage(ImgId);
+		ilGenImages(1, &ImgId);
+		ilBindImage(ImgId);
 
-	//	ilLoadImage(filePath);
+		ilLoadImage(filePath);
 
-	//	ImgId = ilutGLBindTexImage();
+		ImgId = ilutGLBindTexImage();
 
-	//	ilBindImage(0);
-	//	ilDeleteImages(1, &ImgId);
+		ilBindImage(0);
+		ilDeleteImages(1, &ImgId);
 
-	//	ModuleFilesManager::allText.push_back(filePath);
+		ModuleFilesManager::allText.push_back(filePath);
 
-	//	ModuleFilesManager::loaded_textures[filePath] = ImgId;
+		ModuleFilesManager::loaded_textures[filePath] = ImgId;
 
 	//	// ------------------------------------------ It prints also de grid (WRONG!)
 	//	//ilEnable(IL_FILE_OVERWRITE);
@@ -66,98 +67,36 @@ uint TextureImporter::ImportTexture(const char* filePath)
 	//	//glBindTexture(GL_TEXTURE_2D, ImgId);
 	//	//ilDeleteImages(1, &ImgId);
 
-	//	AppExtern->menus->info.AddConsoleLog("TEX ID: %d", ImgId);
+		AppExtern->menus->info.AddConsoleLog("TEX ID: %d", ImgId);
 
 	//	return ImgId;
-	//}
-	//else
-	//{
-	//	//App->menus->info.AddConsoleLog("DevIL ERROR: Could not Load Image. Error: %s", ilGetError());
-
-	//	return 0;
-	//}
-
-	char* buffer = NULL;
-	uint size = AppExtern->files_manager->PFS_Load(filePath, &buffer);
-
-	ILuint image;
-	ilGenImages(1, &image);
-	ilBindImage(image);
-
-	if (!ilLoadL(IL_TYPE_UNKNOWN, buffer, size))
-	{
-		LOG("IMPORT//Image not loaded.");
 	}
+	else
+	{
+		//App->menus->info.AddConsoleLog("DevIL ERROR: Could not Load Image. Error: %s", ilGetError());
 
-	glGenTextures(1, &ImgId);
-	glBindTexture(GL_TEXTURE_2D, ImgId);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), 0, GL_RGBA, GL_UNSIGNED_BYTE, ilGetData());
-	ilDeleteImages(1, &image);
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-
-	ModuleFilesManager::allText.push_back(filePath);
-
-	ModuleFilesManager::loaded_textures[filePath] = ImgId;
+		return 0;
+	}
 
 	return ImgId;
 
 }
 
-char* TextureImporter::SaveTexture(uint& size, string path)
+void TextureImporter::SaveTexture(char** fileBuffer, string path)
 {
-	char* buffer = NULL;
-
-	ILuint imageID;
-	ilGenImages(1, &imageID);
-	ilBindImage(imageID);
-
-	if (!ilLoadL(IL_TYPE_UNKNOWN, buffer, size))
-	{
-		AppExtern->menus->info.AddConsoleLog("SAVE//Image Not Loaded.");
-	}
-
-	ILuint _size = 0;
+	ILuint size = 0;
 	ILubyte* data = nullptr;
 
-	ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);
-	_size = ilSaveL(IL_DDS, nullptr, 0);
-	if (_size > 0)
+	ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);// To pick a specific DXT compression use
+	size = ilSaveL(IL_DDS, nullptr, 0); // Get the size of the data buffer
+	
+	if (size > 0) 
 	{
-		data = new ILubyte[_size];
-		size = ilSaveL(IL_DDS, data, _size);
+		data = new ILubyte[size]; // allocate data buffer
+		if (ilSaveL(IL_DDS, data, size) > 0) // Save to buffer with the ilSaveIL function
+			*fileBuffer = (char*)data;
+
+			RELEASE_ARRAY(data);
 	}
 
-	ilDeleteImages(1, &imageID);
-
-	return (char*)data;
-
-}
-
-uint TextureImporter::LoadTexture(string path)
-{
-	string texture_path = TEXTURES_PATH + AppExtern->files_manager->GetFileName(path, false) + ".dds";
-
-	// Check loaded textures
-	if (!AppExtern->files_manager->PFS_Exists(texture_path))
-	{
-		// save custom format
-		string file = TEXTURES_PATH;
-		file += AppExtern->files_manager->GetFileName(path, false);
-		file += ".dds";
-
-		uint size = 0;
-		char* buffer = SaveTexture(size, path);
-
-		AppExtern->files_manager->PFS_Save(file.c_str(), buffer, size, false);
-		RELEASE_ARRAY(buffer);
-	}
-
-	return ImportTexture(texture_path.c_str());
 }

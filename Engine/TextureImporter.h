@@ -5,7 +5,7 @@
 namespace TextureImporter
 {
 	uint ImportTexture(const char* filePath);
-	char* SaveTexture(uint& size, std::string path);
-	GLuint LoadTexture(string path);
+	void SaveTexture(char** fileBuffer, string path);
+	//GLuint LoadTexture(string path);
 
 }

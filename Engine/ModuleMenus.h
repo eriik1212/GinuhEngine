@@ -120,7 +120,8 @@ public:
 		pOpen_about = true,
 		pOpen_console = true,
 		pOpen_hierarchy = true,
-		pOpen_inspector = true;
+		pOpen_inspector = true,
+		pOpen_assets = true;
 
 	bool vsync = VSYNC;
 
@@ -147,6 +148,9 @@ private:
 
 	bool addComponentVisible = false;
 	void AddComponentCombo();
+
+	bool assetsVisible = true;
+	void MenuAssets();
 
 	char newName[NAME_SIZE];
 

@@ -18,7 +18,13 @@ ModuleFilesManager::ModuleFilesManager(Application* app, bool start_enabled) : M
 
 	if (PHYSFS_setWriteDir(".") == 0) App->menus->info.AddConsoleLog("FileSystem:: %s\n", PHYSFS_getLastError());
 
-	PFS_CreateLibrary();
+	if (!PHYSFS_isDirectory(LIBRARY_PATH)) PHYSFS_mkdir(LIBRARY_PATH);
+	if (!PHYSFS_isDirectory(MODELS_PATH)) PHYSFS_mkdir(MODELS_PATH);
+	if (!PHYSFS_isDirectory(MESHES_PATH)) PHYSFS_mkdir(MESHES_PATH);
+	if (!PHYSFS_isDirectory(TEXTURES_PATH)) PHYSFS_mkdir(TEXTURES_PATH);
+	if (!PHYSFS_isDirectory(MATERIALS_PATH)) PHYSFS_mkdir(MATERIALS_PATH);
+	if (!PHYSFS_isDirectory(SCENES_PATH)) PHYSFS_mkdir(SCENES_PATH);
+	if (!PHYSFS_isDirectory(SCRIPTS_PATH)) PHYSFS_mkdir(SCRIPTS_PATH);
 }
 
 // Destructor
@@ -75,7 +81,7 @@ bool ModuleFilesManager::Start()
 		// Load Texture Here???
 		else if (existent_filedir != nullptr && (extension == ".png" || extension == ".dds"))
 		{
-			TextureImporter::LoadTexture(existent_filedir);
+			TextureImporter::ImportTexture(existent_filedir);
 
 			App->menus->info.AddConsoleLog("File '%s' Loaded Succesfully", fileName_char);
 
@@ -129,7 +135,7 @@ update_status ModuleFilesManager::Update(float dt)
 			}
 			else if (extension == ".png" && new_filedir != nullptr)
 			{
-				TextureImporter::LoadTexture(new_filedir);
+				TextureImporter::ImportTexture(new_filedir);
 
 				/*C_Mesh* mesh = dynamic_cast<C_Mesh*>(App->scene_intro->gameobject_selected->GetComponent(Component::C_TYPE::MESH));
 				mesh->GetMesh()->texture_id = LoadTexture(new_filedir);
@@ -192,27 +198,6 @@ string ModuleFilesManager::GetFileName(string path, bool wExtension)
 	return fileName;
 }
 
-bool ModuleFilesManager::PFS_Exists(const string file)
-{
-	return PHYSFS_exists(file.c_str()) != 0;
-}
-
-void ModuleFilesManager::PFS_CreateLibrary()
-{
-	if (!PFS_IsDirectory(LIBRARY_PATH)) PHYSFS_mkdir(LIBRARY_PATH);
-	if (!PFS_IsDirectory(MODELS_PATH)) PHYSFS_mkdir(MODELS_PATH);
-	if (!PFS_IsDirectory(MESHES_PATH)) PHYSFS_mkdir(MESHES_PATH);
-	if (!PFS_IsDirectory(TEXTURES_PATH)) PHYSFS_mkdir(TEXTURES_PATH);
-	if (!PFS_IsDirectory(MATERIALS_PATH)) PHYSFS_mkdir(MATERIALS_PATH);
-	if (!PFS_IsDirectory(SCENES_PATH)) PHYSFS_mkdir(SCENES_PATH);
-	if (!PFS_IsDirectory(SCRIPTS_PATH)) PHYSFS_mkdir(SCRIPTS_PATH);
-}
-
-bool ModuleFilesManager::PFS_IsDirectory(const string file)
-{
-	return PHYSFS_isDirectory(file.c_str()) != 0;
-}
-
 uint ModuleFilesManager::PFS_Load(const string filePath, char** buffer)
 {
 	uint byteCount = 0;
@@ -263,7 +248,7 @@ uint ModuleFilesManager::PFS_Save(const string filePath, char* buffer, uint size
 	fileName = GetFileName(filePath, true);
 
 
-	bool exists = PFS_Exists(filePath);
+	bool exists = PHYSFS_exists(filePath.c_str());
 
 	PHYSFS_file* filehandle = nullptr;
 	if (append) filehandle = PHYSFS_openAppend(filePath.c_str());

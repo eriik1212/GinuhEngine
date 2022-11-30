@@ -154,6 +154,12 @@ update_status ModuleMenus::PostUpdate(float dt)
 				inspectorVisible = !inspectorVisible;
 			}
 
+			if (ImGui::MenuItem("Assets"))
+			{
+				pOpen_assets = true; // Window can close
+
+				assetsVisible = !assetsVisible;
+			}
 
 			ImGui::EndMenu();
 		}
@@ -179,6 +185,7 @@ update_status ModuleMenus::PostUpdate(float dt)
 	if (consoleVisible) MenuConsole();
 	if (hierarchyVisible) MenuHierarchy();
 	if (inspectorVisible) MenuInspector();
+	if (assetsVisible) MenuAssets();
 
 	// --------------------------------------------------------------------------- WINDOW SCENE
 	ImGui::Begin("Scene", 0, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
@@ -817,6 +824,17 @@ void ModuleMenus::AddComponentCombo()
 		ImGui::EndCombo();
 	}
 	ImGui::Spacing();
+}
+
+void ModuleMenus::MenuAssets()
+{
+	if (pOpen_assets)
+	{
+		ImGui::Begin("Assets", &pOpen_assets, ImGuiWindowFlags_AlwaysAutoResize);
+		
+		ImGui::End();
+	}
+	if (pOpen_assets == NULL) assetsVisible = !assetsVisible; // Window is closed so function "MenuAssets()" stops being called
 }
 
 void ModuleMenus::PrintGameObjects(GameObject* go)

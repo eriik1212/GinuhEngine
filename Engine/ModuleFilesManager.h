@@ -97,11 +97,8 @@ public:
 	//vector<MeshData*> meshList;
 
 	//-------------------------------------------------------------------------- PHYSFS Logic
-	bool PFS_Exists(const string file);
-	void PFS_CreateLibrary();
-	bool PFS_IsDirectory(const string file);
-	uint PFS_Load(const std::string filePath, char** buffer);
-	uint PFS_Save(const std::string filePath, char* buffer, uint size, bool append);
+	uint PFS_Load(const string filePath, char** buffer);
+	uint PFS_Save(const string filePath, char* buffer, uint size, bool append);
 
 
 private:

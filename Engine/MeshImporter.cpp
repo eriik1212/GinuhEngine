@@ -78,7 +78,7 @@ void MeshImporter::ImportMesh(const char* file_path)
 					material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
 
 					aiString sourcePath;
-					sourcePath.Set(TEXTURES_PATH);
+					sourcePath.Set(ASSETS_PATH);
 
 					sourcePath.Append(path.C_Str());
 
@@ -86,11 +86,11 @@ void MeshImporter::ImportMesh(const char* file_path)
 
 					// ------------------------------------ Load Texture Here???
 					// 
-					newMesh->texture_id = TextureImporter::LoadTexture(sourcePath.C_Str());
+					newMesh->texture_id = TextureImporter::ImportTexture(sourcePath.C_Str());
 					
-					string texture_path = TEXTURES_PATH + AppExtern->files_manager->GetFileName(sourcePath.C_Str(), false) + ".dds";
+					//string texture_path = TEXTURES_PATH + AppExtern->files_manager->GetFileName(sourcePath.C_Str(), false) + ".dds";
 
-					dynamic_cast<C_Material*>(GameObjectChild->CreateComponent(Component::C_TYPE::MATERIAL))->SetTexture(texture_path.c_str(), newMesh);
+					dynamic_cast<C_Material*>(GameObjectChild->CreateComponent(Component::C_TYPE::MATERIAL))->SetTexture(sourcePath.C_Str(), newMesh);
 				}
 			}
 			else {

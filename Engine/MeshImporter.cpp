@@ -7,6 +7,7 @@ void MeshImporter::ImportMesh(const char* file_path)
 	const aiScene* scene = aiImportFile(file_path, aiProcessPreset_TargetRealtime_MaxQuality);
 
 	vector<MeshData*> meshList;
+	vector<TextData*> textList;
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
@@ -74,23 +75,46 @@ void MeshImporter::ImportMesh(const char* file_path)
 
 					aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 					uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);
-					aiString path;
-					material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
 
-					aiString sourcePath;
-					sourcePath.Set(ASSETS_PATH);
+					if (numTextures > 0)
+					{
+						TextData* text = new TextData();
 
-					sourcePath.Append(path.C_Str());
+						aiString path;
+						material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
 
-					AppExtern->menus->info.AddConsoleLog(sourcePath.C_Str());
+						aiString sourcePath;
+						sourcePath.Set(ASSETS_PATH);
 
-					// ------------------------------------ Load Texture Here???
-					// 
-					newMesh->texture_id = TextureImporter::ImportTexture(sourcePath.C_Str());
-					
+						sourcePath.Append(path.C_Str());
+
+						// We erase "..\\"
+						string readyPath = AppExtern->files_manager->EraseSubStr(sourcePath.C_Str(), "..\\");
+
+						// We normalize the path
+						string normPath = AppExtern->files_manager->NormalizePath(readyPath.c_str());
+
+						PHYSFS_mkdir(normPath.c_str());
+
+						AppExtern->menus->info.AddConsoleLog(sourcePath.C_Str());
+
+						// ------------------------------------ Load Texture Here???
+						// 
+						newMesh->texture_id = TextureImporter::ImportTexture(normPath.c_str());
+
+						text->textureID = newMesh->texture_id;
+
+						textList.push_back(text);
+
+						path.Clear();
+					}
+					else
+					{
+						// Empty
+						textList.push_back(nullptr);
+					}
 					//string texture_path = TEXTURES_PATH + AppExtern->files_manager->GetFileName(sourcePath.C_Str(), false) + ".dds";
 
-					dynamic_cast<C_Material*>(GameObjectChild->CreateComponent(Component::C_TYPE::MATERIAL))->SetTexture(sourcePath.C_Str(), newMesh);
 				}
 			}
 			else {
@@ -101,12 +125,15 @@ void MeshImporter::ImportMesh(const char* file_path)
 
 			}
 
-			NodeManager(scene, scene->mRootNode, GameObjectRoot);
-
-			dynamic_cast<C_Mesh*>(GameObjectChild->CreateComponent(Component::C_TYPE::MESH))->SetMesh(newMesh, scene->mMeshes[i]->mName.C_Str());
-
 			LoadMeshData(meshList, newMesh);
+
+
 		}
+		std::string name = "";
+		name = AppExtern->files_manager->GetFileName(file_path, false);
+
+		NodeManager(scene->mMeshes, scene, textList, meshList, scene->mRootNode, GameObjectRoot, name.c_str());
+
 		AppExtern->menus->info.AddConsoleLog("% s Pushed In List Successfully", file_path);
 		aiReleaseImport(scene);
 
@@ -170,7 +197,7 @@ void MeshImporter::Load(MeshData* mesh)
 	cursor += bytes;
 }
 
-void MeshImporter::LoadMeshData(vector<MeshData*> meshList, MeshData* mesh)
+void MeshImporter::LoadMeshData(vector<MeshData*>& meshList, MeshData* mesh)
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 
@@ -191,7 +218,7 @@ void MeshImporter::LoadMeshData(vector<MeshData*> meshList, MeshData* mesh)
 	meshList.push_back(mesh);
 }
 
-void MeshImporter::NodeManager(const aiScene* rootScene, aiNode* rootNode, GameObject* goParent)
+void MeshImporter::NodeManager(aiMesh** meshArray, const aiScene* rootScene, vector<TextData*>& sceneTextures, vector<MeshData*>& meshList, aiNode* rootNode, GameObject* goParent, const char* name)
 {
 	aiVector3D translation, scaling;
 	aiQuaternion quatRot;
@@ -201,14 +228,62 @@ void MeshImporter::NodeManager(const aiScene* rootScene, aiNode* rootNode, GameO
 	float3 scale(scaling.x, scaling.y, scaling.z);
 	Quat rot(quatRot.x, quatRot.y, quatRot.z, quatRot.w);
 
-	goParent->transform->SetTransform(pos, rot, scale);
+	std::string nodeName = rootNode->mName.C_Str();
+	bool dummyFound = true;
+	while (dummyFound)
+	{
+		dummyFound = false;
 
+		if (nodeName.find("_$AssimpFbx$_") != std::string::npos && rootNode->mNumChildren == 1)
+		{
+			rootNode = rootNode->mChildren[0];
+
+			rootNode->mTransformation.Decompose(scaling, quatRot, translation);
+			pos += float3(translation.x, translation.y, translation.z);
+			scale = float3(scale.x * scaling.x, scale.y * scaling.y, scale.z * scaling.z);
+			rot = rot * Quat(quatRot.x, quatRot.y, quatRot.z, quatRot.w);
+
+			nodeName = rootNode->mName.C_Str();
+			dummyFound = true;
+		}
+	}
+
+	for (unsigned int i = 0; i < rootNode->mNumMeshes; i++)
+	{
+		MeshData* meshPointer = meshList[rootNode->mMeshes[i]];
+
+		GameObject* goNode = new GameObject(goParent, rootScene->mMeshes[rootNode->mMeshes[i]]->mName.C_Str());
+
+		C_Mesh* goMeshComp = dynamic_cast<C_Mesh*>(goNode->CreateComponent(Component::C_TYPE::MESH));
+
+		goMeshComp->SetMesh(meshPointer);
+
+		aiMesh* importedMesh = meshArray[rootNode->mMeshes[i]];
+		if (importedMesh->mMaterialIndex < sceneTextures.size() && sceneTextures[importedMesh->mMaterialIndex] != nullptr)
+		{
+			C_Material* material = dynamic_cast<C_Material*>(goNode->CreateComponent(Component::C_TYPE::MATERIAL));
+			material->SetTexture("NEW", sceneTextures[i]);
+			//material->textureID = sceneTextures[importedMesh->mMaterialIndex]->textureID;
+		}
+
+		goNode->transform->SetTransform(pos, rot, scale);
+	}
 	// We make it recursive for its children
 	if (rootNode->mNumChildren > 0)
 	{
+		GameObject* rootGO = goParent;
+
+		if (rootNode->mNumChildren == 1 && rootNode->mParent == nullptr && rootNode->mChildren[0]->mNumChildren == 0)
+			rootNode->mChildren[0]->mName = name;
+		else
+		{
+			rootGO = new GameObject(goParent, name);
+			rootGO->transform->SetTransform(pos, rot, scale);
+		}
+
 		for (int n = 0; n < rootNode->mNumChildren; n++)
 		{
-			NodeManager(rootScene, rootNode->mChildren[n], goParent);
+			NodeManager(meshArray, rootScene, sceneTextures, meshList, rootNode->mChildren[n], goParent, rootNode->mChildren[n]->mName.C_Str());
 			//dynamic_cast<C_Transform*>(App->scene_intro->gameObjects[goID]->GetComponent(Component::C_TYPE::TRANSFORM))->SetTransform(pos, rot, scale);
 			//dynamic_cast<C_Material*>(App->scene_intro->gameObjects[goID]->CreateComponent(Component::C_TYPE::MATERIAL))->SetTexture();
 

@@ -21,7 +21,7 @@ public:
 
 	void Update() override;
 
-	void SetMesh(MeshData* mesh, string mesh_name);
+	void SetMesh(MeshData* mesh);
 
 	void RenderMesh();
 

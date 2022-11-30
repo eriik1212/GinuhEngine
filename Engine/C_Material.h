@@ -9,13 +9,15 @@
 #include <string>
 #include <vector>
 
+struct TextData;
+
 class C_Material : public Component
 {
 public:
 	C_Material(GameObject* gameObject);
 	~C_Material();
 
-	void SetTexture(const char* texture_name, MeshData* meshNode);
+	void SetTexture(const char* texture_name, TextData* textureNode);
 
 	void Update() override;
 
@@ -25,12 +27,13 @@ public:
 
 	string name;
 
-	MeshData* mesh = nullptr;
+	//MeshData* mesh = nullptr;
+	TextData* text = nullptr;
 
+	uint textureID = 0;
 
 private:
 
-	uint textureID = 0;
 	uint auxID = 0;
 };
 

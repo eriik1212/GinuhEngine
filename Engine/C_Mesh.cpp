@@ -28,10 +28,9 @@ void C_Mesh::Update()
 		RenderMesh();
 }
 
-void C_Mesh::SetMesh(MeshData* mesh, string mesh_name)
+void C_Mesh::SetMesh(MeshData* mesh)
 {
 	this->mesh = mesh;
-	name = mesh_name;
 }
 
 void C_Mesh::RenderMesh()

@@ -23,7 +23,7 @@
 #pragma comment (lib, "DevIL/libx86/ILUT.lib" )
 
 #include <map>
-
+#include <iostream>
 using namespace std;
 namespace fs = std::filesystem;
 
@@ -67,6 +67,14 @@ struct MeshData
 	void DrawMesh(const float* globalTransform, uint imgID);
 };
 
+struct TextData
+{
+	int textW,
+		textH;
+
+	GLuint textureID;
+};
+
 
 class ModuleFilesManager : public Module
 {
@@ -82,6 +90,10 @@ public:
 	bool CleanUp();
 
 	string GetFileName(string path, bool wExtension = false);
+	string NormalizePath(const char* path);
+	string AdaptPath(const char* full_path);
+
+	string EraseSubStr(const char* mainStr, const char* toErase);
 
 	//void LoadFile(const char* filePath);
 	//void LoadMeshData(MeshData* mesh);
@@ -106,8 +118,6 @@ private:
 	char* dropped_filedir = "";                  // Pointer for directory of dropped file
 	const char* assets_dir = ASSETS_PATH;
 	char* texPath = "";
-
-	uint textID;
 
 };
 

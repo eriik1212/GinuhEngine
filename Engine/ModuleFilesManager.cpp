@@ -71,7 +71,7 @@ bool ModuleFilesManager::Start()
 		string extension = fs::path(fileName_char).extension().string();
 		const char* extension_char = extension.c_str();
 
-		if (existent_filedir != nullptr && extension == ".fbx")
+		if (existent_filedir != nullptr && (extension == ".fbx" || extension == ".FBX"))
 		{
 			MeshImporter::ImportMesh(existent_filedir);
 
@@ -79,7 +79,7 @@ bool ModuleFilesManager::Start()
 
 		}
 		// Load Texture Here???
-		else if (existent_filedir != nullptr && (extension == ".png" || extension == ".dds"))
+		else if (existent_filedir != nullptr && (extension == ".png" || extension == ".tga" || extension == ".dds"))
 		{
 			TextureImporter::ImportTexture(existent_filedir);
 
@@ -128,12 +128,12 @@ update_status ModuleFilesManager::Update(float dt)
 			string extension = fs::path(dropped_filedir).extension().string();
 			const char* extension_char = extension.c_str();
 
-			if (extension == ".fbx" && new_filedir != nullptr)
+			if ((extension == ".fbx" || extension == ".FBX") && new_filedir != nullptr)
 			{
 				MeshImporter::ImportMesh(new_filedir);
 
 			}
-			else if (extension == ".png" && new_filedir != nullptr)
+			else if ((extension == ".png" || extension == ".tga") && new_filedir != nullptr)
 			{
 				TextureImporter::ImportTexture(new_filedir);
 
@@ -196,6 +196,42 @@ string ModuleFilesManager::GetFileName(string path, bool wExtension)
 	}
 
 	return fileName;
+}
+
+string ModuleFilesManager::NormalizePath(const char* path)
+{
+	string newPath = path;
+
+	for (int i = 0; i < newPath.size(); ++i)
+	{
+		if (newPath[i] == '\\')
+			newPath[i] = '/';
+	}
+	return newPath;
+}
+
+string ModuleFilesManager::AdaptPath(const char* full_path)
+{
+	string newPath = full_path;
+	newPath.erase(remove(newPath.begin(), newPath.end(), (int)"..\\"), newPath.end());
+
+	return newPath;
+}
+
+string ModuleFilesManager::EraseSubStr(const char* mainStr, const char* toErase)
+{
+	string path = mainStr;
+	string erase = toErase;
+
+	// Search for the substring in string
+	size_t pos = path.find(erase);
+	if (pos != std::string::npos)
+	{
+		// If found then erase it from string
+		path.erase(pos, erase.length());
+	}
+
+	return path;
 }
 
 uint ModuleFilesManager::PFS_Load(const string filePath, char** buffer)

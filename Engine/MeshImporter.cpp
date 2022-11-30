@@ -100,9 +100,9 @@ void MeshImporter::ImportMesh(const char* file_path)
 
 						// ------------------------------------ Load Texture Here???
 						// 
-						newMesh->texture_id = TextureImporter::ImportTexture(normPath.c_str());
+						text->textureID = TextureImporter::ImportTexture(normPath.c_str());
 
-						text->textureID = newMesh->texture_id;
+						newMesh->texture_id = text->textureID;
 
 						textList.push_back(text);
 
@@ -262,7 +262,7 @@ void MeshImporter::NodeManager(aiMesh** meshArray, const aiScene* rootScene, vec
 		if (importedMesh->mMaterialIndex < sceneTextures.size() && sceneTextures[importedMesh->mMaterialIndex] != nullptr)
 		{
 			C_Material* material = dynamic_cast<C_Material*>(goNode->CreateComponent(Component::C_TYPE::MATERIAL));
-			material->SetTexture("NEW", sceneTextures[i]);
+			material->SetTexture("NEW", meshList[i], sceneTextures[i]);
 			//material->textureID = sceneTextures[importedMesh->mMaterialIndex]->textureID;
 		}
 

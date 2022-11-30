@@ -19,12 +19,17 @@ C_Material::~C_Material()
 
 }
 
-void C_Material::SetTexture(const char* texture_name, TextData* textureNode)
+void C_Material::SetTexture(const char* texture_name, MeshData* meshNode, TextData* textureNode)
 {
 	name = texture_name;
+	mesh = meshNode;
 	text = textureNode;
+
+	mesh->texture_id = text->textureID;
+
 	textureID = textureNode->textureID;
 	auxID = textureNode->textureID;
+
 }
 
 void C_Material::Update()

@@ -17,7 +17,7 @@ public:
 	C_Material(GameObject* gameObject);
 	~C_Material();
 
-	void SetTexture(const char* texture_name, TextData* textureNode);
+	void SetTexture(const char* texture_name, MeshData* meshNode, TextData* textureNode);
 
 	void Update() override;
 
@@ -27,7 +27,7 @@ public:
 
 	string name;
 
-	//MeshData* mesh = nullptr;
+	MeshData* mesh = nullptr;
 	TextData* text = nullptr;
 
 	uint textureID = 0;

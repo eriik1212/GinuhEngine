@@ -97,9 +97,12 @@ public:
 	//vector<MeshData*> meshList;
 
 	//-------------------------------------------------------------------------- PHYSFS Logic
-	bool FS_Exists(const string file);
+	bool PFS_Exists(const string file);
 	void PFS_CreateLibrary();
-	bool FS_IsDirectory(const string file);
+	bool PFS_IsDirectory(const string file);
+	uint PFS_Load(const std::string filePath, char** buffer);
+	uint PFS_Save(const std::string filePath, char* buffer, uint size, bool append);
+
 
 private:
 	SDL_Event event;                        // Declare event handle

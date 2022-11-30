@@ -192,25 +192,121 @@ string ModuleFilesManager::GetFileName(string path, bool wExtension)
 	return fileName;
 }
 
-bool ModuleFilesManager::FS_Exists(const string file)
+bool ModuleFilesManager::PFS_Exists(const string file)
 {
 	return PHYSFS_exists(file.c_str()) != 0;
 }
 
 void ModuleFilesManager::PFS_CreateLibrary()
 {
-	if (!FS_IsDirectory(LIBRARY_PATH)) PHYSFS_mkdir(LIBRARY_PATH);
-	if (!FS_IsDirectory(MODELS_PATH)) PHYSFS_mkdir(MODELS_PATH);
-	if (!FS_IsDirectory(MESHES_PATH)) PHYSFS_mkdir(MESHES_PATH);
-	if (!FS_IsDirectory(TEXTURES_PATH)) PHYSFS_mkdir(TEXTURES_PATH);
-	if (!FS_IsDirectory(MATERIALS_PATH)) PHYSFS_mkdir(MATERIALS_PATH);
-	if (!FS_IsDirectory(SCENES_PATH)) PHYSFS_mkdir(SCENES_PATH);
-	if (!FS_IsDirectory(SCRIPTS_PATH)) PHYSFS_mkdir(SCRIPTS_PATH);
+	if (!PFS_IsDirectory(LIBRARY_PATH)) PHYSFS_mkdir(LIBRARY_PATH);
+	if (!PFS_IsDirectory(MODELS_PATH)) PHYSFS_mkdir(MODELS_PATH);
+	if (!PFS_IsDirectory(MESHES_PATH)) PHYSFS_mkdir(MESHES_PATH);
+	if (!PFS_IsDirectory(TEXTURES_PATH)) PHYSFS_mkdir(TEXTURES_PATH);
+	if (!PFS_IsDirectory(MATERIALS_PATH)) PHYSFS_mkdir(MATERIALS_PATH);
+	if (!PFS_IsDirectory(SCENES_PATH)) PHYSFS_mkdir(SCENES_PATH);
+	if (!PFS_IsDirectory(SCRIPTS_PATH)) PHYSFS_mkdir(SCRIPTS_PATH);
 }
 
-bool ModuleFilesManager::FS_IsDirectory(const string file)
+bool ModuleFilesManager::PFS_IsDirectory(const string file)
 {
 	return PHYSFS_isDirectory(file.c_str()) != 0;
+}
+
+uint ModuleFilesManager::PFS_Load(const string filePath, char** buffer)
+{
+	uint byteCount = 0;
+
+	PHYSFS_file* fsFile = PHYSFS_openRead(filePath.c_str());
+
+	do
+	{
+		if (!fsFile)
+		{
+			LOG("File System error while opening file %s: %s\n", filePath.c_str(), PHYSFS_getLastError());
+			break;
+		}
+
+		PHYSFS_sint64 size = PHYSFS_fileLength(fsFile);
+
+		if (size <= 0)
+		{
+			LOG("File System error while reading from file %s: %s\n", filePath.c_str(), PHYSFS_getLastError());
+			break;
+		}
+
+		*buffer = new char[(uint)size + 1];
+
+		byteCount = (uint)PHYSFS_readBytes(fsFile, *buffer, size);
+
+		if (byteCount != size)
+		{
+			LOG("File System error while reading from file %s: %s\n", filePath.c_str(), PHYSFS_getLastError());
+			RELEASE_ARRAY(*buffer);
+			break;
+		}
+
+		(*buffer)[size] = '\0';
+
+	} while (false);
+
+	if (PHYSFS_close(fsFile) == 0) LOG("File System error while closing file %s: %s\n", filePath.c_str(), PHYSFS_getLastError());
+
+	return byteCount;
+}
+
+uint ModuleFilesManager::PFS_Save(const string filePath, char* buffer, uint size, bool append)
+{
+	uint objCount = 0;
+
+	std::string fileName;
+	fileName = GetFileName(filePath, true);
+
+
+	bool exists = PFS_Exists(filePath);
+
+	PHYSFS_file* filehandle = nullptr;
+	if (append) filehandle = PHYSFS_openAppend(filePath.c_str());
+	else filehandle = PHYSFS_openWrite(filePath.c_str());
+
+	if (filehandle != nullptr)
+	{
+		objCount = (uint)PHYSFS_writeBytes(filehandle, (const void*)buffer, size);
+
+		if (objCount == size)
+		{
+			if (exists)
+			{
+				if (append)
+				{
+					LOG("FILE SYSTEM: Append %u bytes to file '%s'", objCount, fileName.data());
+				}
+				else
+				{
+					LOG("FILE SYSTEM: File '%s' overwritten with %u bytes", fileName.data(), objCount);
+				}
+			}
+			else
+			{
+				LOG("FILE SYSTEM: New file '%s' created with %u bytes", fileName.data(), objCount);
+			}
+		}
+		else
+		{
+			LOG("FILE SYSTEM: Could not write to file '%s'. ERROR: %s", fileName.data(), PHYSFS_getLastError());
+		}
+
+		if (PHYSFS_close(filehandle) == 0)
+		{
+			LOG("FILE SYSTEM: Could not close file '%s'. ERROR: %s", fileName.data(), PHYSFS_getLastError());
+		}
+	}
+	else
+	{
+		LOG("FILE SYSTEM: Could not open file '%s' to write. ERROR: %s", fileName.data(), PHYSFS_getLastError());
+	}
+
+	return objCount;
 }
 
 //void ModuleFilesManager::LoadFile(const char* file_path)

@@ -71,7 +71,7 @@ update_status ModuleCamera3D::Update(float dt)
 
 	// Scrool Zoom
 	if (App->input->GetMouseZ() != 0) frustum.pos -= frustum.front * speed * App->input->GetMouseZ();
-
+	
 	Position += newPos;
 	Reference += newPos;
 

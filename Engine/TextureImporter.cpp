@@ -17,65 +17,96 @@ uint TextureImporter::ImportTexture(const char* filePath)
 	}
 
 	// -------------------------------------- Loading Image
-	if (ilLoadImage(filePath))
+	//if (ilLoadImage(filePath))
+	//{
+	//	ilEnable(IL_FILE_OVERWRITE);
+	//	ilSaveImage(filePath);
+
+	//	ilGenImages(1, &ImgId);
+	//	ilBindImage(ImgId);
+
+	//	ilLoadImage(filePath);
+
+	//	ImgId = ilutGLBindTexImage();
+
+	//	ilBindImage(0);
+	//	ilDeleteImages(1, &ImgId);
+
+	//	ModuleFilesManager::allText.push_back(filePath);
+
+	//	ModuleFilesManager::loaded_textures[filePath] = ImgId;
+
+	//	// ------------------------------------------ It prints also de grid (WRONG!)
+	//	//ilEnable(IL_FILE_OVERWRITE);
+	//	//ilSaveImage(filePath);
+
+	//	//ilGenImages(1, &ImgId);
+	//	//ilBindImage(ImgId);
+
+	//	//ilLoadImage(filePath);
+
+	//	////ilBindImage(ImgId);
+	//	//BYTE* data = ilGetData();
+
+	//	//ILuint imgWidth, imgHeight;
+	//	//imgWidth = ilGetInteger(IL_IMAGE_WIDTH);
+	//	//imgHeight = ilGetInteger(IL_IMAGE_HEIGHT);
+	//	//int const type = ilGetInteger(IL_IMAGE_TYPE);
+	//	//int const format = ilGetInteger(IL_IMAGE_FORMAT);
+
+	//	//// ---------------------------------------------------------------------------------------------------- Create Texture from ImageData
+	//	//glTexImage2D(GL_TEXTURE_2D, 0, format, imgWidth, imgHeight, 0, format,
+	//	//	type, data);
+	//	//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	//	//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	//	//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	//	//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
+	//	//ImgId = ilutGLBindTexImage();
+	//	//glBindTexture(GL_TEXTURE_2D, ImgId);
+	//	//ilDeleteImages(1, &ImgId);
+
+	//	AppExtern->menus->info.AddConsoleLog("TEX ID: %d", ImgId);
+
+	//	return ImgId;
+	//}
+	//else
+	//{
+	//	//App->menus->info.AddConsoleLog("DevIL ERROR: Could not Load Image. Error: %s", ilGetError());
+
+	//	return 0;
+	//}
+
+	char* buffer = NULL;
+	uint size = AppExtern->files_manager->PFS_Load(filePath, &buffer);
+
+	ILuint image;
+	ilGenImages(1, &image);
+	ilBindImage(image);
+
+	if (!ilLoadL(IL_TYPE_UNKNOWN, buffer, size))
 	{
-		ilEnable(IL_FILE_OVERWRITE);
-		ilSaveImage(filePath);
-
-		ilGenImages(1, &ImgId);
-		ilBindImage(ImgId);
-
-		ilLoadImage(filePath);
-
-		ImgId = ilutGLBindTexImage();
-
-		ilBindImage(0);
-		ilDeleteImages(1, &ImgId);
-
-		ModuleFilesManager::allText.push_back(filePath);
-
-		ModuleFilesManager::loaded_textures[filePath] = ImgId;
-
-		// ------------------------------------------ It prints also de grid (WRONG!)
-		//ilEnable(IL_FILE_OVERWRITE);
-		//ilSaveImage(filePath);
-
-		//ilGenImages(1, &ImgId);
-		//ilBindImage(ImgId);
-
-		//ilLoadImage(filePath);
-
-		////ilBindImage(ImgId);
-		//BYTE* data = ilGetData();
-
-		//ILuint imgWidth, imgHeight;
-		//imgWidth = ilGetInteger(IL_IMAGE_WIDTH);
-		//imgHeight = ilGetInteger(IL_IMAGE_HEIGHT);
-		//int const type = ilGetInteger(IL_IMAGE_TYPE);
-		//int const format = ilGetInteger(IL_IMAGE_FORMAT);
-
-		//// ---------------------------------------------------------------------------------------------------- Create Texture from ImageData
-		//glTexImage2D(GL_TEXTURE_2D, 0, format, imgWidth, imgHeight, 0, format,
-		//	type, data);
-		//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-		//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-
-		//ImgId = ilutGLBindTexImage();
-		//glBindTexture(GL_TEXTURE_2D, ImgId);
-		//ilDeleteImages(1, &ImgId);
-
-		AppExtern->menus->info.AddConsoleLog("TEX ID: %d", ImgId);
-
-		return ImgId;
+		LOG("IMPORT//Image not loaded.");
 	}
-	else
-	{
-		//App->menus->info.AddConsoleLog("DevIL ERROR: Could not Load Image. Error: %s", ilGetError());
 
-		return 0;
-	}
+	glGenTextures(1, &ImgId);
+	glBindTexture(GL_TEXTURE_2D, ImgId);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), 0, GL_RGBA, GL_UNSIGNED_BYTE, ilGetData());
+	ilDeleteImages(1, &image);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+
+	ModuleFilesManager::allText.push_back(filePath);
+
+	ModuleFilesManager::loaded_textures[filePath] = ImgId;
+
+	return ImgId;
 
 }
 
@@ -89,7 +120,7 @@ char* TextureImporter::SaveTexture(uint& size, string path)
 
 	if (!ilLoadL(IL_TYPE_UNKNOWN, buffer, size))
 	{
-		AppExtern->menus->info.AddConsoleLog("Image Not Loaded.");
+		AppExtern->menus->info.AddConsoleLog("SAVE//Image Not Loaded.");
 	}
 
 	ILuint _size = 0;
@@ -114,7 +145,7 @@ uint TextureImporter::LoadTexture(string path)
 	string texture_path = TEXTURES_PATH + AppExtern->files_manager->GetFileName(path, false) + ".dds";
 
 	// Check loaded textures
-	if (!AppExtern->files_manager->FS_Exists(texture_path))
+	if (!AppExtern->files_manager->PFS_Exists(texture_path))
 	{
 		// save custom format
 		string file = TEXTURES_PATH;
@@ -124,6 +155,7 @@ uint TextureImporter::LoadTexture(string path)
 		uint size = 0;
 		char* buffer = SaveTexture(size, path);
 
+		AppExtern->files_manager->PFS_Save(file.c_str(), buffer, size, false);
 		RELEASE_ARRAY(buffer);
 	}
 

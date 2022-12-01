@@ -265,7 +265,6 @@ void MeshImporter::NodeManager(aiMesh** sceneMeshes, const aiScene* rootScene, v
 
 		// We create a new Component Mesh
 		C_Mesh* goMeshComp = dynamic_cast<C_Mesh*>(goNode->CreateComponent(Component::C_TYPE::MESH));
-
 		goMeshComp->SetMesh(meshData);
 
 		// We search for materials for each mesh and set its texture

@@ -28,14 +28,20 @@ public:
 	MeshData* mesh;
 
 	Frustum frustum;
+	float FOV;
 
-	//void SetAspectRatio(float aspectRatio);
+	void SetGameCamera();
+
+	void SetAspectRatio(float aspectRatio);
 
 	//------------------------------- Frame Buffer Logics
 	void InitFrameBuffer();
+	void ClearBuffer();
 
 	unsigned int frameBuff;
 	unsigned int textColorBuff;
 	unsigned int rbo;
 
+	void DrawCameraView();
+	void PushCameraMatrix();
 };

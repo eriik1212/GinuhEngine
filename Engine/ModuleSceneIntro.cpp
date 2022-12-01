@@ -25,9 +25,15 @@ ModuleSceneIntro::~ModuleSceneIntro()
 
 bool ModuleSceneIntro::Init()
 {
-	SceneRoot = new GameObject(NULL, "Scene");
 
+	SceneRoot = new GameObject(NULL, "Scene");
 	gameObjects[0] = SceneRoot;
+
+	//------------------------------------------------------------------------- Create & Set the Camera
+	GameObject* mainCam = new GameObject(gameObjects[0], "Main Camera");
+
+	C_Camera* camComp = dynamic_cast<C_Camera*>(mainCam->CreateComponent(Component::C_TYPE::CAMERA));
+	camComp->SetGameCamera();
 
 	return true;
 }

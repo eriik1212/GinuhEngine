@@ -20,11 +20,10 @@ C_Camera::C_Camera() : Component(nullptr, C_TYPE::CAMERA)
 	frustum.front = float3::unitZ;
 	frustum.up = float3::unitY;
 	frustum.verticalFov = 60.0f * DEGTORAD;
-	frustum.horizontalFov = 2.0f * atanf(tanf(frustum.verticalFov / 2.0f) * 1.7f); //That 1.7 comes from 16/9 aspect ratio
+	frustum.horizontalFov = 2.0f * atanf(tanf(frustum.verticalFov / 2.0f) * 1.7f); //16/9 => 1.7
+	FOV = 60.0f;
 
 	frustum.pos = float3(0, 0, -10);
-
-	AppExtern->scene_intro->SetAsGameCam(this);
 }
 
 C_Camera::C_Camera(GameObject* gameObject) : Component(gameObject, C_TYPE::CAMERA)
@@ -37,11 +36,11 @@ C_Camera::C_Camera(GameObject* gameObject) : Component(gameObject, C_TYPE::CAMER
 	frustum.front = float3::unitZ;
 	frustum.up = float3::unitY;
 	frustum.verticalFov = 60.0f * DEGTORAD;
-	frustum.horizontalFov = 2.0f * atanf(tanf(frustum.verticalFov / 2.0f) * 1.7f); //That 1.7 comes from 16/9 aspect ratio
+	frustum.horizontalFov = 2.0f * atanf(tanf(frustum.verticalFov / 2.0f) * 1.7f); //16/9 => 1.7
+	FOV = 60.0f;
 
 	frustum.pos = go->transform->transform.position;
 
-	AppExtern->scene_intro->SetAsGameCam(this);
 }
 
 C_Camera::~C_Camera()
@@ -65,6 +64,33 @@ void C_Camera::PrintGui()
 
 		ImGui::Spacing();
 
+		ImGui::Text("Near Plane: ");
+		ImGui::SameLine();
+		ImGui::DragFloat("##NearPlane", &frustum.nearPlaneDistance, 0.1f, 0.1f, frustum.farPlaneDistance);
+
+		ImGui::Spacing();
+
+		ImGui::Text("Far Plane: ");
+		ImGui::SameLine();
+		ImGui::DragFloat("##FarPlane", &frustum.farPlaneDistance, 0.1f, frustum.nearPlaneDistance, 10000.f);
+
+		ImGui::Spacing();
+		
+		ImGui::Text("Field Of View (FOV): ");
+		ImGui::SameLine();
+		if (ImGui::DragFloat("##FOV: ", &FOV, 0.1f, 1.0f, 160.f))
+			frustum.verticalFov = FOV * DEGTORAD;
+
+		ImGui::Separator();
+
+		ImGui::TextColored(ImVec4(255,255,0,255), "Vertical FOV: ");
+		ImGui::SameLine();
+		ImGui::Text("%f", frustum.verticalFov);
+
+		ImGui::TextColored(ImVec4(255, 255, 0, 255), "Horizontal FOV: ");
+		ImGui::SameLine();
+		ImGui::Text("%f", frustum.horizontalFov);
+
 		ImGui::Spacing();
 		
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 0.0f, 0.0f, 0.5f));
@@ -73,6 +99,7 @@ void C_Camera::PrintGui()
 
 		if (ImGui::Button("Remove Component", ImVec2(ImGui::GetWindowSize().x, 20.0f)))
 			go->RemoveComponent(this);
+
 		ImGui::PopStyleColor(3);
 
 		ImGui::Spacing();
@@ -81,18 +108,26 @@ void C_Camera::PrintGui()
 
 }
 
-//void C_Camera::SetAspectRatio(float aspectRatio)
-//{
-//	frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * aspectRatio);
-//}
+void C_Camera::SetAspectRatio(float aspectRatio)
+{
+	frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * aspectRatio);
+}
+
+void C_Camera::SetGameCamera()
+{
+	AppExtern->scene_intro->SetAsGameCam(this);
+}
 
 void C_Camera::InitFrameBuffer()
 {
+	ClearBuffer();
+
 	glGenFramebuffers(1, &frameBuff);
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBuff);
 
 	// generate texture
 	glGenTextures(1, &textColorBuff);
+
 	glBindTexture(GL_TEXTURE_2D, textColorBuff);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -104,13 +139,50 @@ void C_Camera::InitFrameBuffer()
 
 	glGenRenderbuffers(1, &rbo);
 	glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, SCREEN_WIDTH, SCREEN_HEIGHT);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, AppExtern->renderer3D->screenWidth, AppExtern->renderer3D->screenHeight);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		AppExtern->menus->info.AddConsoleLog("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
+		AppExtern->menus->info.AddConsoleLog("ERROR! Framebuffer is not complete!");
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+void C_Camera::ClearBuffer()
+{
+	if (frameBuff != 0)
+		glDeleteFramebuffers(1, (GLuint*)&frameBuff);
+
+	if (textColorBuff != 0)
+		glDeleteTextures(1, (GLuint*)&textColorBuff);
+
+	if (rbo != 0)
+		glDeleteRenderbuffers(1, (GLuint*)&rbo);
+}
+
+void C_Camera::DrawCameraView()
+{
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
+	PushCameraMatrix();
+
+	//FrameBuffer
+	glBindFramebuffer(GL_FRAMEBUFFER, frameBuff);
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void C_Camera::PushCameraMatrix()
+{
+	glLoadIdentity();
+	glMatrixMode(GL_PROJECTION);
+	glLoadMatrixf((GLfloat*)frustum.ProjectionMatrix().Transposed().v);
+
+	glMatrixMode(GL_MODELVIEW);
+	float4x4 mat = frustum.ViewMatrix();
+	glLoadMatrixf((GLfloat*)mat.Transposed().v);
+}

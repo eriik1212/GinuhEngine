@@ -136,16 +136,16 @@ bool ModuleRenderer3D::Init()
 	}
 
 	// Projection matrix for
-	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	OnResize(screenWidth, screenHeight);
 
 	// Init ImGui (SDL&OpenGL)
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, context);
 	ImGui_ImplOpenGL3_Init("#version 120");
 
-	/*glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();*/
+	/*App->camera->sceneCam.InitFrameBuffer();
 
-	App->camera->sceneCam.InitFrameBuffer();
+	if(gameCamera != nullptr)
+		gameCamera->InitFrameBuffer();*/
 
 	/*GLubyte checkerImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][3];
 	for (int i = 0; i < CHECKERS_HEIGHT; i++) {
@@ -180,17 +180,6 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(App->camera->GetViewMatrix());
 
-	// light 0 on cam pos
-	//lights[0].SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
-
-	for(uint i = 0; i < MAX_LIGHTS; ++i)
-		lights[i].Render();
-
-	//FrameBuffer
-	glBindFramebuffer(GL_FRAMEBUFFER, App->camera->sceneCam.textColorBuff);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-
 	/*Color c = App->camera->background;
 	glClearColor(c.r, c.g, c.b, c.a);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -203,8 +192,24 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
+	App->camera->sceneCam.SetAspectRatio((float)screenWidth / (float)screenHeight);
+	gameCamera->SetAspectRatio((float)screenWidth / (float)screenHeight);
+
+	App->camera->sceneCam.DrawCameraView();
+
+	if (gameCamera != nullptr)
+	{
+		gameCamera->DrawCameraView();
+
+		// light 0 on cam pos
+		lights[0].SetPos(gameCamera->frustum.pos.x, gameCamera->frustum.pos.y, gameCamera->frustum.pos.z);
+
+		for (uint i = 0; i < MAX_LIGHTS; ++i)
+			lights[i].Render();
+	}
+
 	SDL_GL_SwapWindow(App->window->window);
-	
+
 	return UPDATE_CONTINUE;
 }
 
@@ -213,7 +218,6 @@ bool ModuleRenderer3D::CleanUp()
 {
 	//LOG("Destroying 3D Renderer");
 	App->menus->info.AddConsoleLog("Destroying 3D Renderer");
-
 
 	if (context != NULL)
 	{
@@ -228,13 +232,21 @@ void ModuleRenderer3D::OnResize(int width, int height)
 {
 	glViewport(0, 0, width, height);
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
-	glLoadMatrixf(&ProjectionMatrix);
-	
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+	//glMatrixMode(GL_PROJECTION);
+	//glLoadIdentity();
+	//ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
+	//glLoadMatrixf(&ProjectionMatrix);
+	//
+	//glMatrixMode(GL_MODELVIEW);
+	//glLoadIdentity();
+
+	screenHeight = height;
+	screenWidth = width;
+
+	App->camera->sceneCam.InitFrameBuffer();
+
+	if (gameCamera != nullptr)
+		gameCamera->InitFrameBuffer();
 }
 
 void ModuleRenderer3D::SetAsGameRender(C_Camera* cam)

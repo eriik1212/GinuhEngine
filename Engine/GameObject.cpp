@@ -66,9 +66,10 @@ Component* GameObject::CreateComponent(Component::C_TYPE type)
 	case Component::C_TYPE::MATERIAL:
 		new_component = new C_Material(this);
 		break;
-		case Component::C_TYPE::CAMERA:
-			new_component = new C_Camera(this);
-			break;
+	case Component::C_TYPE::CAMERA:
+		new_component = new C_Camera(this);
+		AppExtern->scene_intro->SetAsGameCam(dynamic_cast<C_Camera*>(new_component));
+		break;
 	default:
 		LOG("component type error");
 		break;

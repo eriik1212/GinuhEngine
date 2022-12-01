@@ -2,7 +2,7 @@
 #include "Module.h"
 #include "Globals.h"
 #include "GameObject.h"
-
+#include "C_Camera.h"
 
 class ModuleSceneIntro : public Module
 {
@@ -26,6 +26,8 @@ public:
 	static map<uint, GameObject*> gameObjects;
 
 	GameObject* gameobject_selected = nullptr;
+
+	void SetAsGameCam(C_Camera* cam);
 
 private:
 

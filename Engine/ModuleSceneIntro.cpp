@@ -52,13 +52,13 @@ bool ModuleSceneIntro::CleanUp()
 	//LOG("Unloading Intro scene");
 	App->menus->info.AddConsoleLog( "Unloading Intro scene");
 
+	SetAsGameCam(nullptr);
+
 	delete SceneRoot;
 	SceneRoot = nullptr;
 
 	return true;
 }
-
-
 
 // Update: draw background
 update_status ModuleSceneIntro::Update(float dt)
@@ -103,6 +103,11 @@ float3 ModuleSceneIntro::GetGOGlobalPos(GameObject* go)
 	go->transform->transform.globalPos.Decompose(globalPos, float4x4(), float3());
 
 	return globalPos;
+}
+
+void ModuleSceneIntro::SetAsGameCam(C_Camera* cam)
+{
+	App->renderer3D->SetAsGameRender(cam);
 }
 
 void ModuleSceneIntro::UpdateGO()

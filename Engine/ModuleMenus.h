@@ -22,6 +22,7 @@
 class GameObject;
 class Component;
 class C_Mesh;
+class C_Camera;
 
 class ConsoleInfo
 {

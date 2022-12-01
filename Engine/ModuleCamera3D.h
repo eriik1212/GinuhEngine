@@ -4,11 +4,13 @@
 #include "glmath.h"
 #include "ModuleSceneIntro.h"
 #include "GameObject.h"
+#include "C_Camera.h"
 
 #include "ExternalLibraries/MathGeoLib/include/MathGeoLib.h"
 
 class GameObject;
 class ModuleSceneIntro;
+class C_Camera;
 
 class ModuleCamera3D : public Module
 {
@@ -26,17 +28,15 @@ public:
 	float* GetViewMatrix();
 	Color background;
 
+	//----------------- Scene View CAM
+	C_Camera sceneCam;
+
 private:
 
 	void CalculateViewMatrix();
 
-public:
-	
-	vec3 X, Y, Z, Position, Reference;
-
 private:
 	float3 reference;
-	Frustum frustum;
 	float4x4 ViewMatrix;
 
 };

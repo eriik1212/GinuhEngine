@@ -3,6 +3,7 @@
 #include "Globals.h"
 #include "glmath.h"
 #include "Light.h"
+#include "C_Camera.h"
 
 #define MAX_LIGHTS 8
 #define CHECKERS_HEIGHT 64
@@ -20,7 +21,11 @@ public:
 	bool CleanUp();
 
 	void OnResize(int width, int height);
-	void InitFrameBuffer();
+
+	//---------------------------------------------------------- CAMERA
+	void SetAsGameRender(C_Camera* cam);
+
+	C_Camera* gameCamera;
 
 public:
 
@@ -28,8 +33,4 @@ public:
 	SDL_GLContext context;
 	mat3x3 NormalMatrix;
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
-
-	unsigned int frameBuff;
-	unsigned int textColorBuff;
-	unsigned int rbo;
 };

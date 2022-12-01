@@ -16,6 +16,7 @@ struct MeshData;
 class C_Camera : public Component
 {
 public:
+	C_Camera();
 	C_Camera(GameObject* gameObject);
 	~C_Camera();
 
@@ -25,4 +26,16 @@ public:
 
 	string name;
 	MeshData* mesh;
+
+	Frustum frustum;
+
+	//void SetAspectRatio(float aspectRatio);
+
+	//------------------------------- Frame Buffer Logics
+	void InitFrameBuffer();
+
+	unsigned int frameBuff;
+	unsigned int textColorBuff;
+	unsigned int rbo;
+
 };

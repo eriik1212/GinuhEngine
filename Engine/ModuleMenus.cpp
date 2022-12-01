@@ -187,16 +187,24 @@ update_status ModuleMenus::PostUpdate(float dt)
 	if (inspectorVisible) MenuInspector();
 	if (assetsVisible) MenuAssets();
 
-	// ------------------------------------------------------------------------- WINDOW SCENE ---------------------------------------------------------------------------//
-	ImGui::Begin("Scene", 0, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
-	ImGui::BeginChild("##ID", ImVec2(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h));
+	// ------------------------------------------------------------------------- SCENE WINDOW --------------------------------------------------------------------------- //
+	ImGui::Begin("Scene", 0);
 
-	ImVec2 wsize = ImGui::GetWindowSize();
+	//App->camera->sceneCam.SetAspectRatio(ImGui::GetContentRegionAvail().x / ImGui::GetContentRegionAvail().y);
+	ImGui::Image((ImTextureID)App->camera->sceneCam.textColorBuff, ImGui::GetContentRegionAvail(), ImVec2(0, 1), ImVec2(1, 0));
 
-	ImGui::Image((ImTextureID)App->renderer3D->textColorBuff, wsize, ImVec2(0, 1), ImVec2(1, 0));
-
-	ImGui::EndChild();
+	//ImGui::EndChild();
 	ImGui::End();
+	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------ //
+	
+	// ------------------------------------------------------------------------- GAME WINDOW ---------------------------------------------------------------------------- //
+	ImGui::Begin("Game", 0);
+
+	//App->camera->sceneCam.SetAspectRatio(ImGui::GetContentRegionAvail().x / ImGui::GetContentRegionAvail().y);
+	ImGui::Image((ImTextureID)App->renderer3D->gameCamera->textColorBuff, ImGui::GetContentRegionAvail(), ImVec2(0, 1), ImVec2(1, 0));
+
+	ImGui::End();
+	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------ //
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

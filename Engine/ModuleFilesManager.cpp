@@ -218,6 +218,18 @@ string ModuleFilesManager::AdaptPath(const char* full_path)
 	return newPath;
 }
 
+string ModuleFilesManager::SplitPath(const char* full_path)
+{
+	string path = full_path;
+
+	size_t pos = path.find_last_of("/");
+
+	string splittedPath = path.substr(0, pos + 1);
+
+	return splittedPath;
+
+}
+
 string ModuleFilesManager::EraseSubStr(const char* mainStr, const char* toErase)
 {
 	string path = mainStr;

@@ -12,6 +12,7 @@
 using namespace std;
 
 struct MeshData;
+struct TextData;
 
 class C_Mesh : public Component
 {
@@ -32,4 +33,5 @@ public:
 	string name;
 
 	MeshData* mesh = nullptr;
+	TextData* text = nullptr;
 };

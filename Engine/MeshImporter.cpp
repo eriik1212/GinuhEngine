@@ -11,13 +11,13 @@ void MeshImporter::ImportMesh(const char* file_path)
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
-		GameObject* GameObjectRoot = new GameObject(AppExtern->scene_intro->gameObjects[0], fs::path(file_path).filename().string());
+		//GameObject* GameObjectRoot = new GameObject(AppExtern->scene_intro->gameObjects[0], fs::path(file_path).filename().string());
 
 		//App->scene_intro->gameObjects[1] = GameObjectRoot;
 
 		for (int i = 0; i < scene->mNumMeshes; i++)
 		{
-			GameObject* GameObjectChild = new GameObject(GameObjectRoot, scene->mMeshes[i]->mName.C_Str());
+			//GameObject* GameObjectChild = new GameObject(GameObjectRoot, scene->mMeshes[i]->mName.C_Str());
 
 			MeshData* newMesh = new MeshData();
 
@@ -94,7 +94,9 @@ void MeshImporter::ImportMesh(const char* file_path)
 						// We normalize the path
 						string normPath = AppExtern->files_manager->NormalizePath(readyPath.c_str());
 
-						PHYSFS_mkdir(normPath.c_str());
+						string splittedPath = AppExtern->files_manager->SplitPath(normPath.c_str());
+
+						PHYSFS_mkdir(splittedPath.c_str());
 
 						AppExtern->menus->info.AddConsoleLog(sourcePath.C_Str());
 
@@ -103,6 +105,7 @@ void MeshImporter::ImportMesh(const char* file_path)
 						text->textureID = TextureImporter::ImportTexture(normPath.c_str());
 
 						newMesh->texture_id = text->textureID;
+						text->name = normPath;
 
 						textList.push_back(text);
 
@@ -129,10 +132,11 @@ void MeshImporter::ImportMesh(const char* file_path)
 
 
 		}
+
 		std::string name = "";
 		name = AppExtern->files_manager->GetFileName(file_path, false);
 
-		NodeManager(scene->mMeshes, scene, textList, meshList, scene->mRootNode, GameObjectRoot, name.c_str());
+		NodeManager(scene->mMeshes, scene, textList, meshList, scene->mRootNode, AppExtern->scene_intro->gameObjects[0], name.c_str());
 
 		AppExtern->menus->info.AddConsoleLog("% s Pushed In List Successfully", file_path);
 		aiReleaseImport(scene);
@@ -141,7 +145,7 @@ void MeshImporter::ImportMesh(const char* file_path)
 	}
 	else
 	{
-	AppExtern->menus->info.AddConsoleLog("Error loading scene % s. ERROR: %s", file_path, aiGetErrorString());
+		AppExtern->menus->info.AddConsoleLog("Error loading scene % s. ERROR: %s", file_path, aiGetErrorString());
 	}
 
 }
@@ -218,7 +222,7 @@ void MeshImporter::LoadMeshData(vector<MeshData*>& meshList, MeshData* mesh)
 	meshList.push_back(mesh);
 }
 
-void MeshImporter::NodeManager(aiMesh** meshArray, const aiScene* rootScene, vector<TextData*>& sceneTextures, vector<MeshData*>& meshList, aiNode* rootNode, GameObject* goParent, const char* name)
+void MeshImporter::NodeManager(aiMesh** sceneMeshes, const aiScene* rootScene, vector<TextData*>& textList, vector<MeshData*>& meshList, aiNode* rootNode, GameObject* goParent, const char* name)
 {
 	aiVector3D translation, scaling;
 	aiQuaternion quatRot;
@@ -228,13 +232,15 @@ void MeshImporter::NodeManager(aiMesh** meshArray, const aiScene* rootScene, vec
 	float3 scale(scaling.x, scaling.y, scaling.z);
 	Quat rot(quatRot.x, quatRot.y, quatRot.z, quatRot.w);
 
-	std::string nodeName = rootNode->mName.C_Str();
-	bool dummyFound = true;
-	while (dummyFound)
-	{
-		dummyFound = false;
+	std::string rootNodeName = rootNode->mName.C_Str();
 
-		if (nodeName.find("_$AssimpFbx$_") != std::string::npos && rootNode->mNumChildren == 1)
+	//------------------------------------------------- We accumulate transform from "_$AssimpFbx$_" files and collapse them into its children
+	bool collapseTransform = true;
+	while (collapseTransform)
+	{
+		collapseTransform = false;
+
+		if (rootNodeName.find("_$AssimpFbx$_") != string::npos && rootNode->mNumChildren == 1)
 		{
 			rootNode = rootNode->mChildren[0];
 
@@ -243,47 +249,48 @@ void MeshImporter::NodeManager(aiMesh** meshArray, const aiScene* rootScene, vec
 			scale = float3(scale.x * scaling.x, scale.y * scaling.y, scale.z * scaling.z);
 			rot = rot * Quat(quatRot.x, quatRot.y, quatRot.z, quatRot.w);
 
-			nodeName = rootNode->mName.C_Str();
-			dummyFound = true;
+			rootNodeName = rootNode->mName.C_Str();
+			collapseTransform = true;
 		}
 	}
 
+	//---------------------------------------------------------------------------------------------- We set the mesh and its material (texture)
 	for (unsigned int i = 0; i < rootNode->mNumMeshes; i++)
 	{
-		MeshData* meshPointer = meshList[rootNode->mMeshes[i]];
+		// We get the data from the list
+		MeshData* meshData = meshList[rootNode->mMeshes[i]];
 
+		// We create a new GO for each mesh
 		GameObject* goNode = new GameObject(goParent, rootScene->mMeshes[rootNode->mMeshes[i]]->mName.C_Str());
 
+		// We create a new Component Mesh
 		C_Mesh* goMeshComp = dynamic_cast<C_Mesh*>(goNode->CreateComponent(Component::C_TYPE::MESH));
 
-		goMeshComp->SetMesh(meshPointer);
+		goMeshComp->SetMesh(meshData);
 
-		aiMesh* importedMesh = meshArray[rootNode->mMeshes[i]];
-		if (importedMesh->mMaterialIndex < sceneTextures.size() && sceneTextures[importedMesh->mMaterialIndex] != nullptr)
+		// We search for materials for each mesh and set its texture
+		aiMesh* sceneMesh = sceneMeshes[rootNode->mMeshes[i]];
+
+		if (sceneMesh->mMaterialIndex < textList.size() && textList[sceneMesh->mMaterialIndex] != nullptr)
 		{
 			C_Material* material = dynamic_cast<C_Material*>(goNode->CreateComponent(Component::C_TYPE::MATERIAL));
-			material->SetTexture("NEW", meshList[i], sceneTextures[i]);
-			//material->textureID = sceneTextures[importedMesh->mMaterialIndex]->textureID;
+			material->SetTexture(meshData, textList[sceneMesh->mMaterialIndex]);
 		}
 
 		goNode->transform->SetTransform(pos, rot, scale);
 	}
+
 	// We make it recursive for its children
 	if (rootNode->mNumChildren > 0)
 	{
 		GameObject* rootGO = goParent;
 
-		if (rootNode->mNumChildren == 1 && rootNode->mParent == nullptr && rootNode->mChildren[0]->mNumChildren == 0)
-			rootNode->mChildren[0]->mName = name;
-		else
-		{
-			rootGO = new GameObject(goParent, name);
-			rootGO->transform->SetTransform(pos, rot, scale);
-		}
+		rootGO = new GameObject(goParent, name);
+		rootGO->transform->SetTransform(pos, rot, scale);
 
 		for (int n = 0; n < rootNode->mNumChildren; n++)
 		{
-			NodeManager(meshArray, rootScene, sceneTextures, meshList, rootNode->mChildren[n], goParent, rootNode->mChildren[n]->mName.C_Str());
+			NodeManager(sceneMeshes, rootScene, textList, meshList, rootNode->mChildren[n], rootGO, rootNode->mChildren[n]->mName.C_Str());
 			//dynamic_cast<C_Transform*>(App->scene_intro->gameObjects[goID]->GetComponent(Component::C_TYPE::TRANSFORM))->SetTransform(pos, rot, scale);
 			//dynamic_cast<C_Material*>(App->scene_intro->gameObjects[goID]->CreateComponent(Component::C_TYPE::MATERIAL))->SetTexture();
 

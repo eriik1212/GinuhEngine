@@ -19,13 +19,13 @@ C_Material::~C_Material()
 
 }
 
-void C_Material::SetTexture(const char* texture_name, MeshData* meshNode, TextData* textureNode)
+void C_Material::SetTexture(MeshData* meshNode, TextData* textureNode)
 {
-	name = texture_name;
+	name = textureNode->name;
 	mesh = meshNode;
 	text = textureNode;
 
-	mesh->texture_id = text->textureID;
+	//mesh->texture_id = text->textureID;
 
 	textureID = textureNode->textureID;
 	auxID = textureNode->textureID;
@@ -115,17 +115,17 @@ void C_Material::PrintGui()
 
 void C_Material::UpdateStatus()
 {
-	if (text != nullptr)
+	if (mesh != nullptr)
 	{
 		if (!enabled)
 		{
 			//auxID = textureID;
 			auxID = 0;
-			text->textureID = auxID;
+			mesh->texture_id = auxID;
 		}
 		else
 		{
-			text->textureID = textureID;
+			mesh->texture_id = textureID;
 			auxID = text->textureID;
 		}
 	}

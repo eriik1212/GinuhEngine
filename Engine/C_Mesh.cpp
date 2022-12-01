@@ -31,6 +31,7 @@ void C_Mesh::Update()
 void C_Mesh::SetMesh(MeshData* mesh)
 {
 	this->mesh = mesh;
+	this->name = mesh->meshName;
 }
 
 void C_Mesh::RenderMesh()

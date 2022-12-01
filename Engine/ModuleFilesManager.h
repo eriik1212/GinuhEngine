@@ -69,6 +69,8 @@ struct MeshData
 
 struct TextData
 {
+	string name;
+
 	int textW,
 		textH;
 
@@ -92,6 +94,7 @@ public:
 	string GetFileName(string path, bool wExtension = false);
 	string NormalizePath(const char* path);
 	string AdaptPath(const char* full_path);
+	string SplitPath(const char* full_path);
 
 	string EraseSubStr(const char* mainStr, const char* toErase);
 

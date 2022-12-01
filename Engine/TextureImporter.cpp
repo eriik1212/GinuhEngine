@@ -38,34 +38,34 @@ uint TextureImporter::ImportTexture(const char* filePath)
 		ModuleFilesManager::loaded_textures[filePath] = ImgId;
 
 	//	// ------------------------------------------ It prints also de grid (WRONG!)
-	//	//ilEnable(IL_FILE_OVERWRITE);
-	//	//ilSaveImage(filePath);
+		//ilEnable(IL_FILE_OVERWRITE);
+		//ilSaveImage(filePath);
 
-	//	//ilGenImages(1, &ImgId);
-	//	//ilBindImage(ImgId);
+		//ilGenImages(1, &ImgId);
+		//ilBindImage(ImgId);
 
-	//	//ilLoadImage(filePath);
+		//ilLoadImage(filePath);
 
-	//	////ilBindImage(ImgId);
-	//	//BYTE* data = ilGetData();
+		////ilBindImage(ImgId);
+		//BYTE* data = ilGetData();
 
-	//	//ILuint imgWidth, imgHeight;
-	//	//imgWidth = ilGetInteger(IL_IMAGE_WIDTH);
-	//	//imgHeight = ilGetInteger(IL_IMAGE_HEIGHT);
-	//	//int const type = ilGetInteger(IL_IMAGE_TYPE);
-	//	//int const format = ilGetInteger(IL_IMAGE_FORMAT);
+		//ILuint imgWidth, imgHeight;
+		//imgWidth = ilGetInteger(IL_IMAGE_WIDTH);
+		//imgHeight = ilGetInteger(IL_IMAGE_HEIGHT);
+		//int const type = ilGetInteger(IL_IMAGE_TYPE);
+		//int const format = ilGetInteger(IL_IMAGE_FORMAT);
 
-	//	//// ---------------------------------------------------------------------------------------------------- Create Texture from ImageData
-	//	//glTexImage2D(GL_TEXTURE_2D, 0, format, imgWidth, imgHeight, 0, format,
-	//	//	type, data);
-	//	//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	//	//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	//	//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	//	//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+		//// ---------------------------------------------------------------------------------------------------- Create Texture from ImageData
+		//glTexImage2D(GL_TEXTURE_2D, 0, format, imgWidth, imgHeight, 0, format,
+		//	type, data);
+		//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
-	//	//ImgId = ilutGLBindTexImage();
-	//	//glBindTexture(GL_TEXTURE_2D, ImgId);
-	//	//ilDeleteImages(1, &ImgId);
+		//ImgId = ilutGLBindTexImage();
+		//glBindTexture(GL_TEXTURE_2D, ImgId);
+		//ilDeleteImages(1, &ImgId);
 
 		AppExtern->menus->info.AddConsoleLog("TEX ID: %d", ImgId);
 

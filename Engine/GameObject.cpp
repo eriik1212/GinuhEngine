@@ -13,9 +13,9 @@ GameObject::GameObject(GameObject* parent, string name) : parent(parent), active
 	AppExtern->scene_intro->gameObjects[id_count] = this;
 	if (name != "")
 		this->name = name;
-	else
+	else if( name == "" && parent != nullptr)
 	{
-		this->name = "Mesh";
+		this->name = parent->name;
 	}
 	id = id_count;
 	id_count++;

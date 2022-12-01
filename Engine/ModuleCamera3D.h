@@ -2,6 +2,13 @@
 #include "Module.h"
 #include "Globals.h"
 #include "glmath.h"
+#include "ModuleSceneIntro.h"
+#include "GameObject.h"
+
+#include "ExternalLibraries/MathGeoLib/include/MathGeoLib.h"
+
+class GameObject;
+class ModuleSceneIntro;
 
 class ModuleCamera3D : public Module
 {

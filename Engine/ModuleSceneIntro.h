@@ -19,6 +19,7 @@ public:
 	bool textureEnabled = true;
 
 	uint CreateGameObject(GameObject* parent, string name);
+	float3 GetGOGlobalPos(GameObject* go);
 
 	GameObject* SceneRoot;
 

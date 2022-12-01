@@ -96,6 +96,15 @@ uint ModuleSceneIntro::CreateGameObject(GameObject* parent, string name)
 	return NewGameObject->id;
 }
 
+float3 ModuleSceneIntro::GetGOGlobalPos(GameObject* go)
+{
+	float3 globalPos;
+
+	go->transform->transform.globalPos.Decompose(globalPos, float4x4(), float3());
+
+	return globalPos;
+}
+
 void ModuleSceneIntro::UpdateGO()
 {
 	RecursiveUpdate(SceneRoot);

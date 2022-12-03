@@ -192,7 +192,8 @@ update_status ModuleMenus::PostUpdate(float dt)
 	ImGui::Begin("Game", 0);
 
 	//App->camera->sceneCam.SetAspectRatio(ImGui::GetContentRegionAvail().x / ImGui::GetContentRegionAvail().y);
-	ImGui::Image((ImTextureID)App->renderer3D->gameCamera->textColorBuff, ImGui::GetContentRegionAvail(), ImVec2(0, 1), ImVec2(1, 0));
+	if(App->renderer3D->gameCamera != nullptr)
+		ImGui::Image((ImTextureID)App->renderer3D->gameCamera->textColorBuff, ImGui::GetContentRegionAvail(), ImVec2(0, 1), ImVec2(1, 0));
 
 	ImGui::End();
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------ //

@@ -45,13 +45,19 @@ C_Camera::C_Camera(GameObject* gameObject) : Component(gameObject, C_TYPE::CAMER
 
 C_Camera::~C_Camera()
 {
+	AppExtern->renderer3D->SetAsGameRender(nullptr);
+
 	glDeleteFramebuffers(1, &frameBuff);
 	glDeleteFramebuffers(1, &textColorBuff);
+	glDeleteFramebuffers(1, &rbo);
 }
 
 void C_Camera::Update()
 {
-
+	frustum.pos = go->transform->transform.position;
+	float4x4 matrix = go->transform->transform.globalPos;
+	frustum.up = matrix.RotatePart().Col(1).Normalized();
+	frustum.front = matrix.RotatePart().Col(2).Normalized();
 }
 
 
@@ -62,6 +68,20 @@ void C_Camera::PrintGui()
 	{
 		ImGui::TextColored(ImVec4(255, 255, 0, 255), "Enabled: "); ImGui::SameLine(); ImGui::Checkbox("##Enabled", &enabled);
 
+		ImGui::Spacing();
+		ImGui::Spacing();
+
+		if (AppExtern->menus->ButtonCenteredOnLine("Set as Game Camera"))
+		{
+			AppExtern->renderer3D->SetAsGameRender(this);
+		}
+
+		if(isActiveGameCam)
+			ImGui::TextColored(ImVec4(0, 255, 0, 255), "This Game Camera is ACTIVE");
+		else
+			ImGui::TextColored(ImVec4(255, 0, 0, 255), "This Game Camera is INACTIVE");
+
+		ImGui::Spacing();
 		ImGui::Spacing();
 
 		ImGui::Text("Near Plane: ");
@@ -110,17 +130,17 @@ void C_Camera::PrintGui()
 
 void C_Camera::SetAspectRatio(float aspectRatio)
 {
-	frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * aspectRatio);
+	if(this != nullptr)
+		frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * aspectRatio);
 }
 
 void C_Camera::SetGameCamera()
 {
-	AppExtern->scene_intro->SetAsGameCam(this);
+	AppExtern->renderer3D->SetAsGameRender(this);
 }
 
 void C_Camera::InitFrameBuffer()
 {
-	ClearBuffer();
 
 	glGenFramebuffers(1, &frameBuff);
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBuff);
@@ -168,21 +188,36 @@ void C_Camera::DrawCameraView()
 
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-	PushCameraMatrix();
-
-	//FrameBuffer
-	glBindFramebuffer(GL_FRAMEBUFFER, frameBuff);
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}
-
-void C_Camera::PushCameraMatrix()
-{
-	glLoadIdentity();
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf((GLfloat*)frustum.ProjectionMatrix().Transposed().v);
 
 	glMatrixMode(GL_MODELVIEW);
 	float4x4 mat = frustum.ViewMatrix();
 	glLoadMatrixf((GLfloat*)mat.Transposed().v);
+
+	//FrameBuffer
+	glBindFramebuffer(GL_FRAMEBUFFER, frameBuff);
+
+	glClearColor(0.08f, 0.08f, 0.08f, 1.f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void C_Camera::EndDraw()
+{
+	//Is this important?
+
+	glBindTexture(GL_TEXTURE_2D, textColorBuff);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, frameBuff);
+	//glBlitFramebuffer(0, 0, msaaFBO.texBufferSize.x, msaaFBO.texBufferSize.y, 0, 0, msaaFBO.texBufferSize.x, msaaFBO.texBufferSize.y, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
+	glDisable(GL_DEPTH_TEST);
 }

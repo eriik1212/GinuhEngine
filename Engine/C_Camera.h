@@ -31,6 +31,7 @@ public:
 	float FOV;
 
 	void SetGameCamera();
+	bool isActiveGameCam = false;
 
 	void SetAspectRatio(float aspectRatio);
 
@@ -43,5 +44,5 @@ public:
 	unsigned int rbo;
 
 	void DrawCameraView();
-	void PushCameraMatrix();
+	void EndDraw();
 };

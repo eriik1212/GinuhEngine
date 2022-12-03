@@ -2,6 +2,7 @@
 #include "Module.h"
 #include "Globals.h"
 #include "glmath.h"
+#include "Primitive.h"
 #include "Light.h"
 #include "C_Camera.h"
 
@@ -26,6 +27,8 @@ public:
 	void SetAsGameRender(C_Camera* cam);
 
 	C_Camera* gameCamera;
+
+	P_Plane p;
 
 public:
 

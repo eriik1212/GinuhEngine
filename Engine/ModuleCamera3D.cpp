@@ -14,9 +14,10 @@ ModuleCamera3D::~ModuleCamera3D()
 // -----------------------------------------------------------------
 bool ModuleCamera3D::Start()
 {
+	bool ret = true;
+
 	//LOG("Setting up the camera");
 	App->menus->info.AddConsoleLog( "Setting up the camera");
-	bool ret = true;
 
 	return ret;
 }

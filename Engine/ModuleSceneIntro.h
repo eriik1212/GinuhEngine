@@ -27,8 +27,6 @@ public:
 
 	GameObject* gameobject_selected = nullptr;
 
-	void SetAsGameCam(C_Camera* cam);
-
 private:
 
 	void UpdateGO();

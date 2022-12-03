@@ -18,6 +18,7 @@
 
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
+	gameCamera = nullptr;
 }
 
 // Destructor
@@ -168,23 +169,15 @@ bool ModuleRenderer3D::Init()
 
 	glEnable(GL_TEXTURE_2D);
 
+	p = P_Plane(0, 1, 0, 0);
+	p.axis = true;
+
 	return ret;
 }
 
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glLoadIdentity();
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(App->camera->GetViewMatrix());
-
-	/*Color c = App->camera->background;
-	glClearColor(c.r, c.g, c.b, c.a);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(App->camera->GetViewMatrix());*/
 
 	return UPDATE_CONTINUE;
 }
@@ -192,21 +185,41 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
-	App->camera->sceneCam.SetAspectRatio((float)screenWidth / (float)screenHeight);
-	gameCamera->SetAspectRatio((float)screenWidth / (float)screenHeight);
-
+	// ------------------------------------------------------------------------ Scene Render ------------------------------------------------------------------------ //
+	App->camera->sceneCam.SetAspectRatio((float)App->renderer3D->screenWidth / (float)App->renderer3D->screenHeight);
 	App->camera->sceneCam.DrawCameraView();
+	p.Render();
 
-	if (gameCamera != nullptr)
+	// Wireframe View
+	if (App->scene_intro->wireframe)
 	{
-		gameCamera->DrawCameraView();
+		glDisable(GL_TEXTURE_2D);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	}
+	else		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+
+	App->camera->sceneCam.EndDraw();
+
+	// --------------------------------------------------------------------------------------------------------------------------------------------------------------- //
+	//
+	// ------------------------------------------------------------------------ Game Render ------------------------------------------------------------------------ //
+
+	if (App->renderer3D->gameCamera != nullptr)
+	{
+		App->renderer3D->gameCamera->SetAspectRatio((float)App->renderer3D->screenWidth / (float)App->renderer3D->screenHeight);
+		App->renderer3D->gameCamera->DrawCameraView();
 
 		// light 0 on cam pos
-		lights[0].SetPos(gameCamera->frustum.pos.x, gameCamera->frustum.pos.y, gameCamera->frustum.pos.z);
+		App->renderer3D->lights[0].SetPos(App->renderer3D->gameCamera->frustum.pos.x, App->renderer3D->gameCamera->frustum.pos.y, App->renderer3D->gameCamera->frustum.pos.z);
 
 		for (uint i = 0; i < MAX_LIGHTS; ++i)
-			lights[i].Render();
+			App->renderer3D->lights[i].Render();
+
+		App->renderer3D->gameCamera->EndDraw();
+
 	}
+	// --------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 	SDL_GL_SwapWindow(App->window->window);
 
@@ -251,5 +264,19 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 void ModuleRenderer3D::SetAsGameRender(C_Camera* cam)
 {
+	if (cam == nullptr) {
+		gameCamera = nullptr;
+		AppExtern->menus->info.AddConsoleLog("GAME CAMERA does not exist");
+		return;
+	}
+
+	if (gameCamera != nullptr)
+		gameCamera->isActiveGameCam = false;
+
+	cam->isActiveGameCam = true;
+
 	gameCamera = cam;
+
+	//if (gameCamera != nullptr)
+	//	gameCamera->InitFrameBuffer();
 }

@@ -58,8 +58,6 @@ bool ModuleSceneIntro::CleanUp()
 	//LOG("Unloading Intro scene");
 	App->menus->info.AddConsoleLog( "Unloading Intro scene");
 
-	SetAsGameCam(nullptr);
-
 	delete SceneRoot;
 	SceneRoot = nullptr;
 
@@ -69,28 +67,14 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update(float dt)
 {
-
-	P_Plane p(0, 1, 0, 0);
-	p.axis = true;
-	p.Render();
-
 	if (textureEnabled)
 		glEnable(GL_TEXTURE_2D);
 	else
 		glDisable(GL_TEXTURE_2D);
 
-	// Wireframe View
-	if (wireframe)
-	{
-		glDisable(GL_TEXTURE_2D);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	}
-	else		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
+	
 	UpdateGO();
 
-	//FrameBuffer
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	return UPDATE_CONTINUE;
 }
@@ -109,11 +93,6 @@ float3 ModuleSceneIntro::GetGOGlobalPos(GameObject* go)
 	go->transform->transform.globalPos.Decompose(globalPos, float4x4(), float3());
 
 	return globalPos;
-}
-
-void ModuleSceneIntro::SetAsGameCam(C_Camera* cam)
-{
-	App->renderer3D->SetAsGameRender(cam);
 }
 
 void ModuleSceneIntro::UpdateGO()

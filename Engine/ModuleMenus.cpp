@@ -202,6 +202,42 @@ update_status ModuleMenus::PostUpdate(float dt)
 
 	ImGui::Image((ImTextureID)App->camera->sceneCam.textColorBuff, ImGui::GetContentRegionAvail(), ImVec2(0, 1), ImVec2(1, 0));
 
+	//Mouse picking
+	if (ImGui::IsMouseClicked(0) && App->input->GetKey(SDL_SCANCODE_LALT) != KEY_REPEAT)
+	{
+		//Note: must take care about frame hight, it will create precision problems when click.
+		ImVec2 mousePosN = NormMouse(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y + ImGui::GetFrameHeight(), ImGui::GetWindowSize().x, ImGui::GetWindowSize().y - ImGui::GetFrameHeight(), ImGui::GetMousePos());
+
+		LineSegment ray = App->camera->sceneCam.frustum.UnProjectLineSegment(mousePosN.x, mousePosN.y);
+
+		std::vector<GameObject*>selected;
+		
+		for (size_t i = 0; i < App->scene_intro->gameObjects.size(); i++)
+		{
+			C_Mesh* m = dynamic_cast<C_Mesh*>(App->scene_intro->gameObjects[i]->GetComponent(Component::C_TYPE::MESH));
+			
+			if (m != nullptr)
+			{
+				if (ray.Intersects(m->GetMesh()->obb_box) && App->scene_intro->gameObjects[i]->active)
+				{
+					selected.push_back(App->scene_intro->gameObjects[i]);
+				}
+			}
+		}
+
+		//Once here, we have a vector list with all Game objects that intersects with our click ray. Now its time to only select the closest one.
+
+
+		for (size_t i = 0; i < selected.size(); i++)
+		{
+			C_Mesh* mesh = dynamic_cast<C_Mesh*>(selected[i]->GetComponent(Component::C_TYPE::MESH));
+
+			//for (size_t j=0; j<mesh->me)
+		}
+
+
+	}
+
 	//ImGui::EndChild();
 	ImGui::End();
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------ //
@@ -224,6 +260,16 @@ bool ModuleMenus::CleanUp()
 	ImGui::DestroyContext();
 
 	return true;
+}
+
+ImVec2 ModuleMenus::NormMouse(float x, float y, float w, float h, ImVec2 point)
+{
+	ImVec2 NPos;
+
+	NPos.x = -1.0 + 2.0 * ((point.x - x) / w);
+	NPos.y = 1.0 - 2.0 * ((point.y - y) / h);
+
+	return NPos;
 }
 
 void ModuleMenus::MenuAbout()
@@ -984,4 +1030,5 @@ void ModuleMenus::PushLog(vector<float>* Log, float toPush) //Function to keep a
 
 
 }
+
 

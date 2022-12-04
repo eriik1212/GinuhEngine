@@ -17,6 +17,8 @@
 #include "Assimp/include/scene.h"
 #include "Assimp/include/postprocess.h"
 
+#include "MathGeoLib/include/Geometry/AABB.h"
+
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
 #pragma comment (lib, "DevIL/libx86/DevIL.lib")
 #pragma comment (lib, "DevIL/libx86/ILU.lib" )
@@ -61,6 +63,9 @@ struct MeshData
 	float* vertex = nullptr;
 
 	uint texture_id = 0;
+
+	AABB aabb_box;
+	OBB obb_box;
 
 	const char* meshName;
 
@@ -109,6 +114,7 @@ public:
 	static vector<string> allText;
 	static map<string, uint> loaded_textures;			//Know which textures have we loaded, to NOT load again
 
+	
 
 private:
 	SDL_Event event;                        // Declare event handle

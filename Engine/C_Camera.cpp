@@ -10,7 +10,7 @@
 #include <string>
 #include <vector>
 
-C_Camera::C_Camera() : Component(nullptr, C_TYPE::CAMERA)
+C_Camera::C_Camera() : Component(nullptr, C_TYPE::CAMERA), frameBuff(0), textColorBuff(0), rbo(0)
 {
 	name = "Camera";
 
@@ -26,7 +26,7 @@ C_Camera::C_Camera() : Component(nullptr, C_TYPE::CAMERA)
 	frustum.pos = float3(0, 0, -10);
 }
 
-C_Camera::C_Camera(GameObject* gameObject) : Component(gameObject, C_TYPE::CAMERA)
+C_Camera::C_Camera(GameObject* gameObject) : Component(gameObject, C_TYPE::CAMERA), frameBuff(0), textColorBuff(0), rbo(0)
 {
 	name = "Camera";
 
@@ -46,10 +46,9 @@ C_Camera::C_Camera(GameObject* gameObject) : Component(gameObject, C_TYPE::CAMER
 C_Camera::~C_Camera()
 {
 	AppExtern->renderer3D->SetAsGameRender(nullptr);
+	
+	ClearBuffer();
 
-	glDeleteFramebuffers(1, &frameBuff);
-	glDeleteFramebuffers(1, &textColorBuff);
-	glDeleteFramebuffers(1, &rbo);
 }
 
 void C_Camera::Update()
@@ -141,6 +140,7 @@ void C_Camera::SetGameCamera()
 
 void C_Camera::InitFrameBuffer()
 {
+	ClearBuffer();
 
 	glGenFramebuffers(1, &frameBuff);
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBuff);

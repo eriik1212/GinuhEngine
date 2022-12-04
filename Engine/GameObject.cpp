@@ -8,6 +8,8 @@
 #include "C_Camera.h"
 #include "ModuleSceneIntro.h"
 
+uint GameObject::id_count;
+
 GameObject::GameObject(GameObject* parent, string name) : parent(parent), active(true)
 {
 	AppExtern->scene_intro->gameObjects[id_count] = this;

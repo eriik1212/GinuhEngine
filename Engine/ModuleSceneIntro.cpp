@@ -30,10 +30,8 @@ bool ModuleSceneIntro::Init()
 	gameObjects[0] = SceneRoot;
 
 	//------------------------------------------------------------------------- Create & Set the Camera
-	GameObject* mainCam = new GameObject(gameObjects[0], "Main Camera");
+	mainCam = new GameObject(gameObjects[0], "Main Camera");
 
-	C_Camera* camComp = dynamic_cast<C_Camera*>(mainCam->CreateComponent(Component::C_TYPE::CAMERA));
-	camComp->SetGameCamera();
 
 	return true;
 }
@@ -49,6 +47,9 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(float3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(float3(0, 0, 0));
 
+	C_Camera* camComp = dynamic_cast<C_Camera*>(mainCam->CreateComponent(Component::C_TYPE::CAMERA));
+	camComp->SetGameCamera();
+
 	return ret;
 }
 
@@ -58,8 +59,13 @@ bool ModuleSceneIntro::CleanUp()
 	//LOG("Unloading Intro scene");
 	App->menus->info.AddConsoleLog( "Unloading Intro scene");
 
+
+	delete mainCam;
+	mainCam = nullptr;
+
 	delete SceneRoot;
 	SceneRoot = nullptr;
+
 
 	return true;
 }
@@ -67,14 +73,8 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update(float dt)
 {
-	if (textureEnabled)
-		glEnable(GL_TEXTURE_2D);
-	else
-		glDisable(GL_TEXTURE_2D);
-
 	
 	UpdateGO();
-
 
 	return UPDATE_CONTINUE;
 }

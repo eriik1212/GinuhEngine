@@ -188,7 +188,10 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	// ------------------------------------------------------------------------ Scene Render ------------------------------------------------------------------------ //
 	App->camera->sceneCam.SetAspectRatio((float)App->renderer3D->screenWidth / (float)App->renderer3D->screenHeight);
 	App->camera->sceneCam.DrawCameraView();
+
 	p.Render();
+
+	RenderScene();
 
 	// Wireframe View
 	if (App->scene_intro->wireframe)
@@ -210,6 +213,8 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		App->renderer3D->gameCamera->SetAspectRatio((float)App->renderer3D->screenWidth / (float)App->renderer3D->screenHeight);
 		App->renderer3D->gameCamera->DrawCameraView();
 
+		RenderScene();
+
 		// light 0 on cam pos
 		App->renderer3D->lights[0].SetPos(App->renderer3D->gameCamera->frustum.pos.x, App->renderer3D->gameCamera->frustum.pos.y, App->renderer3D->gameCamera->frustum.pos.z);
 
@@ -224,6 +229,18 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	SDL_GL_SwapWindow(App->window->window);
 
 	return UPDATE_CONTINUE;
+}
+
+void ModuleRenderer3D::RenderScene()
+{
+	for (int i = 0; i < App->scene_intro->gameObjects.size(); i++)
+	{
+		C_Mesh* m = dynamic_cast<C_Mesh*>(App->scene_intro->gameObjects[i]->GetComponent(Component::C_TYPE::MESH));
+
+		if(m != nullptr)
+			m->RenderMesh();
+
+	}
 }
 
 // Called before quitting
@@ -277,6 +294,6 @@ void ModuleRenderer3D::SetAsGameRender(C_Camera* cam)
 
 	gameCamera = cam;
 
-	//if (gameCamera != nullptr)
-	//	gameCamera->InitFrameBuffer();
+	if (gameCamera != nullptr)
+		gameCamera->InitFrameBuffer();
 }

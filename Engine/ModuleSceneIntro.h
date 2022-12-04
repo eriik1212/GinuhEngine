@@ -32,4 +32,5 @@ private:
 	void UpdateGO();
 	void RecursiveUpdate(GameObject* goToUpdate);
 
+	GameObject* mainCam;
 };

@@ -22,10 +22,10 @@ C_Mesh::~C_Mesh()
 
 void C_Mesh::Update()
 {
-	if (mesh == nullptr || !enabled)
+	/*if (mesh == nullptr || !enabled)
 		return;
 	else if(mesh != nullptr || enabled)
-		RenderMesh();
+		RenderMesh();*/
 }
 
 void C_Mesh::SetMesh(MeshData* mesh)

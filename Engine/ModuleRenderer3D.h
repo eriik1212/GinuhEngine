@@ -25,6 +25,7 @@ public:
 
 	//---------------------------------------------------------- CAMERA
 	void SetAsGameRender(C_Camera* cam);
+	void RenderScene();
 
 	C_Camera* gameCamera;
 

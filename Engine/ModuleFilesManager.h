@@ -109,12 +109,6 @@ public:
 	static vector<string> allText;
 	static map<string, uint> loaded_textures;			//Know which textures have we loaded, to NOT load again
 
-	//vector<MeshData*> meshList;
-
-	//-------------------------------------------------------------------------- PHYSFS Logic
-	uint PFS_Load(const string filePath, char** buffer);
-	uint PFS_Save(const string filePath, char* buffer, uint size, bool append);
-
 
 private:
 	SDL_Event event;                        // Declare event handle

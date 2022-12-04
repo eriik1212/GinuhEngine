@@ -7,7 +7,7 @@
 #include "ModuleRenderer3D.h"
 #include "Glew/include/glew.h"
 #include "SDL/include/SDL_opengl.h"
-
+#include "MeshImporter.h"
 
 #include <gl/GL.h>
 #include <gl/GLU.h>
@@ -226,6 +226,8 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	}
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------------- //
 
+	renderList.clear();
+
 	SDL_GL_SwapWindow(App->window->window);
 
 	return UPDATE_CONTINUE;
@@ -233,12 +235,9 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 void ModuleRenderer3D::RenderScene()
 {
-	for (int i = 0; i < App->scene_intro->gameObjects.size(); i++)
+	for (int i = 0; i < renderList.size(); i++)
 	{
-		C_Mesh* m = dynamic_cast<C_Mesh*>(App->scene_intro->gameObjects[i]->GetComponent(Component::C_TYPE::MESH));
-
-		if(m != nullptr)
-			m->RenderMesh();
+		renderList[i]->RenderMesh();
 
 	}
 }

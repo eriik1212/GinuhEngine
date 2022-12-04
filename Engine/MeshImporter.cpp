@@ -6,8 +6,7 @@ void MeshImporter::ImportMesh(const char* file_path)
 {
 	const aiScene* scene = aiImportFile(file_path, aiProcessPreset_TargetRealtime_MaxQuality);
 
-	vector<MeshData*> meshList;
-	vector<TextData*> textList;
+
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
@@ -107,14 +106,14 @@ void MeshImporter::ImportMesh(const char* file_path)
 						newMesh->texture_id = text->textureID;
 						text->name = normPath;
 
-						textList.push_back(text);
+						AppExtern->files_manager->textList.push_back(text);
 
 						path.Clear();
 					}
 					else
 					{
 						// Empty
-						textList.push_back(nullptr);
+						AppExtern->files_manager->textList.push_back(nullptr);
 					}
 					//string texture_path = TEXTURES_PATH + AppExtern->files_manager->GetFileName(sourcePath.C_Str(), false) + ".dds";
 
@@ -128,7 +127,7 @@ void MeshImporter::ImportMesh(const char* file_path)
 
 			}
 
-			LoadMeshData(meshList, newMesh);
+			LoadMeshData(AppExtern->files_manager->meshList, newMesh);
 
 
 		}
@@ -136,7 +135,7 @@ void MeshImporter::ImportMesh(const char* file_path)
 		std::string name = "";
 		name = AppExtern->files_manager->GetFileName(file_path, false);
 
-		NodeManager(scene->mMeshes, scene, textList, meshList, scene->mRootNode, AppExtern->scene_intro->gameObjects[0], name.c_str());
+		NodeManager(scene->mMeshes, scene, AppExtern->files_manager->textList, AppExtern->files_manager->meshList, scene->mRootNode, AppExtern->scene_intro->gameObjects[0], name.c_str());
 
 		AppExtern->menus->info.AddConsoleLog("% s Pushed In List Successfully", file_path);
 		aiReleaseImport(scene);

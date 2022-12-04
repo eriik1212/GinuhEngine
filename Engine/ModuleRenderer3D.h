@@ -5,6 +5,8 @@
 #include "Primitive.h"
 #include "Light.h"
 #include "C_Camera.h"
+#include "ModuleFilesManager.h"
+#include "C_Mesh.h"
 
 #define MAX_LIGHTS 8
 #define CHECKERS_HEIGHT 64
@@ -40,4 +42,6 @@ public:
 
 	int screenWidth = SCREEN_WIDTH,
 		screenHeight = SCREEN_HEIGHT;
+
+	vector<C_Mesh*> renderList;
 };

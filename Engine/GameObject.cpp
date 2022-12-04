@@ -10,7 +10,7 @@
 
 uint GameObject::id_count;
 
-GameObject::GameObject(GameObject* parent, string name) : parent(parent), active(true)
+GameObject::GameObject(GameObject* parent, string name) : parent(parent), active(true), id(id_count)
 {
 	AppExtern->scene_intro->gameObjects[id_count] = this;
 	if (name != "")
@@ -19,7 +19,6 @@ GameObject::GameObject(GameObject* parent, string name) : parent(parent), active
 	{
 		this->name = parent->name;
 	}
-	id = id_count;
 	id_count++;
 
 	transform = dynamic_cast<C_Transform*>(CreateComponent(Component::C_TYPE::TRANSFORM));
@@ -31,25 +30,38 @@ GameObject::GameObject(GameObject* parent, string name) : parent(parent), active
 
 GameObject::~GameObject()
 {
-	for (uint i = 0; i < components.size(); i++)
+	if (!components.empty())
 	{
-		if (components[i] != nullptr)
+		for (uint i = 0; i < components.size(); i++)
 		{
-			delete components[i];
-			components[i] = nullptr;
+			if (components[i] != nullptr)
+			{
+				delete components[i];
+				components[i] = nullptr;
+
+			}
+		}
+		components.clear();
+	}
+
+	int children = this->GetChildren().size();
+
+	if (children > 0)
+	{
+		for (int j = children - 1; j >= 0; j--)
+		{
+
+			RemoveChild(this->GetChild(j));
 
 		}
+		this->GetChildren().clear();
 	}
-	components.clear();
-
-	for (uint j = 0; j < this->GetChildren().size(); j++)
-	{
-		RemoveChild(this->GetChild(j));
-	}
-	this->GetChildren().clear();
 
 	if(this->parent != nullptr)
 		this->parent->RemoveChild(this);	//Little strange (GO->Parent->RemoveChild() ---> Is itself) But works!!
+
+	AppExtern->scene_intro->gameObjects.erase(this->id);
+
 }
 
 Component* GameObject::CreateComponent(Component::C_TYPE type)
@@ -118,6 +130,8 @@ bool GameObject::AddChild(GameObject* child)
 void GameObject::RemoveChild(GameObject* child)
 {
 	children.erase(find(children.begin(), children.end(), child));
+	AppExtern->scene_intro->gameObjects.erase(child->id);
+
 }
 
 void GameObject::RelocateGO(GameObject* relocatedParent)

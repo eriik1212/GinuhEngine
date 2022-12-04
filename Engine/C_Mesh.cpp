@@ -5,6 +5,7 @@
 #include "Component.h"
 #include "C_Mesh.h"
 #include "ModuleFilesManager.h"
+#include "MeshImporter.h"
 
 #include <iostream>
 #include <string>
@@ -28,13 +29,18 @@ C_Mesh::~C_Mesh()
 
 void C_Mesh::Update()
 {
-	for (int i = 0; i < meshes.size(); i++)
-	{
-		/*meshes[i]->OBB_box = meshes[i]->AABB_box;
-		meshes[i]->OBB_box.Transform(containerParent->transform->getGlobalMatrix().Transposed());
-		meshes[i]->Global_AABB_box.SetNegativeInfinity();
-		meshes[i]->Global_AABB_box.Enclose(meshes[i]->OBB_box);*/
-	}
+	if (mesh == nullptr || !enabled)
+		return;
+	else if (mesh != nullptr || enabled)
+		AppExtern->renderer3D->renderList.push_back(this);
+
+		for (int i = 0; i < meshes.size(); i++)
+		{
+			/*meshes[i]->OBB_box = meshes[i]->AABB_box;
+			meshes[i]->OBB_box.Transform(containerParent->transform->getGlobalMatrix().Transposed());
+			meshes[i]->Global_AABB_box.SetNegativeInfinity();
+			meshes[i]->Global_AABB_box.Enclose(meshes[i]->OBB_box);*/
+		}
 }
 
 void C_Mesh::SetMesh(MeshData* mesh)

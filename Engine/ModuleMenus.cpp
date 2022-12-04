@@ -232,7 +232,13 @@ update_status ModuleMenus::PostUpdate(float dt)
 		{
 			C_Mesh* mesh = dynamic_cast<C_Mesh*>(selected[i]->GetComponent(Component::C_TYPE::MESH));
 
-			//for (size_t j=0; j<mesh->me)
+			//evaluar meshes i fer el k fa roger amb elles
+
+			for (size_t j = 0; j < mesh->meshes.size(); j++)
+			{
+
+				
+			}
 		}
 
 

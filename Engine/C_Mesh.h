@@ -11,6 +11,17 @@
 
 using namespace std;
 
+struct Mesh
+{
+	AABB aabbBox;
+	AABB globalBox;
+	OBB obbBox;
+	
+
+};
+
+
+
 struct MeshData;
 struct TextData;
 

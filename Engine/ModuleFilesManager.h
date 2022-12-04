@@ -34,6 +34,8 @@ namespace fs = std::filesystem;
 
 #define VERTEX_FEATURES 8
 
+
+
 #define ASSETS_PATH "Assets/"
 #define LIBRARY_PATH "Library/"
 #define MODELS_PATH "Library/Models/"
@@ -66,11 +68,15 @@ struct MeshData
 
 	uint texture_id = 0;
 
-	AABB aabb_box;
-	OBB obb_box;
+	AABB aabbBox;
+	AABB globalAabbBox;
+	OBB obbBox;
 
 	const char* meshName;
 
+	void InitAABB();
+	void RenderAABB();
+	
 	void DrawMesh(const float* globalTransform, uint imgID);
 };
 

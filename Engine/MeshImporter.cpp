@@ -65,7 +65,9 @@ void MeshImporter::ImportMesh(const char* file_path)
 					{
 						memcpy(&newMesh->index[j * 3], scene->mMeshes[i]->mFaces[j].mIndices, 3 * sizeof(uint));
 					}
+
 				}
+				newMesh->InitAABB();
 
 				// extract materials/textures
 				if (scene->HasMaterials())

@@ -128,6 +128,8 @@ public:
 
 	bool vsync = VSYNC;
 
+	bool showingBBoxes = false;
+
 	ConsoleInfo info;
     
 	//--------------------------------------------------------------------- IMGUI LOGIC
@@ -137,7 +139,7 @@ private:
 	bool aboutVisible = true;
 	void MenuAbout();
 
-	bool configVisible = true;
+	bool configVisible = false;
 	void MenuConfig();
 
 	bool consoleVisible = true;
@@ -186,6 +188,7 @@ private:
 
 	bool hardwareActive = true;
 
+	
 
 	void OpenLink(const char* url);
 	void PushLog(std::vector<float>* Log, float toPush);

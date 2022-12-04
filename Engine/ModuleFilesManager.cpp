@@ -292,3 +292,31 @@ void MeshData::DrawMesh(const float* globalTransform, uint imgID)
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisable(GL_TEXTURE_COORD_ARRAY);
 }
+
+void MeshData::InitAABB()
+{
+	vector<float3> correctVertex;
+	for (size_t i = 0; i < num_vertex * VERTEX_FEATURES; i += VERTEX_FEATURES)
+	{
+		correctVertex.emplace_back(vertex[i], vertex[i + 1], vertex[i + 2]);
+	}
+	aabbBox.SetFrom(&correctVertex[0], correctVertex.size());
+
+}
+
+void MeshData::RenderAABB()
+{
+	float3 corners1[8];
+	obbBox.GetCornerPoints(corners1);
+
+	// Draw
+	AppExtern->renderer3D->DrawBox(corners1, float3(255, 0, 0));
+
+	float3 corners2[8];
+	globalAabbBox.GetCornerPoints(corners2);
+
+	// Draw
+	AppExtern->renderer3D->DrawBox(corners2, float3(0, 0, 255));
+}
+
+

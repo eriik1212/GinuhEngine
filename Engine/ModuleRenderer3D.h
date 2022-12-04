@@ -28,6 +28,10 @@ public:
 	//---------------------------------------------------------- CAMERA
 	void SetAsGameRender(C_Camera* cam);
 	void RenderScene();
+	void RenderGame();
+	void DrawBox(float3* corners, float3 color);
+
+	
 
 	C_Camera* gameCamera;
 

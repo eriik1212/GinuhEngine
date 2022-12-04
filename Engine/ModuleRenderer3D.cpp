@@ -29,47 +29,47 @@ ModuleRenderer3D::~ModuleRenderer3D()
 bool ModuleRenderer3D::Init()
 {
 	//LOG("Creating 3D Renderer context");
-	App->menus->info.AddConsoleLog( "Creating 3D Renderer context");
+	App->menus->info.AddConsoleLog("Creating 3D Renderer context");
 
 	bool ret = true;
 
 	//Create context
 	context = SDL_GL_CreateContext(App->window->window);
-	if(context == NULL)
+	if (context == NULL)
 	{
 		//LOG("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
-		App->menus->info.AddConsoleLog( "OpenGL context could not be created! SDL_Error: %s", SDL_GetError());
+		App->menus->info.AddConsoleLog("OpenGL context could not be created! SDL_Error: %s", SDL_GetError());
 
 		ret = false;
 	}
-	
+
 	//GLEW
 	GLenum err = glewInit();
 	//LOG("Using Glew %s", glewGetString(GLEW_VERSION));
 	if (GLEW_OK != err) {
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
-		App->menus->info.AddConsoleLog( "Error: %a\n", glewGetErrorString(err));
+		App->menus->info.AddConsoleLog("Error: %a\n", glewGetErrorString(err));
 	}
 	else {
-		App->menus->info.AddConsoleLog( "Using Glew %s", glewGetString(GLEW_VERSION));
+		App->menus->info.AddConsoleLog("Using Glew %s", glewGetString(GLEW_VERSION));
 
 	}
 	//Should be 2.0
 
-	App->menus->info.AddConsoleLog( "Vendor: %s", glGetString(GL_VENDOR));
-	App->menus->info.AddConsoleLog( "Renderer: %s", glGetString(GL_RENDERER));
-	App->menus->info.AddConsoleLog( "OpenGL version supported %s", glGetString(GL_VERSION));
-	App->menus->info.AddConsoleLog( "GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+	App->menus->info.AddConsoleLog("Vendor: %s", glGetString(GL_VENDOR));
+	App->menus->info.AddConsoleLog("Renderer: %s", glGetString(GL_RENDERER));
+	App->menus->info.AddConsoleLog("OpenGL version supported %s", glGetString(GL_VERSION));
+	App->menus->info.AddConsoleLog("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
 	SDL_GL_MakeCurrent(App->window->window, context);
 
-	if(ret == true)
+	if (ret == true)
 	{
 		//Use Vsync
 		if (VSYNC && SDL_GL_SetSwapInterval(1) < 0)
 		{
 			//LOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
-			App->menus->info.AddConsoleLog( "Warning: Unable to set VSync! SDL Error: %s", SDL_GetError());
+			App->menus->info.AddConsoleLog("Warning: Unable to set VSync! SDL Error: %s", SDL_GetError());
 		}
 
 		//Initialize Projection Matrix
@@ -78,9 +78,9 @@ bool ModuleRenderer3D::Init()
 
 		//Check for error
 		GLenum error = glGetError();
-		if(error != GL_NO_ERROR)
+		if (error != GL_NO_ERROR)
 		{
-			App->menus->info.AddConsoleLog( "Error initializing OpenGL! %s\n", gluErrorString(error));
+			App->menus->info.AddConsoleLog("Error initializing OpenGL! %s\n", gluErrorString(error));
 
 			ret = false;
 		}
@@ -91,43 +91,43 @@ bool ModuleRenderer3D::Init()
 
 		//Check for error
 		error = glGetError();
-		if(error != GL_NO_ERROR)
+		if (error != GL_NO_ERROR)
 		{
-			App->menus->info.AddConsoleLog( "Error initializing OpenGL! %s\n", gluErrorString(error));
+			App->menus->info.AddConsoleLog("Error initializing OpenGL! %s\n", gluErrorString(error));
 
 			ret = false;
 		}
-		
+
 		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 		glClearDepth(1.0f);
-		
+
 		//Initialize clear color
 		glClearColor(0.f, 0.f, 0.f, 1.f);
 
 		//Check for error
 		error = glGetError();
-		if(error != GL_NO_ERROR)
+		if (error != GL_NO_ERROR)
 		{
 			App->menus->info.AddConsoleLog("Error initializing OpenGL! %s\n", gluErrorString(error));
 			ret = false;
 		}
 
 
-		GLfloat LightModelAmbient[] = {0.0f, 0.0f, 0.0f, 1.0f};
+		GLfloat LightModelAmbient[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 		glLightModelfv(GL_LIGHT_MODEL_AMBIENT, LightModelAmbient);
-		
+
 		lights[0].ref = GL_LIGHT0;
 		lights[0].ambient.Set(0.25f, 0.25f, 0.25f, 1.0f);
 		lights[0].diffuse.Set(0.75f, 0.75f, 0.75f, 1.0f);
 		lights[0].SetPos(0.0f, 0.0f, 2.5f);
 		lights[0].Init();
-		
-		GLfloat MaterialAmbient[] = {1.0f, 1.0f, 1.0f, 1.0f};
+
+		GLfloat MaterialAmbient[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, MaterialAmbient);
 
-		GLfloat MaterialDiffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
+		GLfloat MaterialDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, MaterialDiffuse);
-		
+
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 		lights[0].Active(true);
@@ -148,24 +148,24 @@ bool ModuleRenderer3D::Init()
 	if(gameCamera != nullptr)
 		gameCamera->InitFrameBuffer();*/
 
-	/*GLubyte checkerImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][3];
-	for (int i = 0; i < CHECKERS_HEIGHT; i++) {
-		for (int j = 0; j < CHECKERS_WIDTH; j++) {
-			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
-			checkerImage[i][j][0] = (GLubyte)c;
-			checkerImage[i][j][1] = (GLubyte)c;
-			checkerImage[i][j][2] = (GLubyte)c;
-			//checkerImage[i][j][3] = (GLubyte)255;
+		/*GLubyte checkerImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][3];
+		for (int i = 0; i < CHECKERS_HEIGHT; i++) {
+			for (int j = 0; j < CHECKERS_WIDTH; j++) {
+				int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
+				checkerImage[i][j][0] = (GLubyte)c;
+				checkerImage[i][j][1] = (GLubyte)c;
+				checkerImage[i][j][2] = (GLubyte)c;
+				//checkerImage[i][j][3] = (GLubyte)255;
+			}
 		}
-	}
 
-	glTexImage2D(GL_TEXTURE_2D, 0, 3, CHECKERS_HEIGHT, CHECKERS_HEIGHT, 0, GL_RGB,
-		GL_UNSIGNED_BYTE, checkerImage);  // Create texture from image data
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	*/
+		glTexImage2D(GL_TEXTURE_2D, 0, 3, CHECKERS_HEIGHT, CHECKERS_HEIGHT, 0, GL_RGB,
+			GL_UNSIGNED_BYTE, checkerImage);  // Create texture from image data
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+		*/
 
 	glEnable(GL_TEXTURE_2D);
 
@@ -191,6 +191,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 	p.Render();
 
+	//In scene view [RenderScene()] user can render bounding boxes.
 	RenderScene();
 
 	// Wireframe View
@@ -213,7 +214,8 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		App->renderer3D->gameCamera->SetAspectRatio((float)App->renderer3D->screenWidth / (float)App->renderer3D->screenHeight);
 		App->renderer3D->gameCamera->DrawCameraView();
 
-		RenderScene();
+		//In game view [RenderGame()] we avoid showing bounding boxes.
+		RenderGame();
 
 		// light 0 on cam pos
 		App->renderer3D->lights[0].SetPos(App->renderer3D->gameCamera->frustum.pos.x, App->renderer3D->gameCamera->frustum.pos.y, App->renderer3D->gameCamera->frustum.pos.z);
@@ -239,7 +241,37 @@ void ModuleRenderer3D::RenderScene()
 	{
 		renderList[i]->RenderMesh();
 
+		if (App->menus->showingBBoxes)
+			renderList[i]->GetMesh()->RenderAABB();
 	}
+}
+
+
+void ModuleRenderer3D::RenderGame()
+{
+	for (int i = 0; i < renderList.size(); i++)
+	{
+		renderList[i]->RenderMesh();
+	}
+}
+
+void ModuleRenderer3D::DrawBox(float3* corners, float3 color)
+{
+
+	//Fill points
+	int indices[24] = { 0,2,2,6,6,4,4,0,0,1,1,3,3,2,4,5,6,7,5,7,3,7,1,5 };
+
+	glBegin(GL_LINES);
+	glColor3fv(color.ptr());
+
+	for (size_t i = 0; i < 24; i++)
+	{
+		glVertex3fv(corners[indices[i]].ptr());
+	}
+
+	glColor3f(255.f, 255.f, 255.f);
+	glEnd();
+
 }
 
 // Called before quitting

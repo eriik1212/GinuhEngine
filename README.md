@@ -9,10 +9,12 @@ Erik Martin ([eriik1212](https://github.com/eriik1212))
 Unity-like camera controls:
 * While Right clicking, “WASD” fps-like movement and free look around must be enabled.
 * Alt+Left click to orbit the object.
+* F look at the selected game object.
 * Holding SHIFT duplicates movement speed.
 
 ## Engine Functionality
-* Baker house is automatically loaded.
+### V0.1
+* Street enviroment scene is automatically loaded.
 * Engine accepts drag and drop of fbx files from anywhere in the hard drive. It accepts fbx, png.
 * Console: the window LOG the geometry loading process from ASSIMP and the
 external libraries initialization process.
@@ -22,7 +24,19 @@ external libraries initialization process.
 - Configurate all variables on each module (renderer, window, input, textures).
 - See information of output of memory consumption, hardware detection and software
 versions (SDL, OpenGL, DevIL).
-* Engine have an about screen.
+* Engine has an about screen.
+
+### v0.2
+* User can modify an object usimg inspector:
+- Hierarchy: delete, reparent, create empty and create children
+- Transform (translate, scale and rotate).
+- Change the game object texture.
+- Camera as a component that can be modified.
+* GameObjects can be picked from the world using the mouse.
+* All meshes use a bounding volume (AABB).
+* The editor has 2 windows one with the scene(editor view) and another captured from a
+gameobject with a camera component(main game camera).
+
 
 ## Third party Libraries Used:
 * [SDL](https://github.com/libsdl-org/SDLS) 2.24.0.0

@@ -164,6 +164,16 @@ update_status ModuleMenus::PostUpdate(float dt)
 			ImGui::EndMenu();
 		}
 
+		if (ImGui::BeginMenu("Visual"))
+		{
+			if (ImGui::MenuItem("Show bounding boxes"))
+			{
+				showingBBoxes = !showingBBoxes;
+			}
+			ImGui::EndMenu();
+
+		}
+
 		if (ImGui::MenuItem("Exit"))
 		{
 			return UPDATE_STOP;
@@ -182,16 +192,17 @@ update_status ModuleMenus::PostUpdate(float dt)
 
 	if (configVisible) MenuConfig();
 	if (aboutVisible) MenuAbout();
+	if (assetsVisible) MenuAssets();
 	if (consoleVisible) MenuConsole();
 	if (hierarchyVisible) MenuHierarchy();
 	if (inspectorVisible) MenuInspector();
-	if (assetsVisible) MenuAssets();
 
-	
+
+
 	// ------------------------------------------------------------------------- GAME WINDOW ---------------------------------------------------------------------------- //
 	ImGui::Begin("Game", 0);
 
-	if(App->renderer3D->gameCamera != nullptr)
+	if (App->renderer3D->gameCamera != nullptr)
 		ImGui::Image((ImTextureID)App->renderer3D->gameCamera->textColorBuff, ImGui::GetContentRegionAvail(), ImVec2(0, 1), ImVec2(1, 0));
 
 	ImGui::End();
@@ -208,39 +219,85 @@ update_status ModuleMenus::PostUpdate(float dt)
 		//Note: must take care about frame hight, it will create precision problems when click.
 		ImVec2 mousePosN = NormMouse(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y + ImGui::GetFrameHeight(), ImGui::GetWindowSize().x, ImGui::GetWindowSize().y - ImGui::GetFrameHeight(), ImGui::GetMousePos());
 
+
 		LineSegment ray = App->camera->sceneCam.frustum.UnProjectLineSegment(mousePosN.x, mousePosN.y);
 
 		std::vector<GameObject*>selected;
-		
+
 		for (size_t i = 0; i < App->scene_intro->gameObjects.size(); i++)
 		{
 			C_Mesh* m = dynamic_cast<C_Mesh*>(App->scene_intro->gameObjects[i]->GetComponent(Component::C_TYPE::MESH));
-			
+
 			if (m != nullptr)
 			{
-				if (ray.Intersects(m->GetMesh()->obb_box) && App->scene_intro->gameObjects[i]->active)
+				if (ray.Intersects(m->GetMesh()->obbBox) && App->scene_intro->gameObjects[i]->active)
 				{
 					selected.push_back(App->scene_intro->gameObjects[i]);
+
 				}
 			}
 		}
 
 		//Once here, we have a vector list with all Game objects that intersects with our click ray. Now its time to only select the closest one.
 
+		float currentDist;
+		float minDist = 0;
 
 		for (size_t i = 0; i < selected.size(); i++)
 		{
 			C_Mesh* mesh = dynamic_cast<C_Mesh*>(selected[i]->GetComponent(Component::C_TYPE::MESH));
 
-			//evaluar meshes i fer el k fa roger amb elles
 
-			for (size_t j = 0; j < mesh->meshes.size(); j++)
+
+			for (size_t j = 0; j < App->files_manager->meshList.size(); j++)
 			{
+				MeshData* m = App->files_manager->meshList[j];
+				float4x4 mat = selected[i]->transform->transform.globalPos;
 
-				
+				if (m->num_index > 6)
+				{
+					for (size_t k = 0; j < m->num_index; j += 3)
+					{
+
+						float* v1 = &m->vertex[m->index[j] * VERTEX_FEATURES];
+						float* v2 = &m->vertex[m->index[j + 1] * VERTEX_FEATURES];
+						float* v3 = &m->vertex[m->index[j + 2] * VERTEX_FEATURES];
+
+						float4 pT1 = mat * float4(*v1, *(v1 + 1), *(v1 + 2), 1);
+						float4 pT2 = mat * float4(*v2, *(v2 + 1), *(v2 + 2), 1);
+						float4 pT3 = mat * float4(*v3, *(v3 + 1), *(v3 + 2), 1);
+
+
+						float3 _pt1 = float3(pT1.x, pT1.y, pT1.z);
+						float3 _pt2 = float3(pT2.x, pT2.y, pT2.z);
+						float3 _pt3 = float3(pT3.x, pT3.y, pT3.z);
+
+
+						Triangle triangle(_pt1, _pt2, _pt3);
+
+
+						if (ray.Intersects(triangle, &currentDist, nullptr))
+						{
+
+							if (minDist == 0) {
+								minDist = currentDist;
+								App->scene_intro->gameobject_selected = selected[i];
+								continue;
+							}
+
+
+							if (minDist > currentDist) {
+								minDist = currentDist;
+								App->scene_intro->gameobject_selected = selected[i];
+							}
+						}
+					}
+				}
 			}
 		}
 
+		
+		selected.clear();
 
 	}
 
@@ -852,7 +909,7 @@ void ModuleMenus::AddComponentCombo()
 	// ---------------------------------------------------------------------------------- ADD NEW COMPONENT
 	const char* title_combo = "Components";
 
-	std::string componentNames[NUM_COMPONENTS_TYPES - 1] = { "Material", "Mesh", "Camera"};
+	std::string componentNames[NUM_COMPONENTS_TYPES - 1] = { "Material", "Mesh", "Camera" };
 
 	ImGui::TextColored(ImVec4(255, 255, 0, 255), "Choose A New Component: ");
 	ImGui::Spacing();
@@ -864,20 +921,20 @@ void ModuleMenus::AddComponentCombo()
 			{
 				switch (n)
 				{
-					case 0:
-						if (App->scene_intro->gameobject_selected->GetComponent(Component::C_TYPE::MATERIAL) == nullptr)
-							App->scene_intro->gameobject_selected->CreateComponent(Component::C_TYPE::MATERIAL);
-						break;	
-					case 1:
-						if (App->scene_intro->gameobject_selected->GetComponent(Component::C_TYPE::MESH) == nullptr)
-							App->scene_intro->gameobject_selected->CreateComponent(Component::C_TYPE::MESH);
-						break;
-					case 2:
-						if (App->scene_intro->gameobject_selected->GetComponent(Component::C_TYPE::CAMERA) == nullptr)
-							App->scene_intro->gameobject_selected->CreateComponent(Component::C_TYPE::CAMERA);
-						break;
-					default:
-						break;
+				case 0:
+					if (App->scene_intro->gameobject_selected->GetComponent(Component::C_TYPE::MATERIAL) == nullptr)
+						App->scene_intro->gameobject_selected->CreateComponent(Component::C_TYPE::MATERIAL);
+					break;
+				case 1:
+					if (App->scene_intro->gameobject_selected->GetComponent(Component::C_TYPE::MESH) == nullptr)
+						App->scene_intro->gameobject_selected->CreateComponent(Component::C_TYPE::MESH);
+					break;
+				case 2:
+					if (App->scene_intro->gameobject_selected->GetComponent(Component::C_TYPE::CAMERA) == nullptr)
+						App->scene_intro->gameobject_selected->CreateComponent(Component::C_TYPE::CAMERA);
+					break;
+				default:
+					break;
 				}
 			}
 		}
@@ -891,7 +948,7 @@ void ModuleMenus::MenuAssets()
 	if (pOpen_assets)
 	{
 		ImGui::Begin("Assets", &pOpen_assets, ImGuiWindowFlags_AlwaysAutoResize);
-		
+
 		ImGui::End();
 	}
 	if (pOpen_assets == NULL) assetsVisible = !assetsVisible; // Window is closed so function "MenuAssets()" stops being called

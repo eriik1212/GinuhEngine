@@ -18,12 +18,7 @@ C_Mesh::C_Mesh(GameObject* gameObject) : Component(gameObject, C_TYPE::MESH)
 
 C_Mesh::~C_Mesh()
 {
-	for (size_t i = 0; i < meshes.size(); i++)
-	{
-		meshes.erase(meshes.begin() + i);
-		delete meshes[i];
-		meshes[i] = nullptr;
-	}
+
 
 }
 
@@ -34,13 +29,12 @@ void C_Mesh::Update()
 	else if (mesh != nullptr || enabled)
 		AppExtern->renderer3D->renderList.push_back(this);
 
-		for (int i = 0; i < meshes.size(); i++)
-		{
-			/*meshes[i]->OBB_box = meshes[i]->AABB_box;
-			meshes[i]->OBB_box.Transform(containerParent->transform->getGlobalMatrix().Transposed());
-			meshes[i]->Global_AABB_box.SetNegativeInfinity();
-			meshes[i]->Global_AABB_box.Enclose(meshes[i]->OBB_box);*/
-		}
+
+	mesh->obbBox = mesh->aabbBox;
+	mesh->obbBox.Transform(go->transform->transform.globalPos);
+	mesh->globalAabbBox.SetNegativeInfinity();
+	mesh->globalAabbBox.Enclose(mesh->obbBox);
+
 }
 
 void C_Mesh::SetMesh(MeshData* mesh)
@@ -51,7 +45,7 @@ void C_Mesh::SetMesh(MeshData* mesh)
 
 void C_Mesh::RenderMesh()
 {
-	if(mesh != nullptr)
+	if (mesh != nullptr)
 		mesh->DrawMesh(go->transform->GetGlobalTransposed(), mesh->texture_id);
 }
 

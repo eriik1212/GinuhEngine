@@ -34,4 +34,6 @@ public:
 
 	MeshData* mesh = nullptr;
 	TextData* text = nullptr;
+
+	vector<MeshData*> meshes;
 };

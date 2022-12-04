@@ -18,6 +18,12 @@ C_Mesh::C_Mesh(GameObject* gameObject) : Component(gameObject, C_TYPE::MESH)
 
 C_Mesh::~C_Mesh()
 {
+	for (size_t i = 0; i < meshes.size(); i++)
+	{
+		meshes.erase(meshes.begin() + i);
+		delete meshes[i];
+		meshes[i] = nullptr;
+	}
 
 }
 
@@ -27,6 +33,14 @@ void C_Mesh::Update()
 		return;
 	else if (mesh != nullptr || enabled)
 		AppExtern->renderer3D->renderList.push_back(this);
+
+		for (int i = 0; i < meshes.size(); i++)
+		{
+			/*meshes[i]->OBB_box = meshes[i]->AABB_box;
+			meshes[i]->OBB_box.Transform(containerParent->transform->getGlobalMatrix().Transposed());
+			meshes[i]->Global_AABB_box.SetNegativeInfinity();
+			meshes[i]->Global_AABB_box.Enclose(meshes[i]->OBB_box);*/
+		}
 }
 
 void C_Mesh::SetMesh(MeshData* mesh)

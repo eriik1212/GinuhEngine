@@ -36,6 +36,8 @@ Application::Application()
 	AddModule(renderer3D);
 }
 
+
+
 Application::~Application()
 {
 	for (int i = list_modules.size() - 1; i >= 0; i--)

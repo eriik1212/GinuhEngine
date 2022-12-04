@@ -117,6 +117,8 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
+	ImVec2 NormMouse(float x, float y, float w, float h, ImVec2 point);
+
 	bool pOpen_config = true,
 		pOpen_about = true,
 		pOpen_console = true,

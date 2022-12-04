@@ -940,7 +940,10 @@ void ModuleMenus::OptionsPanelGO(GameObject* GO)
 				GameObject* newGO = new GameObject(App->scene_intro->gameobject_selected, "Empty");
 
 			if (ImGui::Button("Delete GO"))
-				App->scene_intro->gameobject_selected->~GameObject();
+			{
+				delete App->scene_intro->gameobject_selected;
+				App->scene_intro->gameobject_selected = nullptr;
+			}
 
 			if (ImGui::Button("Close"))
 				ImGui::CloseCurrentPopup();

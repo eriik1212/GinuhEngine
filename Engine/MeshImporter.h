@@ -22,5 +22,4 @@ namespace MeshImporter
 
 	void LoadMeshData(vector<MeshData*>& meshList, MeshData* mesh);
 	void NodeManager(aiMesh** meshArray, const aiScene* rootScene, vector<TextData*>& sceneTextures, vector<MeshData*>& meshList, aiNode* rootNode, GameObject* goParent, const char* name);
-
 }

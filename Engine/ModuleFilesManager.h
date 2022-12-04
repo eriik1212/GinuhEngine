@@ -24,6 +24,8 @@
 
 #include <map>
 #include <iostream>
+#include <vector>
+
 using namespace std;
 namespace fs = std::filesystem;
 
@@ -104,11 +106,13 @@ public:
 
 	//void NodeManager(const aiScene* rootScene, aiNode* rootNode, GameObject* goParent);
 
-	uint id_count = 1;
+	//uint id_count = 1;
 
 	static vector<string> allText;
 	static map<string, uint> loaded_textures;			//Know which textures have we loaded, to NOT load again
 
+	vector<MeshData*> meshList;
+	vector<TextData*> textList;
 
 private:
 	SDL_Event event;                        // Declare event handle

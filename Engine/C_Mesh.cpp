@@ -5,6 +5,7 @@
 #include "Component.h"
 #include "C_Mesh.h"
 #include "ModuleFilesManager.h"
+#include "MeshImporter.h"
 
 #include <iostream>
 #include <string>
@@ -22,10 +23,10 @@ C_Mesh::~C_Mesh()
 
 void C_Mesh::Update()
 {
-	/*if (mesh == nullptr || !enabled)
+	if (mesh == nullptr || !enabled)
 		return;
-	else if(mesh != nullptr || enabled)
-		RenderMesh();*/
+	else if (mesh != nullptr || enabled)
+		AppExtern->renderer3D->renderList.push_back(this);
 }
 
 void C_Mesh::SetMesh(MeshData* mesh)

@@ -31,17 +31,19 @@ GameObject::GameObject(GameObject* parent, string name) : parent(parent), active
 
 GameObject::~GameObject()
 {
-	for (uint i = 0; i < components.size(); i++)
+	if (!components.empty())
 	{
-		if (components[i] != nullptr)
+		for (uint i = 0; i < components.size(); i++)
 		{
-			delete components[i];
-			components[i] = nullptr;
+			if (components[i] != nullptr)
+			{
+				delete components[i];
+				components[i] = nullptr;
 
+			}
 		}
+		components.clear();
 	}
-	components.clear();
-
 	for (uint j = 0; j < this->GetChildren().size(); j++)
 	{
 		RemoveChild(this->GetChild(j));

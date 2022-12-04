@@ -31,7 +31,7 @@ bool ModuleSceneIntro::Init()
 
 	//------------------------------------------------------------------------- Create & Set the Camera
 	mainCam = new GameObject(gameObjects[0], "Main Camera");
-
+	mainCam->transform->transform.position = float3(0, 10, 0);
 
 	return true;
 }
@@ -59,12 +59,11 @@ bool ModuleSceneIntro::CleanUp()
 	//LOG("Unloading Intro scene");
 	App->menus->info.AddConsoleLog( "Unloading Intro scene");
 
-
-	delete mainCam;
-	mainCam = nullptr;
-
-	delete SceneRoot;
-	SceneRoot = nullptr;
+	for (int g = gameObjects.size(); g >= 0; g--)
+	{
+		delete gameObjects[g];
+		gameObjects[g] = nullptr;
+	}
 
 
 	return true;

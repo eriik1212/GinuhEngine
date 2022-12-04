@@ -58,13 +58,13 @@ bool ModuleSceneIntro::CleanUp()
 {
 	//LOG("Unloading Intro scene");
 	App->menus->info.AddConsoleLog( "Unloading Intro scene");
-
-	for (int g = gameObjects.size(); g >= 0; g--)
+	
+	for (int g = gameObjects.size() - 1; g >= 0; --g)
 	{
 		delete gameObjects[g];
 		gameObjects[g] = nullptr;
 	}
-
+	gameObjects.clear();
 
 	return true;
 }
@@ -72,7 +72,7 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update(float dt)
 {
-	
+
 	UpdateGO();
 
 	return UPDATE_CONTINUE;

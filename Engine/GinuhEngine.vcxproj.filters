@@ -190,6 +190,9 @@
     <ClCompile Include="MeshImporter.cpp">
       <Filter>Source Files\Importers</Filter>
     </ClCompile>
+    <ClCompile Include="ModuleAudio.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -473,6 +476,9 @@
     </ClInclude>
     <ClInclude Include="MeshImporter.h">
       <Filter>Header Files\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleAudio.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

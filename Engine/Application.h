@@ -10,6 +10,7 @@
 #include "ModuleCamera3D.h"
 #include "ModuleMenus.h"
 #include "ModuleFilesManager.h"
+#include "ModuleAudio.h"
 
 
 #include <vector>
@@ -22,6 +23,7 @@ class ModuleRenderer3D;
 class ModuleCamera3D;
 class ModuleMenus;
 class ModuleFilesManager;
+class ModuleAudio;
 
 class Application
 {
@@ -33,6 +35,7 @@ public:
 	ModuleCamera3D* camera;
 	ModuleMenus* menus;
 	ModuleFilesManager* files_manager;
+	ModuleAudio* audio;
 	
 	
 private:

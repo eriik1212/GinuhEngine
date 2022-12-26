@@ -13,6 +13,7 @@ Application::Application()
 	camera = new ModuleCamera3D(this);
 	menus = new ModuleMenus(this);
 	files_manager = new ModuleFilesManager(this);
+	audio = new ModuleAudio(this);
 	
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -23,6 +24,7 @@ Application::Application()
 
 	// Main Modules
 	AddModule(window);
+	AddModule(audio);
 	AddModule(camera);
 	AddModule(input);
 

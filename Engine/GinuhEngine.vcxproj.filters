@@ -193,33 +193,6 @@
     <ClCompile Include="ModuleAudio.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkDefaultLowLevelIODispatcher.cpp">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClCompile>
-    <ClCompile Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkFileLocationBase.cpp">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClCompile>
-    <ClCompile Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkFilePackage.cpp">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClCompile>
-    <ClCompile Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkFilePackageLUT.cpp">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClCompile>
-    <ClCompile Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkGeneratedSoundBanksResolver.cpp">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClCompile>
-    <ClCompile Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkJobWorkerMgr.cpp">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClCompile>
-    <ClCompile Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkMultipleFileLocation.cpp">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClCompile>
-    <ClCompile Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkPlatformProfilerHookStubs.cpp">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClCompile>
-    <ClCompile Include="ExternalLibraries\AK\include\IO_DefaultInterface\stdafx.cpp">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -507,42 +480,6 @@
     <ClInclude Include="ModuleAudio.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkDefaultLowLevelIODispatcher.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkFileHelpersBase.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkFileLocationBase.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkFilePackage.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkFilePackageLowLevelIO.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkFilePackageLUT.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkGeneratedSoundBanksResolver.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkJobWorkerMgr.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkMultipleFileLocation.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkPlatformProfilerHooks.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\AK\include\IO_DefaultInterface\stdafx.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkFileHelpers.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -612,9 +549,6 @@
     </None>
     <None Include="ExternalLibraries\MathGeoLib\include\Math\Matrix.inl">
       <Filter>ExternalLibraries\MathGeoLib\Math</Filter>
-    </None>
-    <None Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkFilePackageLowLevelIO.inl">
-      <Filter>ExternalLibraries\Wwise</Filter>
     </None>
   </ItemGroup>
 </Project>

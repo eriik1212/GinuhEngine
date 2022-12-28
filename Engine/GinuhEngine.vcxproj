@@ -20,7 +20,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -41,17 +41,17 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)ExternalLibraries\Wwise\include\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)ExternalLibraries\AK\include\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>false</SDLCheck>
-      <ExceptionHandling>false</ExceptionHandling>
+      <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <AdditionalIncludeDirectories>$(SolutionDir)\ExternalLibraries;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WINDOWS_IGNORE_PACKING_MISMATCH;AKSOUNDENGINE_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WINDOWS_IGNORE_PACKING_MISMATCH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -95,6 +95,18 @@
     <ClInclude Include="C_Mesh.h" />
     <ClInclude Include="C_Material.h" />
     <ClInclude Include="C_Transform.h" />
+    <ClInclude Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkDefaultLowLevelIODispatcher.h" />
+    <ClInclude Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkFileHelpers.h" />
+    <ClInclude Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkFileHelpersBase.h" />
+    <ClInclude Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkFileLocationBase.h" />
+    <ClInclude Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkFilePackage.h" />
+    <ClInclude Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkFilePackageLowLevelIO.h" />
+    <ClInclude Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkFilePackageLUT.h" />
+    <ClInclude Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkGeneratedSoundBanksResolver.h" />
+    <ClInclude Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkJobWorkerMgr.h" />
+    <ClInclude Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkMultipleFileLocation.h" />
+    <ClInclude Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkPlatformProfilerHooks.h" />
+    <ClInclude Include="ExternalLibraries\AK\include\IO_DefaultInterface\stdafx.h" />
     <ClInclude Include="ExternalLibraries\ImGui\imconfig.h" />
     <ClInclude Include="ExternalLibraries\ImGui\imgui.h" />
     <ClInclude Include="ExternalLibraries\ImGui\imgui_impl_opengl3.h" />
@@ -192,6 +204,15 @@
     <ClCompile Include="C_Mesh.cpp" />
     <ClCompile Include="C_Material.cpp" />
     <ClCompile Include="C_Transform.cpp" />
+    <ClCompile Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkDefaultLowLevelIODispatcher.cpp" />
+    <ClCompile Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkFileLocationBase.cpp" />
+    <ClCompile Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkFilePackage.cpp" />
+    <ClCompile Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkFilePackageLUT.cpp" />
+    <ClCompile Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkGeneratedSoundBanksResolver.cpp" />
+    <ClCompile Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkJobWorkerMgr.cpp" />
+    <ClCompile Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkMultipleFileLocation.cpp" />
+    <ClCompile Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkPlatformProfilerHookStubs.cpp" />
+    <ClCompile Include="ExternalLibraries\AK\include\IO_DefaultInterface\stdafx.cpp" />
     <ClCompile Include="ExternalLibraries\ImGui\imgui.cpp" />
     <ClCompile Include="ExternalLibraries\ImGui\imgui_demo.cpp" />
     <ClCompile Include="ExternalLibraries\ImGui\imgui_draw.cpp" />
@@ -251,6 +272,7 @@
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ExternalLibraries\AK\include\IO_DefaultInterface\AkFilePackageLowLevelIO.inl" />
     <None Include="ExternalLibraries\MathGeoLib\include\Geometry\KDTree.inl" />
     <None Include="ExternalLibraries\MathGeoLib\include\Geometry\QuadTree.inl" />
     <None Include="ExternalLibraries\MathGeoLib\include\Geometry\TriangleMesh_IntersectRay_AVX.inl" />

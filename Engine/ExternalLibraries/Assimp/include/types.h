@@ -84,7 +84,7 @@ namespace Intern        {
      * the application is determined to crash.
      */
     // --------------------------------------------------------------------
-#define SWIG
+//#define SWIG
 #ifndef SWIG
     struct ASSIMP_API AllocateFromAssimpHeap    {
         // http://www.gotw.ca/publications/mill15.htm

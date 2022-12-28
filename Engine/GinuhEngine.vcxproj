@@ -41,7 +41,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)ExternalLibraries\AK\include\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)ExternalLibraries\Wwise\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(ProjectDir)ExternalLibraries\Wwise\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -71,10 +74,9 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
       <ExceptionHandling>false</ExceptionHandling>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)\ExternalLibraries;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WINDOWS_IGNORE_PACKING_MISMATCH;AK_OPTIMIZED;AKSOUNDENGINE_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WINDOWS_IGNORE_PACKING_MISMATCH;AK_OPTIMIZED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -165,6 +167,40 @@
     <ClInclude Include="ExternalLibraries\MathGeoLib\include\Math\sse_mathfun.h" />
     <ClInclude Include="ExternalLibraries\MathGeoLib\include\Math\TransformOps.h" />
     <ClInclude Include="ExternalLibraries\MathGeoLib\include\Time\Clock.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkAtomic.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkBytesCount.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkBytesMem.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkCallback.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkCommonDefs.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkDynamicDialogue.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkDynamicSequence.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkErrorMessageTranslator.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkFPUtilities.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkMemoryMgr.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkMidiTypes.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkMidiWwiseCmds.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkModule.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkNumeralTypes.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkQueryParameters.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkSimd.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkSimdMath.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkSoundEngine.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkSoundEngineExport.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkSpeakerConfig.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkSpeakerVolumes.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkStreamMgrModule.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkTypes.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkVirtualAcoustics.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkWavDefs.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkWwiseErrorHandler.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkXMLErrorMessageTranslator.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\IAkMixerPlugin.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\IAkPlatformContext.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\IAkPlugin.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\IAkPluginMemAlloc.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\IAkProcessorFeatures.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\IAkRTPCSubscriber.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\IAkStreamMgr.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
@@ -257,6 +293,9 @@
     <None Include="ExternalLibraries\MathGeoLib\include\Geometry\TriangleMesh_IntersectRay_CPP.inl" />
     <None Include="ExternalLibraries\MathGeoLib\include\Geometry\TriangleMesh_IntersectRay_SSE.inl" />
     <None Include="ExternalLibraries\MathGeoLib\include\Math\Matrix.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\ak.natvis" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

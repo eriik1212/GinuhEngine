@@ -44,7 +44,7 @@ void C_Material::PrintGui()
 	{
 		const char* current_item = name.c_str();
 
-		ImGui::TextColored(ImVec4(255, 255, 0, 255), "Enabled: "); ImGui::SameLine(); ImGui::Checkbox("##Enabled", &enabled);
+		ImGui::TextColored(ImVec4(255, 255, 0, 255), "Enabled: "); ImGui::SameLine(); ImGui::Checkbox("##materialEnabled", &enabled);
 
 		ImGui::Spacing();
 
@@ -95,7 +95,7 @@ void C_Material::PrintGui()
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(1.0f, 0.5f, 0.5f, 1.0f));
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
 
-		if (ImGui::Button("Remove Component", ImVec2(ImGui::GetWindowSize().x, 20.0f)))
+		if (ImGui::Button("Remove Component ##material", ImVec2(ImGui::GetWindowSize().x, 20.0f)))
 		{
 			textureID = 0;
 

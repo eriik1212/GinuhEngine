@@ -6,6 +6,8 @@
 #include "C_Mesh.h"
 #include "C_Material.h"
 #include "C_Camera.h"
+#include "C_AudioListener.h"
+#include "C_AudioSource.h"
 #include "ModuleSceneIntro.h"
 
 uint GameObject::id_count;
@@ -83,6 +85,12 @@ Component* GameObject::CreateComponent(Component::C_TYPE type)
 	case Component::C_TYPE::CAMERA:
 		new_component = new C_Camera(this);
 		//AppExtern->scene_intro->SetAsGameCam(dynamic_cast<C_Camera*>(new_component));
+		break;
+	case Component::C_TYPE::AUDIO_LISTENER:
+		new_component = new C_AudioListener(this);
+		break;
+	case Component::C_TYPE::AUDIO_SOURCE:
+		new_component = new C_AudioSource(this);
 		break;
 	default:
 		LOG("component type error");

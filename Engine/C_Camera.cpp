@@ -65,7 +65,7 @@ void C_Camera::PrintGui()
 
 	if (ImGui::CollapsingHeader("Camera", ImGuiTreeNodeFlags_DefaultOpen))
 	{
-		ImGui::TextColored(ImVec4(255, 255, 0, 255), "Enabled: "); ImGui::SameLine(); ImGui::Checkbox("##Enabled", &enabled);
+		ImGui::TextColored(ImVec4(255, 255, 0, 255), "Enabled: "); ImGui::SameLine(); ImGui::Checkbox("##cameraEnabled", &enabled);
 
 		ImGui::Spacing();
 		ImGui::Spacing();
@@ -116,7 +116,7 @@ void C_Camera::PrintGui()
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(1.0f, 0.5f, 0.5f, 1.0f));
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
 
-		if (ImGui::Button("Remove Component", ImVec2(ImGui::GetWindowSize().x, 20.0f)))
+		if (ImGui::Button("Remove Component ##camera", ImVec2(ImGui::GetWindowSize().x, 20.0f)))
 			go->RemoveComponent(this);
 
 		ImGui::PopStyleColor(3);

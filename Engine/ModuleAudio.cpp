@@ -39,7 +39,7 @@ update_status ModuleAudio::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleAudio::PostUpdate(float dt)
 {
-	//ProcessAudio();
+	ProcessAudio();
 
 	return UPDATE_CONTINUE;
 }
@@ -52,10 +52,10 @@ bool ModuleAudio::CleanUp()
 
 	//TermCommunicationModule();
 	////TermSpatialAudio();  // NO TERM FUNCTION :(
-	//TermMusicEngine();
-	//TermSoundEngine();
-	//TermStreamingManager();
-	//TermMemoryManager();
+	TermMusicEngine();
+	TermSoundEngine();
+	TermStreamingManager();
+	TermMemoryManager();
 
 	return true;
 }
@@ -108,6 +108,8 @@ bool ModuleAudio::InitStreamingManager()
 		assert(!"Could not create the streaming device and Low-Level I/O system");
 		return false;
 	}*/
+
+
 
 	return true;
 }
@@ -187,3 +189,80 @@ bool ModuleAudio::InitMusicEngine()
 //
 //	return true;
 //}
+
+void ModuleAudio::ProcessAudio()
+{
+	// Process bank requests, events, positions, RTPC, etc.
+	AK::SoundEngine::RenderAudio();
+}
+
+//bool ModuleAudio::TermCommunicationModule()
+//{
+//#ifndef AK_OPTIMIZED
+//	//
+//	// Terminate Communication Services
+//	//
+//
+//	AK::Comm::Term();
+//#endif // AK_OPTIMIZED
+//
+//	return true;
+//}
+
+//bool ModuleAudio::TermSpatialAudio()
+//{
+//	//
+//	// Terminate Spatial Audio
+//	//
+//
+//	AK::SpatialAudio::Term();
+//
+//	return true;
+//}
+
+bool ModuleAudio::TermMusicEngine()
+{
+	//
+	// Terminate the music engine
+	//
+
+	AK::MusicEngine::Term();
+
+	return true;
+}
+
+bool ModuleAudio::TermSoundEngine()
+{
+	//
+    // Terminate the sound engine
+    //
+
+	AK::SoundEngine::Term();
+
+	return true;
+}
+
+bool ModuleAudio::TermStreamingManager()
+{
+
+	// Terminate the streaming device and streaming manager
+
+	// CAkFilePackageLowLevelIOBlocking::Term() destroys its associated streaming device 
+	// that lives in the Stream Manager, and unregisters itself as the File Location Resolver.
+
+	//g_lowLevelIO.Term();
+
+	if (AK::IAkStreamMgr::Get())
+		AK::IAkStreamMgr::Get()->Destroy();
+
+	return true;
+}
+
+bool ModuleAudio::TermMemoryManager()
+{
+
+	// Terminate the Memory Manager
+	AK::MemoryMgr::Term();
+
+	return true;
+}

@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-#define NUM_COMPONENTS_TYPES 4
+#define NUM_COMPONENTS_TYPES 6
 
 using namespace std;
 
@@ -26,7 +26,10 @@ public:
 		TRANSFORM,
 		MESH,
 		MATERIAL,
-		CAMERA
+		CAMERA,
+		// AUDIO
+		AUDIO_LISTENER,
+		AUDIO_SOURCE
 	};
 
 

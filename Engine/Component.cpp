@@ -27,6 +27,12 @@ Component::Component(GameObject* game_object, C_TYPE type) : enabled(true), go(g
 	case Component::C_TYPE::CAMERA:
 		componentName = "Camera";
 		break;
+	case Component::C_TYPE::AUDIO_LISTENER:
+		componentName = "Auido Listener";
+		break;
+	case Component::C_TYPE::AUDIO_SOURCE:
+		componentName = "Audio Source";
+		break;
 	default:
 		componentName = "";
 		break;

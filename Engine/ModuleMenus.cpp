@@ -909,7 +909,7 @@ void ModuleMenus::AddComponentCombo()
 	// ---------------------------------------------------------------------------------- ADD NEW COMPONENT
 	const char* title_combo = "Components";
 
-	std::string componentNames[NUM_COMPONENTS_TYPES - 1] = { "Material", "Mesh", "Camera" };
+	std::string componentNames[NUM_COMPONENTS_TYPES - 1] = { "Material", "Mesh", "Camera", "Audio Listener", "Audio Source"};
 
 	ImGui::TextColored(ImVec4(255, 255, 0, 255), "Choose A New Component: ");
 	ImGui::Spacing();
@@ -924,15 +924,34 @@ void ModuleMenus::AddComponentCombo()
 				case 0:
 					if (App->scene_intro->gameobject_selected->GetComponent(Component::C_TYPE::MATERIAL) == nullptr)
 						App->scene_intro->gameobject_selected->CreateComponent(Component::C_TYPE::MATERIAL);
+					addComponentVisible = false;
+
 					break;
 				case 1:
 					if (App->scene_intro->gameobject_selected->GetComponent(Component::C_TYPE::MESH) == nullptr)
 						App->scene_intro->gameobject_selected->CreateComponent(Component::C_TYPE::MESH);
+					addComponentVisible = false;
+
 					break;
 				case 2:
 					if (App->scene_intro->gameobject_selected->GetComponent(Component::C_TYPE::CAMERA) == nullptr)
 						App->scene_intro->gameobject_selected->CreateComponent(Component::C_TYPE::CAMERA);
+					addComponentVisible = false;
+
 					break;
+				case 3:
+					if (App->scene_intro->gameobject_selected->GetComponent(Component::C_TYPE::AUDIO_LISTENER) == nullptr)
+						App->scene_intro->gameobject_selected->CreateComponent(Component::C_TYPE::AUDIO_LISTENER);
+					addComponentVisible = false;
+
+					break;
+				case 4:
+					if (App->scene_intro->gameobject_selected->GetComponent(Component::C_TYPE::AUDIO_SOURCE) == nullptr)
+						App->scene_intro->gameobject_selected->CreateComponent(Component::C_TYPE::AUDIO_SOURCE);
+					addComponentVisible = false;
+
+					break;
+
 				default:
 					break;
 				}
@@ -941,6 +960,7 @@ void ModuleMenus::AddComponentCombo()
 		ImGui::EndCombo();
 	}
 	ImGui::Spacing();
+
 }
 
 void ModuleMenus::MenuAssets()

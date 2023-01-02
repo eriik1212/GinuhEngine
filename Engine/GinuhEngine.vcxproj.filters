@@ -193,6 +193,12 @@
     <ClCompile Include="ModuleAudio.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C_AudioListener.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="C_AudioSource.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -480,107 +486,11 @@
     <ClInclude Include="ModuleAudio.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkAtomic.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
+    <ClInclude Include="C_AudioListener.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkBytesCount.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkBytesMem.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkCallback.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkCommonDefs.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkDynamicDialogue.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkDynamicSequence.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkErrorMessageTranslator.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkFPUtilities.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkMemoryMgr.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkMidiTypes.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkMidiWwiseCmds.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkModule.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkNumeralTypes.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkQueryParameters.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkSimd.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkSimdMath.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkSoundEngine.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkSoundEngineExport.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkSpeakerConfig.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkSpeakerVolumes.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkStreamMgrModule.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkTypes.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkVirtualAcoustics.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkWavDefs.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkWwiseErrorHandler.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkXMLErrorMessageTranslator.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\IAkMixerPlugin.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\IAkPlatformContext.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\IAkPlugin.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\IAkPluginMemAlloc.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\IAkProcessorFeatures.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\IAkRTPCSubscriber.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\IAkStreamMgr.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
+    <ClInclude Include="C_AudioSource.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -652,10 +562,5 @@
     <None Include="ExternalLibraries\MathGeoLib\include\Math\Matrix.inl">
       <Filter>ExternalLibraries\MathGeoLib\Math</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Natvis Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\ak.natvis">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </Natvis>
   </ItemGroup>
 </Project>

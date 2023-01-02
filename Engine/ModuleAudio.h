@@ -4,13 +4,17 @@
 #include "Module.h"
 #include "Globals.h"
 
-#include <AK/SoundEngine/Common/AkSoundEngine.h>	   // SoundEngine
-#include <AK/MusicEngine/Common/AkMusicEngine.h>	   // MusicEngine
 #include <AK/SoundEngine/Common/AkMemoryMgr.h>         // Memory Manager
 #include <AK/SoundEngine/Common/AkModule.h>            // Default memory and stream managers  
+
 #include <AK/SoundEngine/Common/AkStreamMgrModule.h>   // Streaming Manager
-#include <AK/SoundEngine/Common/AkTypes.h>
 #include <AK/Tools/Common/AkPlatformFuncs.h>           // Thread defines
+
+#include <AK/SoundEngine/Common/AkSoundEngine.h>	   // SoundEngine
+#include <AK/MusicEngine/Common/AkMusicEngine.h>	   // MusicEngine
+
+#include <AK/SoundEngine/Common/AkTypes.h>
+
 #include <AK/SpatialAudio/Common/AkSpatialAudio.h>              // Spatial Audio
 
 #ifdef _DEBUG
@@ -30,10 +34,10 @@
 #else
 #define AK_OPTIMIZED
 	// Input libraries
-	//#pragma comment( lib, "Wwise/Release/lib/AkMusicEngine.lib")
-	//#pragma comment( lib, "Wwise/Release/lib/AkMemoryMgr.lib")
-	//#pragma comment( lib, "Wwise/Release/lib/AkStreamMgr.lib")
-	//#pragma comment( lib, "Wwise/Release/lib/AkSoundEngine.lib")
+	#pragma comment( lib, "Wwise/Release(StaticCRT)/lib/AkMusicEngine.lib")
+	#pragma comment( lib, "Wwise/Release(StaticCRT)/lib/AkMemoryMgr.lib")
+	#pragma comment( lib, "Wwise/Release(StaticCRT)/lib/AkStreamMgr.lib")
+	#pragma comment( lib, "Wwise/Release(StaticCRT)/lib/AkSoundEngine.lib")
 
 	// External library dependencies
 	#pragma comment( lib, "Wwise/dinput8.lib") // Microsoft DirectX DirectInput.Needed by Motion to support DirectInput devices.
@@ -44,7 +48,7 @@
 	#pragma comment( lib, "Wwise/XInput.lib")  // Microsoft XInput. Needed by Motion to support XInput devices (Xbox controller).
 #endif
 
-//#include <AkFilePackageLowLevelIOBlocking.h>                    // Sample low-level I/O implementation
+//#include <Win32/AkFilePackageLowLevelIOBlocking.h>                    // Sample low-level I/O implementation
 
 // Include for communication between Wwise and the game -- Not needed in the release version
 #ifndef AK_OPTIMIZED
@@ -64,6 +68,10 @@ public:
 
 private:
 
+	// We're using the default Low-Level I/O implementation that's part
+	// of the SDK's sample code, with the file package extension
+	//CAkFilePackageLowLevelIOBlocking g_lowLevelIO;
+
 	//// ----------------------------------- Init Functions
 	bool InitMemoryManager();
 	bool InitStreamingManager();
@@ -74,17 +82,17 @@ private:
 
 	//// -----------------------------------
 
-	//void ProcessAudio();
+	void ProcessAudio();
 
 	//// ----------------------------------- 
 	//
 	//// ----------------------------------- Term Functions
 	//bool TermCommunicationModule();
-	////bool TermSpatialAudio();  // NO TERM FUNCTION :(
-	//bool TermMusicEngine();
-	//bool TermSoundEngine();
-	//bool TermStreamingManager();
-	//bool TermMemoryManager();
+	//bool TermSpatialAudio();  // NO TERM FUNCTION :(
+	bool TermMusicEngine();
+	bool TermSoundEngine();
+	bool TermStreamingManager();
+	bool TermMemoryManager();
 };
 
 #endif // __ModuleAudio_H__

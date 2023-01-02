@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "Component.h"
 #include "ModuleFilesManager.h"
+#include "ModuleAudio.h"
 
 #include <iostream>
 #include <string>
@@ -14,7 +15,6 @@ using namespace std;
 class C_AudioListener : public Component
 {
 public:
-	C_AudioListener();
 	C_AudioListener(GameObject* gameObject);
 	~C_AudioListener();
 
@@ -22,4 +22,5 @@ public:
 
 	void PrintGui();
 
+	GameObject* ListenerGameObject;
 };

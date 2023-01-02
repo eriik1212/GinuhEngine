@@ -66,6 +66,11 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
+	void RegisterGameObject(unsigned int id);
+	void UnregisterGameObject(unsigned int id);
+
+	void AddListener(const AkGameObjectID id);
+
 private:
 
 	// We're using the default Low-Level I/O implementation that's part

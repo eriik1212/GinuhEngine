@@ -12,11 +12,16 @@ C_AudioSource::C_AudioSource() : Component(nullptr, C_TYPE::AUDIO_SOURCE)
 
 C_AudioSource::C_AudioSource(GameObject* gameObject) : Component(gameObject, C_TYPE::AUDIO_SOURCE)
 {
+	SourceGameObject = gameObject;
+
+	AppExtern->audio->RegisterGameObject(SourceGameObject->id);
 
 }
 
 C_AudioSource::~C_AudioSource()
 {
+	AppExtern->audio->UnregisterGameObject(SourceGameObject->id);
+
 }
 
 void C_AudioSource::Update()

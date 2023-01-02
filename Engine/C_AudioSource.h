@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "Component.h"
 #include "ModuleFilesManager.h"
+#include "ModuleAudio.h"
 
 #include <iostream>
 #include <string>
@@ -22,4 +23,5 @@ public:
 
 	void PrintGui();
 
+	GameObject* SourceGameObject;
 };

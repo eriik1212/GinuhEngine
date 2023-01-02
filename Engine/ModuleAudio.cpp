@@ -266,3 +266,20 @@ bool ModuleAudio::TermMemoryManager()
 
 	return true;
 }
+
+void ModuleAudio::RegisterGameObject(unsigned int id)
+{
+	AK::SoundEngine::RegisterGameObj(id);
+
+}
+
+void ModuleAudio::UnregisterGameObject(unsigned int id)
+{
+	AK::SoundEngine::UnregisterGameObj(id);
+
+}
+
+void ModuleAudio::AddListener(const AkGameObjectID id)
+{
+	AK::SoundEngine::SetDefaultListeners(&id, 1);
+}

@@ -5,18 +5,16 @@
 #include "Component.h"
 #include "C_AudioListener.h"
 
-C_AudioListener::C_AudioListener() : Component(nullptr, C_TYPE::AUDIO_LISTENER)
-{
-
-}
-
 C_AudioListener::C_AudioListener(GameObject* gameObject) : Component(gameObject, C_TYPE::AUDIO_LISTENER)
 {
-
+	ListenerGameObject = gameObject;
+	AppExtern->audio->RegisterGameObject(ListenerGameObject->id);
+	AppExtern->audio->AddListener(ListenerGameObject->id);
 }
 
 C_AudioListener::~C_AudioListener()
 {
+	AppExtern->audio->UnregisterGameObject(ListenerGameObject->id);
 }
 
 void C_AudioListener::Update()
@@ -28,6 +26,14 @@ void C_AudioListener::PrintGui()
 	if (ImGui::CollapsingHeader("Audio Listener", ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		ImGui::TextColored(ImVec4(255, 255, 0, 255), "Enabled: "); ImGui::SameLine(); ImGui::Checkbox("##audioListenerEnabled", &enabled);
+
+		ImGui::Spacing();
+		ImGui::Spacing();
+
+		if(enabled)
+			ImGui::TextColored(ImVec4(0, 255, 0, 255), "'%s' is now a LISTENER", go->name.c_str());
+		else
+			ImGui::TextColored(ImVec4(255, 0, 0, 255), "'%s' is NOT a LISTENER", go->name.c_str());
 
 		ImGui::Spacing();
 		ImGui::Spacing();

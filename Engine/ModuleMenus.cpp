@@ -940,8 +940,11 @@ void ModuleMenus::AddComponentCombo()
 
 					break;
 				case 3:
-					if (App->scene_intro->gameobject_selected->GetComponent(Component::C_TYPE::AUDIO_LISTENER) == nullptr)
+					if (App->scene_intro->gameobject_selected->GetComponent(Component::C_TYPE::AUDIO_LISTENER) == nullptr
+						&& App->scene_intro->gameobject_selected->GetComponent(Component::C_TYPE::CAMERA) != nullptr)
 						App->scene_intro->gameobject_selected->CreateComponent(Component::C_TYPE::AUDIO_LISTENER);
+					else
+						App->menus->info.AddConsoleLog("It is necessary to have a CAMERA component attached on the GameObject\n in order to create an AUDIO LISTENER component.");
 					addComponentVisible = false;
 
 					break;

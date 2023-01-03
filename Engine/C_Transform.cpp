@@ -106,3 +106,13 @@ void C_Transform::ResetTransform()
 
 	transform.globalPosTransposed = transform.globalPos.Transposed();
 }
+
+float3 C_Transform::GetTopVec()
+{
+	return transform.globalPos.Row3(2);
+}
+
+float3 C_Transform::GetFrontVec()
+{
+	return transform.globalPos.Row3(3);
+}

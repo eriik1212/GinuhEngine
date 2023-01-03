@@ -23,4 +23,5 @@ public:
 	void PrintGui();
 
 	GameObject* ListenerGameObject;
+	unsigned int listener_id;
 };

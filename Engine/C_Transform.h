@@ -39,6 +39,9 @@ public:
 
 	void PrintGui();
 
+	float3 GetTopVec();
+	float3 GetFrontVec();
+
 	Transform transform;
 
 };

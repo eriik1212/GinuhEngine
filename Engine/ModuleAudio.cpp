@@ -279,7 +279,43 @@ void ModuleAudio::UnregisterGameObject(unsigned int id)
 
 }
 
-void ModuleAudio::AddListener(const AkGameObjectID id)
+void ModuleAudio::SetDefaultListener(const AkGameObjectID id)
 {
-	AK::SoundEngine::SetDefaultListeners(&id, 1);
+	AK::SoundEngine::SetDefaultListeners(&id, MAX_LISTENERS);
+}
+
+void ModuleAudio::AddListeners(unsigned int emitter_id, const AkGameObjectID listener_id)
+{
+	AK::SoundEngine::SetListeners(emitter_id, &listener_id, MAX_LISTENERS);
+
+}
+
+void ModuleAudio::SetListenerPos(GameObject* listener, unsigned int id)
+{
+	// Orientation of the listener
+	AkVector front;
+	front.X = listener->transform->GetFrontVec().x;  
+	front.Y = listener->transform->GetFrontVec().y;
+	front.Z = listener->transform->GetFrontVec().z;
+
+	// Top orientation of the listener
+	AkVector top;
+	top.X = listener->transform->GetTopVec().x;
+	top.Y = listener->transform->GetTopVec().y;
+	top.Z = listener->transform->GetTopVec().z;
+
+	// Position of the listener
+	AkVector pos;
+	pos.X = listener->transform->transform.position.x;
+	pos.Y = listener->transform->transform.position.y;
+	pos.Z = listener->transform->transform.position.z;
+
+	/*AkTransform listenerTransform;
+	listenerTransform.Set(pos, front, top);*/
+
+	// Bc we only want to know pos and orientation, we use "AkSoundPosition". "AkTransform" is more 'complex' (scale..., etc)
+	AkSoundPosition listenerPosition;
+	listenerPosition.Set(pos, front, top);
+
+	AK::SoundEngine::SetPosition(id, listenerPosition);
 }

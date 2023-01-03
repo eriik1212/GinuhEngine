@@ -8,17 +8,20 @@
 C_AudioListener::C_AudioListener(GameObject* gameObject) : Component(gameObject, C_TYPE::AUDIO_LISTENER)
 {
 	ListenerGameObject = gameObject;
-	AppExtern->audio->RegisterGameObject(ListenerGameObject->id);
-	AppExtern->audio->AddListener(ListenerGameObject->id);
+	listener_id = gameObject->id;
+
+	AppExtern->audio->RegisterGameObject(listener_id);
+	AppExtern->audio->SetDefaultListener(listener_id);
 }
 
 C_AudioListener::~C_AudioListener()
 {
-	AppExtern->audio->UnregisterGameObject(ListenerGameObject->id);
+	AppExtern->audio->UnregisterGameObject(listener_id);
 }
 
 void C_AudioListener::Update()
 {
+	AppExtern->audio->SetListenerPos(ListenerGameObject, listener_id);
 }
 
 void C_AudioListener::PrintGui()

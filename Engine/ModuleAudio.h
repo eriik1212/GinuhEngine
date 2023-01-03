@@ -55,6 +55,8 @@
 	#include <AK/Comm/AkCommunication.h>
 #endif // AK_OPTIMIZED
 
+#define MAX_LISTENERS 1
+
 class ModuleAudio : public Module
 {
 public:
@@ -66,10 +68,14 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
+	// GO
 	void RegisterGameObject(unsigned int id);
 	void UnregisterGameObject(unsigned int id);
 
-	void AddListener(const AkGameObjectID id);
+	// Listeners 
+	void SetDefaultListener(const AkGameObjectID id);
+	void AddListeners(unsigned int emitter_id, const AkGameObjectID listener_id);
+	void SetListenerPos(GameObject* listener, unsigned int id);
 
 private:
 

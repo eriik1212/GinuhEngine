@@ -5,6 +5,7 @@
 #include "Component.h"
 #include "ModuleFilesManager.h"
 #include "ModuleAudio.h"
+#include "AudioEvent.h"
 
 #include <iostream>
 #include <string>
@@ -12,10 +13,12 @@
 
 using namespace std;
 
+class AudioEvent;
+
 class C_AudioSource : public Component
 {
 public:
-	C_AudioSource();
+
 	C_AudioSource(GameObject* gameObject);
 	~C_AudioSource();
 
@@ -24,4 +27,14 @@ public:
 	void PrintGui();
 
 	GameObject* SourceGameObject;
+	unsigned int source_id;
+
+	vector<AudioEvent*> eventsList;
+	AudioEvent* emptyEvent = nullptr;
+
+private:
+
+	void PlayEvent(unsigned index) const;
+	void StopEvent(unsigned index) const;
+	void StopAllEvents() const;
 };

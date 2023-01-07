@@ -5,22 +5,18 @@
 #include "Component.h"
 #include "C_AudioSource.h"
 
-C_AudioSource::C_AudioSource() : Component(nullptr, C_TYPE::AUDIO_SOURCE)
-{
-
-}
-
 C_AudioSource::C_AudioSource(GameObject* gameObject) : Component(gameObject, C_TYPE::AUDIO_SOURCE)
 {
 	SourceGameObject = gameObject;
+	source_id = gameObject->id;
 
-	AppExtern->audio->RegisterGameObject(SourceGameObject->id);
+	AppExtern->audio->RegisterGameObject(source_id);
 
 }
 
 C_AudioSource::~C_AudioSource()
 {
-	AppExtern->audio->UnregisterGameObject(SourceGameObject->id);
+	AppExtern->audio->UnregisterGameObject(source_id);
 
 }
 
@@ -47,6 +43,27 @@ void C_AudioSource::PrintGui()
 		ImGui::PopStyleColor(3);
 
 		ImGui::Spacing();
+
+	}
+}
+
+void C_AudioSource::PlayEvent(unsigned index) const
+{
+	AppExtern->audio->PostEvent(eventsList[index], source_id);
+
+}
+
+void C_AudioSource::StopEvent(unsigned index) const
+{
+	AppExtern->audio->StopEvent(eventsList[index], source_id);
+
+}
+
+void C_AudioSource::StopAllEvents() const
+{
+	for (int i = 0; i < eventsList.size(); ++i)
+	{
+		StopEvent(i);
 
 	}
 }

@@ -3,6 +3,7 @@
 
 #include "Module.h"
 #include "Globals.h"
+#include "AudioEvent.h"
 
 #include <AK/SoundEngine/Common/AkMemoryMgr.h>         // Memory Manager
 #include <AK/SoundEngine/Common/AkModule.h>            // Default memory and stream managers  
@@ -57,6 +58,8 @@
 
 #define MAX_LISTENERS 1
 
+class AudioEvent;
+
 class ModuleAudio : public Module
 {
 public:
@@ -76,6 +79,10 @@ public:
 	void SetDefaultListener(const AkGameObjectID id);
 	void AddListeners(unsigned int emitter_id, const AkGameObjectID listener_id);
 	void SetListenerPos(GameObject* listener, unsigned int id);
+
+	// Events
+	void PostEvent(AudioEvent* event, unsigned int id);
+	void StopEvent(const AudioEvent* event, unsigned int id);
 
 private:
 

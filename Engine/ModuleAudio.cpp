@@ -319,3 +319,20 @@ void ModuleAudio::SetListenerPos(GameObject* listener, unsigned int id)
 
 	AK::SoundEngine::SetPosition(id, listenerPosition);
 }
+
+void ModuleAudio::PostEvent(AudioEvent* event, unsigned int id)
+{
+	if (event != nullptr)
+	{
+		event->event_id = AK::SoundEngine::PostEvent(event->name.c_str(), id);
+	}
+}
+
+void ModuleAudio::StopEvent(const AudioEvent* event, unsigned int id)
+{
+	if (event != nullptr)
+	{
+		AK::SoundEngine::ExecuteActionOnEvent(event->name.c_str(), AK::SoundEngine::AkActionOnEventType_Stop, id);
+
+	}
+}

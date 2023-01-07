@@ -15,6 +15,7 @@ using namespace std;
 class C_AudioListener : public Component
 {
 public:
+
 	C_AudioListener(GameObject* gameObject);
 	~C_AudioListener();
 

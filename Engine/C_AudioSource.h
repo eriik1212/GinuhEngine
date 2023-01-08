@@ -34,7 +34,9 @@ public:
 
 private:
 
-	void PlayEvent(unsigned index) const;
-	void StopEvent(unsigned index) const;
+	void PlayEvent(unsigned int index) const;
+	void StopEvent(unsigned int index) const;
 	void StopAllEvents() const;
+
+	void PrintAudioList();
 };

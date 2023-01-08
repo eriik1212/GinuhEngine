@@ -175,6 +175,7 @@
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="ModuleAudio.h" />
+    <ClInclude Include="SoundBank.h" />
     <ClInclude Include="TextureImporter.h" />
     <ClInclude Include="MemLeaks.h" />
     <ClInclude Include="MeshImporter.h" />

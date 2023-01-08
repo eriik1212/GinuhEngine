@@ -84,6 +84,8 @@ public:
 	void PostEvent(AudioEvent* event, unsigned int id);
 	void StopEvent(const AudioEvent* event, unsigned int id);
 
+
+
 private:
 
 	// We're using the default Low-Level I/O implementation that's part

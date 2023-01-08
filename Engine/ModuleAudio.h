@@ -84,7 +84,11 @@ public:
 	void PostEvent(AudioEvent* event, unsigned int id);
 	void StopEvent(const AudioEvent* event, unsigned int id);
 
+	// SoundBanks
+	bool IsSoundBankInit();
+	void InitSoundBank();
 
+	bool IsSoundBank(string &file);
 
 private:
 
@@ -113,6 +117,10 @@ private:
 	bool TermSoundEngine();
 	bool TermStreamingManager();
 	bool TermMemoryManager();
+
+	//SoundBank
+	bool initSoundBank = false;
+
 };
 
 #endif // __ModuleAudio_H__

@@ -16,6 +16,14 @@ public:
 
 	int event_id = 0L;			// If event is playing, is different from 0L
 
+	bool IsPlaying() const;			
+	void Unload();						
+	void Unloaded();					
+	bool IsReadyToUnload() const;
+
+private:
+
+	bool unload = false;
 };
 
 #endif

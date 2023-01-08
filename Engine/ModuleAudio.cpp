@@ -336,3 +336,22 @@ void ModuleAudio::StopEvent(const AudioEvent* event, unsigned int id)
 
 	}
 }
+
+bool ModuleAudio::IsSoundBankInit()
+{
+	return initSoundBank;
+}
+
+void ModuleAudio::InitSoundBank()
+{
+	initSoundBank = true;
+}
+
+bool ModuleAudio::IsSoundBank(string &file)
+{
+	size_t extension = file.find_last_of('.');
+	if (extension != string::npos && file.substr(extension + 1).compare("bnk") == 0)
+		return true;
+
+	return false;
+}

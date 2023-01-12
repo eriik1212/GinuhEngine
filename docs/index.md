@@ -1,1 +1,1 @@
-## About the engine
+## About GinuhEngine

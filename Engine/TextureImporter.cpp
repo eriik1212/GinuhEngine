@@ -18,15 +18,15 @@ uint TextureImporter::ImportTexture(const char* filePath)
 	}
 
 	// -------------------------------------- Loading Image
-	if (ilLoadImage(filePath))
+	if (ilLoadImage((wchar_t*)filePath))
 	{
 		ilEnable(IL_FILE_OVERWRITE);
-		ilSaveImage(filePath);
+		ilSaveImage((wchar_t*)filePath);
 
 		ilGenImages(1, &ImgId);
 		ilBindImage(ImgId);
 
-		ilLoadImage(filePath);
+		ilLoadImage((wchar_t*)filePath);
 
 		ImgId = ilutGLBindTexImage();
 

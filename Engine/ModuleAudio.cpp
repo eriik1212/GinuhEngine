@@ -24,6 +24,23 @@ bool ModuleAudio::Init()
 	//InitSpatialAudio();
 	//InitCommunications();
 
+	g_lowLevelIO.SetBasePath(AKTEXT("Assets/Wwise/"));
+
+	AK::StreamMgr::SetCurrentLanguage(AKTEXT("English(US)"));
+
+	//ReadIDs();
+
+	AkBankID bankID = 0;
+	for (int i = 0; i < soundBankList.size(); ++i)
+	{
+		std::string nam = soundBankList[i]->name + ".bnk";
+		if (AK::SoundEngine::LoadBank(soundBankList[i]->name.c_str(), bankID) != AK_Success)
+		{
+			App->menus->info.AddConsoleLog("Couldn't find the bank: %s", soundBankList[i]->name.c_str());
+			return false;
+		}
+	}
+
 	bool ret = true;
 
 	return ret;
@@ -51,7 +68,7 @@ bool ModuleAudio::CleanUp()
 	App->menus->info.AddConsoleLog("Destroying Module Audio");
 
 	//TermCommunicationModule();
-	////TermSpatialAudio();  // NO TERM FUNCTION :(
+	//TermSpatialAudio();  // NO TERM FUNCTION :(
 	TermMusicEngine();
 	TermSoundEngine();
 	TermStreamingManager();
@@ -103,11 +120,11 @@ bool ModuleAudio::InitStreamingManager()
 
 	// CAkFilePackageLowLevelIOBlocking::Init() creates a streaming device
 	// in the Stream Manager, and registers itself as the File Location Resolver.
-	/*if (g_lowLevelIO.Init(deviceSettings) != AK_Success)
+	if (g_lowLevelIO.Init(deviceSettings) != AK_Success)
 	{
 		assert(!"Could not create the streaming device and Low-Level I/O system");
 		return false;
-	}*/
+	}
 
 
 
@@ -154,7 +171,7 @@ bool ModuleAudio::InitMusicEngine()
 
 	return true;
 }
-
+//
 //bool ModuleAudio::InitSpatialAudio()
 //{
 //	//
@@ -171,7 +188,7 @@ bool ModuleAudio::InitMusicEngine()
 //
 //	return true;
 //}
-
+//
 //bool ModuleAudio::InitCommunications()
 //{
 //#ifndef AK_OPTIMIZED
@@ -208,14 +225,14 @@ void ModuleAudio::ProcessAudio()
 //
 //	return true;
 //}
-
+//
 //bool ModuleAudio::TermSpatialAudio()
 //{
 //	//
 //	// Terminate Spatial Audio
 //	//
 //
-//	AK::SpatialAudio::Term();
+//	//AK::SpatialAudio::Term();
 //
 //	return true;
 //}
@@ -250,7 +267,7 @@ bool ModuleAudio::TermStreamingManager()
 	// CAkFilePackageLowLevelIOBlocking::Term() destroys its associated streaming device 
 	// that lives in the Stream Manager, and unregisters itself as the File Location Resolver.
 
-	//g_lowLevelIO.Term();
+	g_lowLevelIO.Term();
 
 	if (AK::IAkStreamMgr::Get())
 		AK::IAkStreamMgr::Get()->Destroy();
@@ -355,3 +372,70 @@ bool ModuleAudio::IsSoundBank(string &file)
 
 	return false;
 }
+
+AkBankID ModuleAudio::LoadSoundBnk(const char* bnkPath)
+{
+	AkBankID bankId;
+
+	// Load the corresponding soundbank
+	AKRESULT eResult = AK::SoundEngine::LoadBank(bnkPath, bankId, AK_DEFAULT_POOL_ID);
+
+	if(eResult == AK_Success)
+		App->menus->info.AddConsoleLog("Succesfully Imported BNK!");
+	else
+		assert(eResult == AK_Success);
+
+
+	return bankId;
+}
+
+//unsigned int ModuleAudio::GetBnkInfo(string soundbank_path)
+//{
+//	char* buf;
+//	AkUInt32 ret = 0;
+//
+//	string json_file = soundbank_path.substr(0, soundbank_path.find_last_of('.')) + ".json"; // Changing .bnk with .json
+//	if (App->files_manager->LoadFile(json_file.c_str(), &buf))
+//	{
+//		Data general_info(buf);
+//		Data sb_info = general_info.GetJObject("SoundBanksInfo").GetArray("SoundBanks", 0);
+//
+//		// Soundbank Information
+//		SoundBank* soundbank = new SoundBank();
+//		soundBankList.push_back(soundbank);
+//
+//		ret = soundbank->id = stoul(sb_info.GetString("Id"));
+//		soundbank->name = sb_info.GetString("ShortName");
+//		soundbank->path = soundbank_path;
+//
+//		// Is Init Soundbank?
+//		if (soundbank->name.compare("Init") == 0)
+//			initSoundBnk = soundbank;
+//
+//		// Events Information
+//		uint num_events = sb_info.GetArraySize("IncludedEvents");
+//		for (uint i = 0; i < num_events; ++i)
+//		{
+//			Data events_info = sb_info.GetArray("IncludedEvents", i);
+//
+//			AudioEvent* a_event = new AudioEvent();
+//			soundbank->events.push_back(a_event);
+//			a_event->soundBnk = soundbank;
+//
+//			a_event->id = stoul(events_info.GetString("Id"));
+//			a_event->name = events_info.GetString("Name");
+//
+//			const char* attenuation = events_info.GetString("MaxAttenuation");
+//			if (attenuation != nullptr)
+//			{
+//				a_event->maxAttenuation = stof(attenuation);
+//				if (a_event->maxAttenuation != 0.0f)
+//					a_event->isSound3D = true;
+//			}
+//		}
+//
+//		delete buf; // Freeing memory
+//	}
+//
+//	return ret;
+//}

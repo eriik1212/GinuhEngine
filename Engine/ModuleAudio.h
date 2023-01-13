@@ -4,6 +4,7 @@
 #include "Module.h"
 #include "Globals.h"
 #include "AudioEvent.h"
+#include "SoundBank.h"
 
 #include <AK/SoundEngine/Common/AkMemoryMgr.h>         // Memory Manager
 #include <AK/SoundEngine/Common/AkModule.h>            // Default memory and stream managers  
@@ -24,6 +25,8 @@
 	#pragma comment( lib, "Wwise/Debug(StaticCRT)/lib/AkMusicEngine.lib")
 	#pragma comment( lib, "Wwise/Debug(StaticCRT)/lib/AkMemoryMgr.lib")
 	#pragma comment( lib, "Wwise/Debug(StaticCRT)/lib/AkStreamMgr.lib")
+	//#pragma comment( lib, "Wwise/AkSpatialAudio.lib")
+	//#pragma comment( lib, "Wwise/CommunicationCentral.lib")
 
 	// External library dependencies
 	#pragma comment( lib, "Wwise/dinput8.lib") // Microsoft DirectX DirectInput.Needed by Motion to support DirectInput devices.
@@ -49,7 +52,7 @@
 	#pragma comment( lib, "Wwise/XInput.lib")  // Microsoft XInput. Needed by Motion to support XInput devices (Xbox controller).
 #endif
 
-//#include <Win32/AkFilePackageLowLevelIOBlocking.h>                    // Sample low-level I/O implementation
+#include <Win32/AkFilePackageLowLevelIOBlocking.h>                    // Sample low-level I/O implementation
 
 // Include for communication between Wwise and the game -- Not needed in the release version
 #ifndef AK_OPTIMIZED
@@ -89,12 +92,16 @@ public:
 	void InitSoundBank();
 
 	bool IsSoundBank(string &file);
+	
+	AkBankID LoadSoundBnk(const char* bnkPath);
+
+	//unsigned int GetBnkInfo(string soundbank_path);
 
 private:
 
 	// We're using the default Low-Level I/O implementation that's part
 	// of the SDK's sample code, with the file package extension
-	//CAkFilePackageLowLevelIOBlocking g_lowLevelIO;
+	CAkFilePackageLowLevelIOBlocking g_lowLevelIO;
 
 	//// ----------------------------------- Init Functions
 	bool InitMemoryManager();
@@ -120,6 +127,9 @@ private:
 
 	//SoundBank
 	bool initSoundBank = false;
+
+	vector<SoundBank*> soundBankList;
+	SoundBank* initSoundBnk = nullptr;
 
 };
 

@@ -100,6 +100,13 @@ bool ModuleFilesManager::Start()
 			App->menus->info.AddConsoleLog("File '%s' Loaded Succesfully", fileName_char);
 
 		}
+		else if (existent_filedir != nullptr && (extension == ".bnk"))
+		{
+			//SoundBankLoad(existent_filedir, ASSETS_PATH);
+
+			//App->audio->GetBnkInfo(existent_filedir);
+
+		}
 		else
 		{
 			App->menus->info.AddConsoleLog("File '%s' cannot be loaded", fileName_char);
@@ -136,7 +143,7 @@ update_status ModuleFilesManager::Update(float dt)
 			strcat_s(new_filedir, fileName_char);
 
 			// We copy the dropped file to "Assets/" dir, with its name
-			CopyFile(dropped_filedir, new_filedir, FALSE);
+			CopyFileA(dropped_filedir, new_filedir, FALSE);
 
 			// We get the Extension
 			string extension = fs::path(dropped_filedir).extension().string();
@@ -258,6 +265,103 @@ string ModuleFilesManager::EraseSubStr(const char* mainStr, const char* toErase)
 	}
 
 	return path;
+}
+
+unsigned int ModuleFilesManager::LoadFile(const char* file, char** buffer) const
+{
+	unsigned int ret = 0;
+
+	PHYSFS_file* fs_file = PHYSFS_openRead(file);
+
+	if (fs_file != NULL)
+	{
+		PHYSFS_sint64 size = PHYSFS_fileLength(fs_file);
+
+		if (size >= 0)
+		{
+			*buffer = new char[(uint)size];
+			PHYSFS_sint64 readed = PHYSFS_read(fs_file, *buffer, 1, (PHYSFS_sint32)size);
+			if (readed != size)
+			{
+				LOG("File System error while reading from file %s: %s\n", file, PHYSFS_getLastError());
+				if (buffer)
+					delete[] buffer;
+			}
+			else
+				ret = (uint)readed;
+		}
+
+		if (PHYSFS_close(fs_file) == 0)
+			LOG("File System error while closing file %s: %s\n", file, PHYSFS_getLastError());
+	}
+	else
+		LOG("File System error while opening file to load %s: %s\n", file, PHYSFS_getLastError());
+
+	return ret;
+}
+
+unsigned int ModuleFilesManager::SaveFile(const char* file, const void* buffer, unsigned int size) const
+{
+	unsigned int ret = 0;
+
+	PHYSFS_file* fs_file = PHYSFS_openWrite(file);
+
+	if (fs_file != NULL)
+	{
+		PHYSFS_sint64 written = PHYSFS_write(fs_file, (const void*)buffer, 1, size);
+		if (written != size)
+		{
+			LOG("File System error while writing to file %s: %s\n", file, PHYSFS_getLastError());
+		}
+		else
+			ret = (uint)written;
+
+		if (PHYSFS_close(fs_file) == 0)
+			LOG("File System error while closing file %s: %s\n", file, PHYSFS_getLastError());
+	}
+	else
+		LOG("File System error while opening file to save %s: %s\n", file, PHYSFS_getLastError());
+
+	return ret;
+}
+
+void ModuleFilesManager::SoundBankLoad(const char* path, string base_dir) const
+{
+	string file_assets_path = path;
+
+	string soundbank_path = base_dir;
+	PHYSFS_mkdir((soundbank_path.data()));
+
+	string json_path = soundbank_path;
+
+	// JSON
+	string json_file_path = file_assets_path.substr(0, file_assets_path.find_last_of('.')) + ".json";
+	json_path + ".json";
+	App->files_manager->DuplicateFile(json_file_path.data(), json_path.data());
+
+	LOG("PATH: %s", file_assets_path.c_str());
+	LOG("SB PATH: %s", soundbank_path.c_str());
+	LOG("JSON PATH: %s", json_path.c_str());
+	LOG("JSON FILE PATH: %s", json_file_path.c_str());
+}
+
+bool ModuleFilesManager::DuplicateFile(const char* src, const char* dst) const
+{
+	char* buffer = nullptr;
+	int size = LoadFile(src, &buffer);
+
+	if (size == -1)
+	{
+		if (buffer != nullptr)
+			delete[] buffer;
+		LOG("Couldn't duplicate %s file to %s", src, dst);
+		return false;
+	}
+
+	int success = SaveFile(dst, buffer, size);
+	delete[] buffer;
+
+	return (success != 0) ? true : false;
 }
 
 void MeshData::DrawMesh(const float* globalTransform, uint imgID)

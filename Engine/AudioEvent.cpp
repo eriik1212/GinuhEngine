@@ -10,6 +10,8 @@ bool AudioEvent::IsPlaying() const
 
 }
 
+// ------------------------------------------------- Unnecessary
+
 void AudioEvent::Unload()
 {
     unload = true;

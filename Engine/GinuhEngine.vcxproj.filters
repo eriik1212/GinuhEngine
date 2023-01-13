@@ -139,9 +139,6 @@
     <ClCompile Include="ExternalLibraries\MathGeoLib\include\Time\Clock.cpp">
       <Filter>ExternalLibraries\MathGeoLib\Time</Filter>
     </ClCompile>
-    <ClCompile Include="ExternalLibraries\Json\json.c">
-      <Filter>ExternalLibraries\Json</Filter>
-    </ClCompile>
     <ClCompile Include="ModuleFilesManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -201,6 +198,42 @@
     </ClCompile>
     <ClCompile Include="AudioEvent.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ExternalLibraries\Json\parson.c">
+      <Filter>ExternalLibraries\Json</Filter>
+    </ClCompile>
+    <ClCompile Include="ExternalLibraries\Wwise\include\Common\AkDefaultLowLevelIODispatcher.cpp">
+      <Filter>ExternalLibraries\Wwise</Filter>
+    </ClCompile>
+    <ClCompile Include="ExternalLibraries\Wwise\include\Common\AkFileLocationBase.cpp">
+      <Filter>ExternalLibraries\Wwise</Filter>
+    </ClCompile>
+    <ClCompile Include="ExternalLibraries\Wwise\include\Common\AkFilePackage.cpp">
+      <Filter>ExternalLibraries\Wwise</Filter>
+    </ClCompile>
+    <ClCompile Include="ExternalLibraries\Wwise\include\Common\AkFilePackageLUT.cpp">
+      <Filter>ExternalLibraries\Wwise</Filter>
+    </ClCompile>
+    <ClCompile Include="ExternalLibraries\Wwise\include\Common\AkGeneratedSoundBanksResolver.cpp">
+      <Filter>ExternalLibraries\Wwise</Filter>
+    </ClCompile>
+    <ClCompile Include="ExternalLibraries\Wwise\include\Common\AkJobWorkerMgr.cpp">
+      <Filter>ExternalLibraries\Wwise</Filter>
+    </ClCompile>
+    <ClCompile Include="ExternalLibraries\Wwise\include\Common\AkMultipleFileLocation.cpp">
+      <Filter>ExternalLibraries\Wwise</Filter>
+    </ClCompile>
+    <ClCompile Include="ExternalLibraries\Wwise\include\Win32\AkDefaultIOHookBlocking.cpp">
+      <Filter>ExternalLibraries\Wwise</Filter>
+    </ClCompile>
+    <ClCompile Include="ExternalLibraries\Wwise\include\Win32\AkDefaultIOHookDeferred.cpp">
+      <Filter>ExternalLibraries\Wwise</Filter>
+    </ClCompile>
+    <ClCompile Include="ExternalLibraries\Wwise\include\Win32\AkPlatformProfilerHooks.cpp">
+      <Filter>ExternalLibraries\Wwise</Filter>
+    </ClCompile>
+    <ClCompile Include="ExternalLibraries\Wwise\include\Win32\stdafx.cpp">
+      <Filter>ExternalLibraries\Wwise</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -426,9 +459,6 @@
     <ClInclude Include="ExternalLibraries\MathGeoLib\include\MathGeoLibFwd.h">
       <Filter>ExternalLibraries\MathGeoLib</Filter>
     </ClInclude>
-    <ClInclude Include="ExternalLibraries\Json\json.h">
-      <Filter>ExternalLibraries\Json</Filter>
-    </ClInclude>
     <ClInclude Include="ModuleFilesManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -501,6 +531,60 @@
     <ClInclude Include="SoundBank.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ExternalLibraries\Json\parson.h">
+      <Filter>ExternalLibraries\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="ExternalLibraries\Wwise\include\Common\AkDefaultLowLevelIODispatcher.h">
+      <Filter>ExternalLibraries\Wwise</Filter>
+    </ClInclude>
+    <ClInclude Include="ExternalLibraries\Wwise\include\Common\AkFileHelpersBase.h">
+      <Filter>ExternalLibraries\Wwise</Filter>
+    </ClInclude>
+    <ClInclude Include="ExternalLibraries\Wwise\include\Common\AkFileLocationBase.h">
+      <Filter>ExternalLibraries\Wwise</Filter>
+    </ClInclude>
+    <ClInclude Include="ExternalLibraries\Wwise\include\Common\AkFilePackage.h">
+      <Filter>ExternalLibraries\Wwise</Filter>
+    </ClInclude>
+    <ClInclude Include="ExternalLibraries\Wwise\include\Common\AkFilePackageLowLevelIO.h">
+      <Filter>ExternalLibraries\Wwise</Filter>
+    </ClInclude>
+    <ClInclude Include="ExternalLibraries\Wwise\include\Common\AkFilePackageLUT.h">
+      <Filter>ExternalLibraries\Wwise</Filter>
+    </ClInclude>
+    <ClInclude Include="ExternalLibraries\Wwise\include\Common\AkGeneratedSoundBanksResolver.h">
+      <Filter>ExternalLibraries\Wwise</Filter>
+    </ClInclude>
+    <ClInclude Include="ExternalLibraries\Wwise\include\Common\AkJobWorkerMgr.h">
+      <Filter>ExternalLibraries\Wwise</Filter>
+    </ClInclude>
+    <ClInclude Include="ExternalLibraries\Wwise\include\Common\AkMultipleFileLocation.h">
+      <Filter>ExternalLibraries\Wwise</Filter>
+    </ClInclude>
+    <ClInclude Include="ExternalLibraries\Wwise\include\Common\AkPlatformProfilerHooks.h">
+      <Filter>ExternalLibraries\Wwise</Filter>
+    </ClInclude>
+    <ClInclude Include="ExternalLibraries\Wwise\include\Win32\AkDefaultIOHookBlocking.h">
+      <Filter>ExternalLibraries\Wwise</Filter>
+    </ClInclude>
+    <ClInclude Include="ExternalLibraries\Wwise\include\Win32\AkDefaultIOHookDeferred.h">
+      <Filter>ExternalLibraries\Wwise</Filter>
+    </ClInclude>
+    <ClInclude Include="ExternalLibraries\Wwise\include\Win32\AkFileHelpers.h">
+      <Filter>ExternalLibraries\Wwise</Filter>
+    </ClInclude>
+    <ClInclude Include="ExternalLibraries\Wwise\include\Win32\AkFileHelpersBase.h">
+      <Filter>ExternalLibraries\Wwise</Filter>
+    </ClInclude>
+    <ClInclude Include="ExternalLibraries\Wwise\include\Win32\AkFilePackageLowLevelIOBlocking.h">
+      <Filter>ExternalLibraries\Wwise</Filter>
+    </ClInclude>
+    <ClInclude Include="ExternalLibraries\Wwise\include\Win32\AkFilePackageLowLevelIODeferred.h">
+      <Filter>ExternalLibraries\Wwise</Filter>
+    </ClInclude>
+    <ClInclude Include="ExternalLibraries\Wwise\include\Win32\stdafx.h">
+      <Filter>ExternalLibraries\Wwise</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -570,6 +654,9 @@
     </None>
     <None Include="ExternalLibraries\MathGeoLib\include\Math\Matrix.inl">
       <Filter>ExternalLibraries\MathGeoLib\Math</Filter>
+    </None>
+    <None Include="ExternalLibraries\Wwise\include\Common\AkFilePackageLowLevelIO.inl">
+      <Filter>ExternalLibraries\Wwise</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -12,7 +12,7 @@ written agreement between you and Audiokinetic Inc.
   Copyright (c) 2022 Audiokinetic Inc.
 *******************************************************************************/
 
-#include "stdafx.h"
+#include "Wwise/include/Win32/stdafx.h"
 #include "AkJobWorkerMgr.h"
 #include <AK/Tools/Common/AkFifoQueue.h>
 #include <AK/Tools/Common/AkInstrument.h>

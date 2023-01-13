@@ -38,5 +38,10 @@ private:
 	void StopEvent(unsigned int index) const;
 	void StopAllEvents() const;
 
+	void PlayAudio(unsigned int audioId);
+
+	bool toPlayEvent = false;
+	unsigned toPlayEventId = 0;
+
 	void PrintAudioList();
 };

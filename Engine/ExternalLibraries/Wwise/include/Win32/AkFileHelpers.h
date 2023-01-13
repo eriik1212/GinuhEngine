@@ -24,7 +24,9 @@ written agreement between you and Audiokinetic Inc.
 
 #include "../Common/AkFileHelpersBase.h"
 
+#include <AK/Tools/Common/AkPlatformFuncs.h>
 #include <AK/Tools/Common/AkAssert.h>
+#include <windows.h>
 #include <AK/SoundEngine/Common/AkStreamMgrModule.h>
 
 class CAkFileHelpers : public CAkFileHelpersBase

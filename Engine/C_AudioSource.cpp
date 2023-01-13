@@ -22,6 +22,11 @@ C_AudioSource::~C_AudioSource()
 
 void C_AudioSource::Update()
 {
+	if (toPlayEvent)
+	{
+		PlayEvent(toPlayEventId);
+		toPlayEvent = false;
+	}
 }
 
 void C_AudioSource::PrintGui()
@@ -104,6 +109,15 @@ void C_AudioSource::StopAllEvents() const
 	}
 }
 
+void C_AudioSource::PlayAudio(unsigned int audioId)
+{
+	if (audioId < eventsList.size())
+	{
+		toPlayEvent = true;
+		toPlayEventId = audioId;
+	}
+}
+
 void C_AudioSource::PrintAudioList()
 {
 	std::vector<AudioEvent*> events;
@@ -137,11 +151,11 @@ void C_AudioSource::PrintAudioList()
 						(*currentEvent)->Unload();
 
 					// Now, loading new bank: first Init bank if it has been not loaded 
-					/*if (!AppExtern->audio->IsSoundBankInit() && AppExtern->audio->LoadSoundBank())
-						AppExtern->audio->InitSoundbank();*/
+					if (!AppExtern->audio->IsSoundBankInit())
+						AppExtern->audio->InitSoundBank();
 
 					// Finally, the soundbank to the corresponding new audio event
-					//AppExtern->audio->LoadSoundBank((*it)->parent_soundbank->path.c_str());
+					AppExtern->audio->LoadSoundBnk((*it)->soundBnk->path.c_str());
 
 					eventsList[index] = *it;  // Updating list of events
 				}

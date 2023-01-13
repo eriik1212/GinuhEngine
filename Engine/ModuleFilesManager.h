@@ -111,13 +111,18 @@ public:
 
 	string EraseSubStr(const char* mainStr, const char* toErase);
 
-	//void LoadFile(const char* filePath);
+	unsigned int LoadFile(const char* file, char** buffer) const;
+	unsigned int SaveFile(const char* file, const void* buffer, unsigned int size) const;
+
 	//void LoadMeshData(MeshData* mesh);
 	//uint LoadTexture(const char* filePath);
 
 	//void NodeManager(const aiScene* rootScene, aiNode* rootNode, GameObject* goParent);
 
 	//uint id_count = 1;
+
+	void SoundBankLoad(const char* path, string base_dir) const;
+	bool DuplicateFile(const char* src, const char* dst) const;
 
 	static vector<string> allText;
 	static map<string, uint> loaded_textures;			//Know which textures have we loaded, to NOT load again

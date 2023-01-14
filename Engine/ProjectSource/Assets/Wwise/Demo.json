@@ -1,0 +1,43 @@
+{
+ "SoundBanksInfo": {
+  "Platform": "Windows",
+  "BasePlatform": "Windows",
+  "SchemaVersion": "12",
+  "SoundbankVersion": "140",
+  "RootPaths": {
+   "ProjectRoot": "C:\\Users\\david\\OneDrive\\Escritorio\\UNI\\A3\\S5\\Motors\\SoundBankCreation\\",
+   "SourceFilesRoot": "C:\\Users\\david\\OneDrive\\Escritorio\\UNI\\A3\\S5\\Motors\\SoundBankCreation\\.cache\\Windows\\",
+   "SoundBanksRoot": "C:\\Users\\david\\OneDrive\\Escritorio\\UNI\\A3\\S5\\Motors\\SoundBankCreation\\GeneratedSoundBanks\\Windows\\",
+   "ExternalSourcesInputFile": "",
+   "ExternalSourcesOutputRoot": "C:\\Users\\david\\OneDrive\\Escritorio\\UNI\\A3\\S5\\Motors\\SoundBankCreation\\GeneratedSoundBanks\\Windows"
+  },
+  "SoundBanks": [
+   {
+    "Id": "1842718300",
+    "GUID": "{C2AECE2F-B8F1-41D0-94FC-5BC71E611FC0}",
+    "Language": "SFX",
+    "Hash": "884751606",
+    "ObjectPath": "\\SoundBanks\\Default Work Unit\\Demo",
+    "ShortName": "Demo",
+    "Path": "Demo.bnk",
+    "IncludedEvents": [
+     {
+      "Id": "1529754339",
+      "Name": "Cowabunga_Loop",
+      "ObjectPath": "\\Events\\Default Work Unit\\Cowabunga_Loop",
+      "GUID": "{EC8CDCC3-CC31-4732-808F-F80370C07A62}",
+      "DurationType": "Infinite",
+      "IncludedMemoryFiles": [
+       {
+        "Id": "972568859",
+        "Language": "SFX",
+        "ShortName": "01Cowabunga.wav",
+        "Path": "SFX\\01Cowabunga_D79FB2B7.wem"
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+}

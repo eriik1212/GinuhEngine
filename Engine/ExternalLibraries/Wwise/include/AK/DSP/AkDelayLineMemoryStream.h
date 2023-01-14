@@ -21,7 +21,8 @@ under the Apache License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
 OR CONDITIONS OF ANY KIND, either express or implied. See the Apache License for
 the specific language governing permissions and limitations under the License.
 
-  Copyright (c) 2022 Audiokinetic Inc.
+  Version: v2021.1.5  Build: 7749
+  Copyright (c) 2006-2021 Audiokinetic Inc.
 *******************************************************************************/
 
 // Length of delay line is mapped on 4 frames boundary (i.e. may not be suited for reverberation for example)
@@ -39,6 +40,7 @@ namespace AK
 {
 	namespace DSP
 	{
+#ifndef AK_VOICE_MAX_NUM_CHANNELS
 		template < class T_SAMPLETYPE > 
 		class CAkDelayLineMemoryStream : public CAkDelayLineMemory< T_SAMPLETYPE > 
 		{
@@ -49,6 +51,18 @@ namespace AK
 				return this->m_ppDelay[in_uChannelIndex] + in_uOffset;
 			}
 		};
+#else
+		template < class T_SAMPLETYPE, AkUInt32 T_MAXNUMCHANNELS > 
+		class CAkDelayLineMemoryStream : public CAkDelayLineMemory< T_SAMPLETYPE, T_MAXNUMCHANNELS > 
+		{
+		public:
+
+			T_SAMPLETYPE * GetCurrentPointer( AkUInt32 in_uOffset, AkUInt32 in_uChannelIndex )
+			{
+				return this->m_pDelay[in_uChannelIndex] + in_uOffset;
+			}
+		};
+#endif
 	} // namespace DSP
 } // namespace AK
 #endif // _AKDSP_DELAYLINEMEMORYSTREAM_

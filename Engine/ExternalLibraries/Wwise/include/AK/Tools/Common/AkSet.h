@@ -21,7 +21,8 @@ under the Apache License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
 OR CONDITIONS OF ANY KIND, either express or implied. See the Apache License for
 the specific language governing permissions and limitations under the License.
 
-  Copyright (c) 2022 Audiokinetic Inc.
+  Version: v2021.1.5  Build: 7749
+  Copyright (c) 2006-2021 Audiokinetic Inc.
 *******************************************************************************/
 
 //////////////////////////////////////////////////////////////////////
@@ -52,21 +53,21 @@ struct AkSetGetKey{ static AkForceInline T& Get(T& in_item){ return in_item; } }
 //
 //	Set container type, implemented as a sorted array of unique items
 //
-template< typename T, class U_POOL = ArrayPoolDefault, class uGrowBy = AkGrowByPolicy_DEFAULT, class TMovePolicy = AkAssignmentMovePolicy<T>, class TComparePolicy = AkDefaultSortedKeyCompare<T> >
-class AkSet : public AkSortedKeyArray < T, T, U_POOL, AkSetGetKey<T>, uGrowBy, TMovePolicy, TComparePolicy >
+template< typename T, class U_POOL, class uGrowBy = AkGrowByPolicy_DEFAULT >
+class AkSet : public AkSortedKeyArray < T, T, U_POOL, AkSetGetKey<T>, uGrowBy >
 {
 public:
-	bool Contains(T in_item) const { return AkSortedKeyArray < T, T, U_POOL, AkSetGetKey<T>, uGrowBy, TMovePolicy, TComparePolicy >::Exists(in_item) != NULL; }
+	bool Contains(T in_item) const { return AkSortedKeyArray < T, T, U_POOL, AkSetGetKey<T>, uGrowBy >::Exists(in_item) != NULL; }
 };
 
 // AkDisjoint
 //	- Returns true if the intersection of A and B is the empty set.
 //
-template< typename T, class U_POOL = ArrayPoolDefault, class uGrowBy, class TMovePolicy, class TComparePolicy >
-static bool AkDisjoint(const AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>& in_A, const AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>& in_B)
+template< typename T, class U_POOL, class uGrowBy >
+static bool AkDisjoint(const AkSet<T, U_POOL, uGrowBy>& in_A, const AkSet<T, U_POOL, uGrowBy>& in_B)
 {
-	typename AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>::Iterator itA = in_A.Begin();
-	typename AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>::Iterator itB = in_B.Begin();
+	typename AkSet<T, U_POOL, uGrowBy>::Iterator itA = in_A.Begin();
+	typename AkSet<T, U_POOL, uGrowBy>::Iterator itB = in_B.Begin();
 	while (itA != in_A.End() && itB != in_B.End())
 	{
 		if (*itA == *itB)
@@ -82,8 +83,8 @@ static bool AkDisjoint(const AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePoli
 // AkIntersect
 //  - Return true if the intersection of A and B is not the empty set.
 //
-template< typename T, class U_POOL, class uGrowBy, class TMovePolicy, class TComparePolicy >
-static bool AkIntersect(const AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>& in_A, const AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>& in_B)
+template< typename T, class U_POOL, class uGrowBy >
+static bool AkIntersect(const AkSet<T, U_POOL, uGrowBy>& in_A, const AkSet<T, U_POOL, uGrowBy>& in_B)
 {
 	return !AkDisjoint(in_A, in_B);
 }
@@ -91,18 +92,18 @@ static bool AkIntersect(const AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePol
 // AkIsSubset
 //	- Return true if in_A is a subset of in_B
 //
-template< typename T, class U_POOL, class uGrowBy, class TMovePolicy, class TComparePolicy >
-static bool AkIsSubset(const AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>& in_A, const AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>& in_B)
+template< typename T, class U_POOL, class uGrowBy >
+static bool AkIsSubset(const AkSet<T, U_POOL, uGrowBy>& in_A, const AkSet<T, U_POOL, uGrowBy>& in_B)
 {
-	typename AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>::Iterator itA = in_A.Begin();
-	typename AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>::Iterator itB = in_B.Begin();
+	typename AkSet<T, U_POOL, uGrowBy>::Iterator itA = in_A.Begin();
+	typename AkSet<T, U_POOL, uGrowBy>::Iterator itB = in_B.Begin();
 	while (itA != in_A.End() && itB != in_B.End())
 	{
-		if (TComparePolicy::Equal(&in_A, *itA, *itB))
+		if (*itA == *itB)
 		{
 			++itA; ++itB;
 		}
-		else if (TComparePolicy::Lesser(&in_A, *itA, *itB))
+		else if (*itA < *itB)
 		{
 			return false;//an element of A is not in B
 		}
@@ -115,19 +116,19 @@ static bool AkIsSubset(const AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePoli
 // AkCountIntersection
 //	- Helper function to count the number of elements that are in both in_A and in_B.
 //
-template< typename T, class U_POOL, class uGrowBy, class TMovePolicy, class TComparePolicy >
-static AkUInt32 AkCountIntersection(const AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>& in_A, const AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>& in_B)
+template< typename T, class U_POOL, class uGrowBy >
+static AkUInt32 AkCountIntersection(const AkSet<T, U_POOL, uGrowBy>& in_A, const AkSet<T, U_POOL, uGrowBy>& in_B)
 {
 	AkUInt32 uSize = 0;
-	typename AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>::Iterator itA = in_A.Begin();
-	typename AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>::Iterator itB = in_B.Begin();
+	typename AkSet<T, U_POOL, uGrowBy>::Iterator itA = in_A.Begin();
+	typename AkSet<T, U_POOL, uGrowBy>::Iterator itB = in_B.Begin();
 	while (itA != in_A.End() && itB != in_B.End())
 	{
-		if (TComparePolicy::Equal(&in_A, *itA, *itB))
+		if (*itA == *itB)
 		{
 			++uSize; ++itA;	++itB;
 		}
-		else if (TComparePolicy::Lesser(&in_A, *itA, *itB))
+		else if (*itA < *itB)
 		{
 			++itA;
 		}
@@ -142,15 +143,15 @@ static AkUInt32 AkCountIntersection(const AkSet<T, U_POOL, uGrowBy, TMovePolicy,
 // AkSubtraction
 //  - In-place set subtraction ( A = A - B )
 //
-template< typename T, class U_POOL, class uGrowBy, class TMovePolicy, class TComparePolicy>
-static bool AkSubtraction(AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>& in_A, const AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>& in_B)
+template< typename T, class U_POOL, class uGrowBy >
+static bool AkSubtraction(AkSet<T, U_POOL, uGrowBy>& in_A, const AkSet<T, U_POOL, uGrowBy>& in_B)
 {
-	typename AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>::Iterator itAr, itAw;
+	typename AkSet<T, U_POOL, uGrowBy>::Iterator itAr, itAw;
 	itAr = itAw = in_A.Begin();
-	typename AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>::Iterator itB = in_B.Begin();
+	typename AkSet<T, U_POOL, uGrowBy>::Iterator itB = in_B.Begin();
 	while (itAr != in_A.End())
 	{
-		if (itB == in_B.End() || TComparePolicy::Lesser(&in_A, *itAr, *itB))
+		if (itB == in_B.End() || *itAr < *itB)
 		{
 			if (itAw != itAr)
 				*itAw = *itAr;
@@ -158,7 +159,7 @@ static bool AkSubtraction(AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>
 			++itAw;
 			++itAr;
 		}
-		else if (TComparePolicy::Equal(&in_A, *itAr, *itB))
+		else if (*itAr == *itB)
 		{
 			++itB;
 			++itAr;
@@ -175,15 +176,15 @@ static bool AkSubtraction(AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>
 // AkIntersection
 //	- In-place set intersection ( A = A n B )
 //
-template< typename T, class U_POOL, class uGrowBy, class TMovePolicy, class TComparePolicy >
-static bool AkIntersection(AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>& in_A, const AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>& in_B)
+template< typename T, class U_POOL, class uGrowBy >
+static bool AkIntersection(AkSet<T, U_POOL, uGrowBy>& in_A, const AkSet<T, U_POOL, uGrowBy>& in_B)
 {
-	typename AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>::Iterator itAr, itAw;
+	typename AkSet<T, U_POOL, uGrowBy>::Iterator itAr, itAw;
 	itAr = itAw = in_A.Begin();
-	typename AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>::Iterator itB = in_B.Begin();
+	typename AkSet<T, U_POOL, uGrowBy>::Iterator itB = in_B.Begin();
 	while (itAr != in_A.End() && itB != in_B.End())
 	{
-		if (TComparePolicy::Equal(&in_A, *itAr, *itB))
+		if (*itAr == *itB)
 		{
 			if (itAw != itAr)
 				*itAw = *itAr;
@@ -192,7 +193,7 @@ static bool AkIntersection(AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy
 			++itAr;
 			++itB;
 		}
-		else if (TComparePolicy::Lesser(&in_A, *itAr,*itB))
+		else if (*itAr < *itB)
 		{
 			++itAr;
 		}
@@ -208,23 +209,23 @@ static bool AkIntersection(AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy
 // AkIntersection
 //	- Out-of-place set intersection ( res = A n B )
 //
-template< typename T, class U_POOL, class uGrowBy, class TMovePolicy, class TComparePolicy >
-static bool AkIntersection(AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>& out_res, const AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>& in_A, const AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>& in_B)
+template< typename T, class U_POOL, class uGrowBy >
+static bool AkIntersection(AkSet<T, U_POOL, uGrowBy>& out_res, const AkSet<T, U_POOL, uGrowBy>& in_A, const AkSet<T, U_POOL, uGrowBy>& in_B)
 {
 	out_res.RemoveAll();
 
-	typename AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>::Iterator itA = in_A.Begin();
-	typename AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>::Iterator itB = in_B.Begin();
+	typename AkSet<T, U_POOL, uGrowBy>::Iterator itA = in_A.Begin();
+	typename AkSet<T, U_POOL, uGrowBy>::Iterator itB = in_B.Begin();
 	while (itA != in_A.End() && itB != in_B.End())
 	{
-		if (TComparePolicy::Equal(&in_A, *itA, *itB))
+		if (*itA == *itB)
 		{
 			out_res.AddLast(*itA);
 
 			++itA;
 			++itB;
 		}
-		else if (TComparePolicy::Lesser(&in_A, *itA,*itB))
+		else if (*itA < *itB)
 		{
 			++itA;
 		}
@@ -240,26 +241,26 @@ static bool AkIntersection(AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy
 //  - Set union ( A = A U B ).  
 //	NOTE: Preforms a memory allocation and may fail.
 //
-template< typename T, class U_POOL, class uGrowBy, class TMovePolicy, class TComparePolicy >
-static bool AkUnion(AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>& io_A, const AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>& in_B)
+template< typename T, class U_POOL, class uGrowBy >
+static bool AkUnion(AkSet<T, U_POOL, uGrowBy>& io_A, const AkSet<T, U_POOL, uGrowBy>& in_B)
 {
 	AkInt32 uSizeNeeded = io_A.Length() + in_B.Length() - AkCountIntersection(io_A, in_B);
 	AkSet<T, U_POOL, uGrowBy> result;
 
 	if (result.Resize(uSizeNeeded))
 	{
-		typename AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>::Iterator itRes = result.Begin();
-		typename AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>::Iterator itA = io_A.Begin();
-		typename AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>::Iterator itB = in_B.Begin();
+		typename AkSet<T, U_POOL, uGrowBy>::Iterator itRes = result.Begin();
+		typename AkSet<T, U_POOL, uGrowBy>::Iterator itA = io_A.Begin();
+		typename AkSet<T, U_POOL, uGrowBy>::Iterator itB = in_B.Begin();
 
 		while (itB != in_B.End() || itA != io_A.End())
 		{
-			if ( itB != in_B.End() && (itA == io_A.End() || TComparePolicy::Lesser(&io_A, *itB, *itA)))
+			if ( itB != in_B.End() && (itA == io_A.End() || *itB < *itA))
 			{
 				*itRes = *itB;
 				++itB;
 			}
-			else if (itB == in_B.End() || TComparePolicy::Lesser(&io_A, *itA,*itB) )
+			else if (itB == in_B.End() || *itA < *itB)
 			{
 				*itRes = *itA;
 				++itA;
@@ -286,8 +287,8 @@ typedef AkSet< AkUniqueID, ArrayPoolDefault >  AkUniqueIDSet;
 // AkIntersect
 //  - Return true if the intersection of in_A (a set of type in_typeA), and in_B (a set of type in_typeB) is not the empty set.
 //
-template< typename T, class U_POOL, class uGrowBy, class TMovePolicy, class TComparePolicy >
-static inline bool AkIntersect(const AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>& in_A, AkSetType in_typeA, const AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>& in_B, AkSetType in_typeB)
+template< typename T, class U_POOL, class uGrowBy >
+static inline bool AkIntersect(const AkSet<T, U_POOL, uGrowBy>& in_A, AkSetType in_typeA, const AkSet<T, U_POOL, uGrowBy>& in_B, AkSetType in_typeB)
 {
 	if (in_typeA == SetType_Inclusion)
 	{
@@ -308,8 +309,8 @@ static inline bool AkIntersect(const AkSet<T, U_POOL, uGrowBy, TMovePolicy, TCom
 // AkContains
 //  - Return true if the element in_item is contained in in_Set, a set of type in_type.
 //
-template< typename T, class U_POOL, class uGrowBy, class TMovePolicy, class TComparePolicy >
-static inline bool AkContains(const AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>& in_Set, AkSetType in_type, T in_item)
+template< typename T, class U_POOL, class uGrowBy >
+static inline bool AkContains(const AkSet<T, U_POOL, uGrowBy>& in_Set, AkSetType in_type, T in_item)
 {
 	return	(in_type == SetType_Inclusion && in_Set.Contains(in_item)) ||
 		(in_type == SetType_Exclusion && !in_Set.Contains(in_item));
@@ -319,8 +320,8 @@ static inline bool AkContains(const AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComp
 //	- pseudo in-place set subtraction (A = A - B) with set type specifiers.
 //	NOTE: Memory may be allocated (in AkUnion) so prepare for failure.
 //
-template< typename T, class U_POOL, class uGrowBy, class TMovePolicy, class TComparePolicy >
-static inline bool AkSubtraction(AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>& in_A, AkSetType in_typeA, const AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>& in_B, AkSetType in_typeB)
+template< typename T, class U_POOL, class uGrowBy >
+static inline bool AkSubtraction(AkSet<T, U_POOL, uGrowBy>& in_A, AkSetType in_typeA, const AkSet<T, U_POOL, uGrowBy>& in_B, AkSetType in_typeB)
 {
 	if (in_typeA == SetType_Inclusion)
 	{
@@ -342,8 +343,8 @@ static inline bool AkSubtraction(AkSet<T, U_POOL, uGrowBy, TMovePolicy, TCompare
 //  - Pseudo in-place set union (A = A + B)
 //	NOTE: Memory may be allocated (in AkUnion) so prepare for failure.
 //
-template< typename T, class U_POOL, class uGrowBy, class TMovePolicy, class TComparePolicy >
-static inline bool AkUnion(AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>& io_A, AkSetType& io_typeA, const AkSet<T, U_POOL, uGrowBy, TMovePolicy, TComparePolicy>& in_B, AkSetType in_typeB)
+template< typename T, class U_POOL, class uGrowBy >
+static inline bool AkUnion(AkSet<T, U_POOL, uGrowBy>& io_A, AkSetType& io_typeA, const AkSet<T, U_POOL, uGrowBy>& in_B, AkSetType in_typeB)
 {
 	if (io_typeA == SetType_Inclusion)
 	{

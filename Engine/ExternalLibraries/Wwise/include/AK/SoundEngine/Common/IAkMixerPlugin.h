@@ -21,7 +21,8 @@ under the Apache License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
 OR CONDITIONS OF ANY KIND, either express or implied. See the Apache License for
 the specific language governing permissions and limitations under the License.
 
-  Copyright (c) 2022 Audiokinetic Inc.
+  Version: v2021.1.5  Build: 7749
+  Copyright (c) 2006-2021 Audiokinetic Inc.
 *******************************************************************************/
 
 /// \file 
@@ -100,7 +101,7 @@ namespace AK
 		/// wait until OnEffectsProcessed() or OnFrameEnd() to flip the state to AK_DataReady. This is usually undesirable, so handling this inside OnMixDone() is usually preferred.\endaknote
 		/// \sa
 		/// - OnMixDone
-		/// - AK::AkMetering
+		/// - AK::IAkMetering
 		/// - AK::IAkMixerPluginContext::EnableMetering()
 		virtual void OnEffectsProcessed( 
 			AkAudioBuffer *			io_pMixBuffer		///< Output audio buffer data structure.
@@ -118,11 +119,11 @@ namespace AK
 		/// It may also be enabled by the Wwise authoring tool when connected.\endaknote
 		/// \sa
 		/// - OnMixDone
-		/// - AK::AkMetering
+		/// - AK::IAkMetering
 		/// - AK::IAkMixerPluginContext::EnableMetering()
 		virtual void OnFrameEnd(
 			AkAudioBuffer *			io_pMixBuffer,		///< Output audio buffer data structure.
-			AkMetering *			in_pMetering		///< Struct containing metering data computed on io_pMixBuffer. May be NULL if metering is not enabled.
+			IAkMetering *			in_pMetering		///< Interface for retrieving metering data computed on io_pMixBuffer. May be NULL if metering is not enabled.
 			) = 0;
 	};
 }

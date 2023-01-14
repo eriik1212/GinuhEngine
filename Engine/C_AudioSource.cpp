@@ -125,61 +125,23 @@ void C_AudioSource::PrintAudioList()
 	// List of different events
 	unsigned int index = 0;
 
-	for (vector<AudioEvent*>::iterator currentEvent = eventsList.begin(); currentEvent != eventsList.end(); ++currentEvent)
-	{
-		ImGui::Text("ID: %d", index);
-		ImGui::Text("Event: ");
-		
-		ImGui::SameLine();
 
-		string eventName = "";
+	ImGui::Spacing();
 
-		if (*currentEvent != nullptr)
-			eventName = (*currentEvent)->name.c_str();
+	// Play and stop buttons for each event entry on Component
+	string playButton = "PLAY##" + to_string(index);
+	string stopButton = "STOP##" + to_string(index);
 
-		eventName += "##" + to_string(index);
+	if (ImGui::Button(playButton.c_str()))
+		PlayEvent(index);
 
-		// Print Options
-		if (ImGui::BeginMenu(eventName.c_str()))
-		{
-			for (vector<AudioEvent*>::iterator it = events.begin(); it != events.end(); ++it)
-			{
-				if (ImGui::MenuItem((*it)->name.c_str()))
-				{
-					// First, unloading previous Soundbank for old audio event.
-					if ((*currentEvent) != nullptr)
-						(*currentEvent)->Unload();
+	ImGui::SameLine();
 
-					// Now, loading new bank: first Init bank if it has been not loaded 
-					if (!AppExtern->audio->IsSoundBankInit())
-						AppExtern->audio->InitSoundBank();
+	if (ImGui::Button(stopButton.c_str()))
+		StopEvent(index);
 
-					// Finally, the soundbank to the corresponding new audio event
-					AppExtern->audio->LoadSoundBnk((*it)->soundBnk->path.c_str());
+	ImGui::Spacing();
+	ImGui::Separator();
 
-					eventsList[index] = *it;  // Updating list of events
-				}
-			}
-			ImGui::EndMenu();
-		}
-
-		ImGui::Spacing();
-
-		// Play and stop buttons for each event entry on Component
-		string playButton = "PLAY##" + to_string(index);
-		string stopButton = "STOP##" + to_string(index);
-
-		if (ImGui::Button(playButton.c_str()))
-			PlayEvent(index);
-
-		ImGui::SameLine();
-
-		if (ImGui::Button(stopButton.c_str()))
-			StopEvent(index);
-
-		ImGui::Spacing();
-		ImGui::Separator();
-
-		++index;
-	}
+	++index;
 }

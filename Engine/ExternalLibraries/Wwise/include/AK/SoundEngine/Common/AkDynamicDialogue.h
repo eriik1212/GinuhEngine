@@ -21,7 +21,8 @@ under the Apache License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
 OR CONDITIONS OF ANY KIND, either express or implied. See the Apache License for
 the specific language governing permissions and limitations under the License.
 
-  Copyright (c) 2022 Audiokinetic Inc.
+  Version: v2021.1.5  Build: 7749
+  Copyright (c) 2006-2021 Audiokinetic Inc.
 *******************************************************************************/
 
 #ifndef _AK_SOUNDENGINE_AKDYNAMICDIALOGUE_H
@@ -84,10 +85,7 @@ namespace AK
 				);
 
 			/// Get the value of a custom property of integer or boolean type.
-			/// \return 
-			/// - AK_Success if the value is found			
-			/// - AK_PartialSuccess if the event was found but no matching custom property was found on this object. Note that it could mean this value is the default value.
-			/// - AK_IDNotFound if the EventID is unknown (not loaded or typo in the id)
+			/// \return AK_PartialSuccess if the event was found but no matching custom property was found on this object. Note that it could mean this value is the default value.
 			AK_EXTERNAPIFUNC(AKRESULT, GetDialogueEventCustomPropertyValue)(
 				AkUniqueID in_eventID,			///< Unique ID of dialogue event
 				AkUInt32 in_uPropID,			///< Property ID of your custom property found under the Custom Properties tab of the Wwise project settings.
@@ -95,10 +93,7 @@ namespace AK
 				);
 
 			/// Get the value of a custom property of real type.
-			/// \return 
-			/// - AK_Success if the value is found			
-			/// - AK_PartialSuccess if the event was found but no matching custom property was found on this object. Note that it could mean this value is the default value.
-			/// - AK_IDNotFound if the EventID is unknown (not loaded or typo in the id)
+			/// \return AK_PartialSuccess if the event was found but no matching custom property was found on this object. Note that it could mean this value is the default value.
 			AK_EXTERNAPIFUNC(AKRESULT, GetDialogueEventCustomPropertyValue)(
 				AkUniqueID in_eventID,			///< Unique ID of dialogue event
 				AkUInt32 in_uPropID,			///< Property ID of your custom property found under the Custom Properties tab of the Wwise project settings.

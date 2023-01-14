@@ -21,7 +21,8 @@ under the Apache License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
 OR CONDITIONS OF ANY KIND, either express or implied. See the Apache License for
 the specific language governing permissions and limitations under the License.
 
-Copyright (c) 2022 Audiokinetic Inc.
+Version: v2021.1.5  Build: 7749
+Copyright (c) 2006-2021 Audiokinetic Inc.
 *******************************************************************************/
 
 // AkAtomic.h
@@ -30,26 +31,8 @@ Copyright (c) 2022 Audiokinetic Inc.
 
 #include <stddef.h>
 #include <stdint.h>
-#include <time.h>
-
-#define AkThreadYield() { \
-		struct timespec _akthreadyieldts; \
-		_akthreadyieldts.tv_sec = 0; \
-		_akthreadyieldts.tv_nsec = 1; \
-		nanosleep(&_akthreadyieldts, NULL); \
-	} \
-
-inline void AkSpinHint()
-{
-#if defined(__x86_64__) || defined(__i386__)
-	__asm__ volatile("pause" ::: "memory");
-#elif defined(__aarch64__) || (defined(__arm__) && __ARM_ARCH >= 7)
-	__asm__ volatile("yield" ::: "memory");
-#else
-	#error Unsupported platform for AkSpinHint
-#endif
-	//No spin hint supported on this CPU	
-}
+#include <unistd.h>
+#define AkThreadYield() usleep(0)
 
 #ifdef __cplusplus
 extern "C" {

@@ -1,0 +1,6 @@
+Event	ID	Name			Wwise Object Path	Notes
+	1529754339	Cowabunga_Loop			\Default Work Unit\Cowabunga_Loop	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	972568859	01Cowabunga	C:\Users\david\OneDrive\Escritorio\UNI\A3\S5\Motors\SoundBankCreation\.cache\Windows\SFX\01Cowabunga_D79FB2B7.wem		\Actor-Mixer Hierarchy\Default Work Unit\01Cowabunga		288348
+

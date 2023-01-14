@@ -21,7 +21,8 @@ under the Apache License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
 OR CONDITIONS OF ANY KIND, either express or implied. See the Apache License for
 the specific language governing permissions and limitations under the License.
 
-  Copyright (c) 2022 Audiokinetic Inc.
+  Version: v2021.1.5  Build: 7749
+  Copyright (c) 2006-2021 Audiokinetic Inc.
 *******************************************************************************/
 
 /// \file 
@@ -59,7 +60,7 @@ the specific language governing permissions and limitations under the License.
 
 	#include <AK/SoundEngine/Platforms/Lumin/AkTypes.h>
 
-#elif defined( __ANDROID__ ) && !defined (AK_LINUX_AOSP)
+#elif defined( __ANDROID__ )
 
 	#include <AK/SoundEngine/Platforms/Android/AkTypes.h>
 

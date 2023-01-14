@@ -20,9 +20,6 @@ public:
 	float maxAttenuation = 0.0f;
 
 	bool IsPlaying() const;			
-	void Unload();						
-	void Unloaded();					
-	bool IsReadyToUnload() const;
 
 	SoundBank* soundBnk = nullptr;
 

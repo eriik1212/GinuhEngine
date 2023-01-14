@@ -21,7 +21,8 @@ under the Apache License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
 OR CONDITIONS OF ANY KIND, either express or implied. See the Apache License for
 the specific language governing permissions and limitations under the License.
 
-  Copyright (c) 2022 Audiokinetic Inc.
+  Version: v2021.1.5  Build: 7749
+  Copyright (c) 2006-2021 Audiokinetic Inc.
 *******************************************************************************/
 
 // AkSpeakerVolumes.h
@@ -34,7 +35,7 @@ the specific language governing permissions and limitations under the License.
 
 #include <AK/SoundEngine/Common/AkTypes.h>
 
-#if defined( AK_CPU_ARM_NEON ) || ( ( defined( AK_CPU_X86 ) || defined( AK_CPU_X86_64 ) ) && !defined(AK_IOS) ) || defined (AK_CPU_WASM)
+#if defined( AK_CPU_ARM_NEON ) || ( ( defined( AK_CPU_X86 ) || defined( AK_CPU_X86_64 ) ) && !defined(AK_IOS) )
 
 	#define AKSIMD_SPEAKER_VOLUME
 
@@ -51,34 +52,13 @@ namespace SpeakerVolumes
 {
 	namespace Vector
 	{
-#if defined(AKSIMD_AVX2_SUPPORTED)
-#define SIZEOF_AKSIMD_V8F32		32
-#define SIZEOF_AKSIMD_NUMF32	8
-		/// Compute size (in number of v8 elements) required for given number of channels in vector.
-		AkForceInline AkUInt32 GetNumV8F32(AkUInt32 in_uNumChannels)
-		{
-			return (in_uNumChannels + SIZEOF_AKSIMD_NUMF32 - 1) >> 3;
-		}
-
-		/// Compute size (in number of elements/floats) required for given number of channels in vector.
-		AkForceInline AkUInt32 GetNumElements(AkUInt32 in_uNumChannels)
-		{
-			return GetNumV8F32(in_uNumChannels) * 8;
-		}
-
-		/// Compute size (in bytes) required for given number of channels in vector.
-		AkForceInline AkUInt32 GetRequiredSize(AkUInt32 in_uNumChannels)
-		{
-			return GetNumV8F32(in_uNumChannels) * SIZEOF_AKSIMD_V8F32;
-		}
-
-#elif defined(AKSIMD_V4F32_SUPPORTED)
+#ifdef AKSIMD_V4F32_SUPPORTED
 #define SIZEOF_AKSIMD_V4F32		16
-#define SIZEOF_AKSIMD_NUMF32	4
+#define SIZEOF_AKSIMD_F32		4	
 		/// Compute size (in number of v4 elements) required for given number of channels in vector.
 		AkForceInline AkUInt32 GetNumV4F32( AkUInt32 in_uNumChannels )
 		{
-			return (in_uNumChannels + SIZEOF_AKSIMD_NUMF32 - 1) >> 2;
+			return (in_uNumChannels + SIZEOF_AKSIMD_F32 - 1) >> 2;
 		}
 
 		/// Compute size (in number of elements/floats) required for given number of channels in vector.

@@ -61,8 +61,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <AdditionalLibraryDirectories>$(SolutionDir)\ExternalLibraries;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\ExternalLibraries;$(SolutionDir)\ExternalLibraries\Wwise\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;opengl32.lib;ws2_32.lib;AkMemoryMgr.lib;AkMusicEngine.lib;AkSoundEngine.lib;AkSpatialAudio.lib;AkStreamMgr.lib;AkRoomVerbFX.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
@@ -170,23 +170,19 @@
     <ClInclude Include="ExternalLibraries\MathGeoLib\include\Math\sse_mathfun.h" />
     <ClInclude Include="ExternalLibraries\MathGeoLib\include\Math\TransformOps.h" />
     <ClInclude Include="ExternalLibraries\MathGeoLib\include\Time\Clock.h" />
-    <ClInclude Include="ExternalLibraries\Wwise\include\Common\AkDefaultLowLevelIODispatcher.h" />
-    <ClInclude Include="ExternalLibraries\Wwise\include\Common\AkFileHelpersBase.h" />
-    <ClInclude Include="ExternalLibraries\Wwise\include\Common\AkFileLocationBase.h" />
-    <ClInclude Include="ExternalLibraries\Wwise\include\Common\AkFilePackage.h" />
-    <ClInclude Include="ExternalLibraries\Wwise\include\Common\AkFilePackageLowLevelIO.h" />
-    <ClInclude Include="ExternalLibraries\Wwise\include\Common\AkFilePackageLUT.h" />
-    <ClInclude Include="ExternalLibraries\Wwise\include\Common\AkGeneratedSoundBanksResolver.h" />
-    <ClInclude Include="ExternalLibraries\Wwise\include\Common\AkJobWorkerMgr.h" />
-    <ClInclude Include="ExternalLibraries\Wwise\include\Common\AkMultipleFileLocation.h" />
-    <ClInclude Include="ExternalLibraries\Wwise\include\Common\AkPlatformProfilerHooks.h" />
-    <ClInclude Include="ExternalLibraries\Wwise\include\Win32\AkDefaultIOHookBlocking.h" />
-    <ClInclude Include="ExternalLibraries\Wwise\include\Win32\AkDefaultIOHookDeferred.h" />
-    <ClInclude Include="ExternalLibraries\Wwise\include\Win32\AkFileHelpers.h" />
-    <ClInclude Include="ExternalLibraries\Wwise\include\Win32\AkFileHelpersBase.h" />
-    <ClInclude Include="ExternalLibraries\Wwise\include\Win32\AkFilePackageLowLevelIOBlocking.h" />
-    <ClInclude Include="ExternalLibraries\Wwise\include\Win32\AkFilePackageLowLevelIODeferred.h" />
-    <ClInclude Include="ExternalLibraries\Wwise\include\Win32\stdafx.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkDefaultLowLevelIODispatcher.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkFileHelpersBase.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkFileLocationBase.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkFilePackage.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkFilePackageLowLevelIO.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkFilePackageLUT.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkMultipleFileLocation.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Win32\AkDefaultIOHookBlocking.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Win32\AkDefaultIOHookDeferred.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Win32\AkFileHelpers.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Win32\AkFilePackageLowLevelIOBlocking.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Win32\AkFilePackageLowLevelIODeferred.h" />
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Win32\stdafx.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
@@ -258,17 +254,14 @@
     <ClCompile Include="ExternalLibraries\MathGeoLib\include\Math\SSEMath.cpp" />
     <ClCompile Include="ExternalLibraries\MathGeoLib\include\Math\TransformOps.cpp" />
     <ClCompile Include="ExternalLibraries\MathGeoLib\include\Time\Clock.cpp" />
-    <ClCompile Include="ExternalLibraries\Wwise\include\Common\AkDefaultLowLevelIODispatcher.cpp" />
-    <ClCompile Include="ExternalLibraries\Wwise\include\Common\AkFileLocationBase.cpp" />
-    <ClCompile Include="ExternalLibraries\Wwise\include\Common\AkFilePackage.cpp" />
-    <ClCompile Include="ExternalLibraries\Wwise\include\Common\AkFilePackageLUT.cpp" />
-    <ClCompile Include="ExternalLibraries\Wwise\include\Common\AkGeneratedSoundBanksResolver.cpp" />
-    <ClCompile Include="ExternalLibraries\Wwise\include\Common\AkJobWorkerMgr.cpp" />
-    <ClCompile Include="ExternalLibraries\Wwise\include\Common\AkMultipleFileLocation.cpp" />
-    <ClCompile Include="ExternalLibraries\Wwise\include\Win32\AkDefaultIOHookBlocking.cpp" />
-    <ClCompile Include="ExternalLibraries\Wwise\include\Win32\AkDefaultIOHookDeferred.cpp" />
-    <ClCompile Include="ExternalLibraries\Wwise\include\Win32\AkPlatformProfilerHooks.cpp" />
-    <ClCompile Include="ExternalLibraries\Wwise\include\Win32\stdafx.cpp" />
+    <ClCompile Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkDefaultLowLevelIODispatcher.cpp" />
+    <ClCompile Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkFileLocationBase.cpp" />
+    <ClCompile Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkFilePackage.cpp" />
+    <ClCompile Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkFilePackageLUT.cpp" />
+    <ClCompile Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkMultipleFileLocation.cpp" />
+    <ClCompile Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Win32\AkDefaultIOHookBlocking.cpp" />
+    <ClCompile Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Win32\AkDefaultIOHookDeferred.cpp" />
+    <ClCompile Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Win32\stdafx.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="glmath.cpp" />
     <ClCompile Include="Light.cpp" />
@@ -294,9 +287,14 @@
     <None Include="ExternalLibraries\MathGeoLib\include\Geometry\TriangleMesh_IntersectRay_CPP.inl" />
     <None Include="ExternalLibraries\MathGeoLib\include\Geometry\TriangleMesh_IntersectRay_SSE.inl" />
     <None Include="ExternalLibraries\MathGeoLib\include\Math\Matrix.inl" />
-    <None Include="ExternalLibraries\Wwise\include\Common\AkFilePackageLowLevelIO.inl" />
+    <None Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkFilePackageLowLevelIO.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties GetAudioID_1json__JsonSchema="https://ffizer.github.io/ffizer/ffizer.schema.json" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

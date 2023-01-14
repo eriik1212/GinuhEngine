@@ -21,7 +21,8 @@ under the Apache License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
 OR CONDITIONS OF ANY KIND, either express or implied. See the Apache License for
 the specific language governing permissions and limitations under the License.
 
-  Copyright (c) 2022 Audiokinetic Inc.
+  Version: v2021.1.5  Build: 7749
+  Copyright (c) 2006-2021 Audiokinetic Inc.
 *******************************************************************************/
 
 #pragma once
@@ -29,7 +30,7 @@ the specific language governing permissions and limitations under the License.
 #include <AK/Tools/Common/AkAssert.h>
 #include <AK/SoundEngine/Common/AkTypes.h>
 
-#include <stdarg.h>
+#include <pthread.h>
 #include <string.h>
 #include <wchar.h>
 #include <unistd.h>
@@ -38,10 +39,6 @@ the specific language governing permissions and limitations under the License.
 #include <sys/syscall.h>
 #endif
 #include <stdlib.h>
-
-#if defined(AK_SUPPORT_THREADS)
-#include <pthread.h>
-#endif
 
 #define AK_POSIX_NO_ERR 0
 #define AK_POSIX
@@ -79,20 +76,13 @@ namespace AK
 
 #define AK_DEFAULT_STACK_SIZE                   (128*1024)
 
-#if defined(AK_SUPPORT_THREADS)
+
 #define AK_THREAD_DEFAULT_SCHED_POLICY			SCHED_FIFO
+
 
 #define AK_THREAD_PRIORITY_NORMAL				(((sched_get_priority_max( SCHED_FIFO ) - sched_get_priority_min( SCHED_FIFO )) / 2) + sched_get_priority_min( SCHED_FIFO ))
 #define AK_THREAD_PRIORITY_ABOVE_NORMAL			sched_get_priority_max( SCHED_FIFO )
 #define AK_THREAD_PRIORITY_BELOW_NORMAL			sched_get_priority_min( SCHED_FIFO )
-#else
-#define AK_THREAD_DEFAULT_SCHED_POLICY			1
-
-#define AK_THREAD_PRIORITY_NORMAL				50
-#define AK_THREAD_PRIORITY_ABOVE_NORMAL			99
-#define AK_THREAD_PRIORITY_BELOW_NORMAL			1
-#endif
-
 
 #define AK_THREAD_AFFINITY_DEFAULT				0xFFFF
 
@@ -152,17 +142,11 @@ namespace AKPLATFORM
 		AKVERIFY( sem_post( &in_event ) == AK_POSIX_NO_ERR );
 	}
 
-	/// Platform Independent Helper
-	AkForceInline void AkClearSemaphore(AkSemaphore& io_semaphore)
-	{
-		memset(&io_semaphore, 0, sizeof(AkSemaphore));
-	}
-
 		/// Platform Independent Helper
-	inline AKRESULT AkCreateSemaphore( AkSemaphore& out_semaphore, AkUInt32 in_initialCount )
+	inline AKRESULT AkCreateSemaphore( AkSemaphore* out_semaphore, AkUInt32 in_initialCount )
 	{
 		int ret = sem_init(	
-							&out_semaphore,
+							out_semaphore,
 							0,
 							in_initialCount );
 		
@@ -170,25 +154,22 @@ namespace AKPLATFORM
 	}
 
 	/// Platform Independent Helper
-	inline void AkDestroySemaphore(AkSemaphore& io_semaphore)
+	inline void AkDestroySemaphore( AkSemaphore* io_semaphore )
 	{
-		AKVERIFY(sem_destroy(&io_semaphore) == AK_POSIX_NO_ERR);
-		memset(&io_semaphore, 0, sizeof(AkSemaphore));
-	}
+		AKVERIFY( sem_destroy( io_semaphore ) == AK_POSIX_NO_ERR);
+		AkClearEvent(*io_semaphore); 
+	}	
 
 	/// Platform Independent Helper - Semaphore wait, aka Operation P. Decrements value of semaphore, and, if the semaphore would be less than 0, waits for the semaphore to be released.
-	inline void AkWaitForSemaphore(AkSemaphore& in_semaphore)
+	inline void AkWaitForSemaphore( AkSemaphore* in_semaphore )
 	{
-		AKVERIFY(sem_wait(&in_semaphore) == AK_POSIX_NO_ERR);
+		AKVERIFY( sem_wait( in_semaphore ) == AK_POSIX_NO_ERR );
 	}
 
-	/// Platform Independent Helper - Semaphore signal, aka Operation V. Increments value of semaphore by an arbitrary count.
-	inline void AkReleaseSemaphore(AkSemaphore& in_semaphore, AkUInt32 in_count)
+	/// Platform Independent Helper - Semaphore signal, aka Operation V. Increments value of semaphore.
+	inline void AkReleaseSemaphore( AkSemaphore* in_semaphore )
 	{
-		for (int i=0; i < in_count; i++)
-		{
-			AKVERIFY(sem_post(&in_semaphore) == AK_POSIX_NO_ERR);
-		}
+		AKVERIFY( sem_post( in_semaphore ) == AK_POSIX_NO_ERR );
 	}
 #endif	
 
@@ -206,7 +187,6 @@ namespace AKPLATFORM
 			munmap( address, release );
 	}
 
-#if defined(AK_SUPPORT_THREADS)
     // Threads
     // ------------------------------------------------------------------
 
@@ -240,7 +220,7 @@ namespace AKPLATFORM
 		out_threadProperties.dwAffinityMask = AK_THREAD_AFFINITY_DEFAULT;	
 	}
 
-#if !defined(AK_ANDROID) && !defined(AK_LINUX_AOSP)
+#ifndef AK_ANDROID 
 	/// Platform Independent Helper
 	inline void AkCreateThread( 
 		AkThreadRoutine pStartRoutine,					// Thread routine.
@@ -325,52 +305,6 @@ namespace AKPLATFORM
 		return pthread_self();
 	}
 
-#else // AK_SUPPORT_THREADS
-
-	inline bool AkIsValidThread( AkThread * in_pThread )
-	{
-		return false;
-	}
-
-	inline void AkClearThread( AkThread * in_pThread )
-	{
-	}
-
-	inline void AkCloseThread( AkThread * in_pThread )
-	{
-	}
-
-	/// Platform Independent Helper
-	inline void AkGetDefaultThreadProperties( AkThreadProperties & out_threadProperties )
-	{
-		out_threadProperties.uStackSize		= AK_DEFAULT_STACK_SIZE;
-		out_threadProperties.uSchedPolicy	= AK_THREAD_DEFAULT_SCHED_POLICY;
-		out_threadProperties.nPriority		= AK_THREAD_PRIORITY_NORMAL;
-		out_threadProperties.dwAffinityMask = AK_THREAD_AFFINITY_DEFAULT;	
-	}
-
-	inline void AkCreateThread( 
-		AkThreadRoutine pStartRoutine,					// Thread routine.
-		void * pParams,									// Routine params.
-		const AkThreadProperties & in_threadProperties,	// Properties. NULL for default.
-		AkThread * out_pThread,							// Returned thread handle.
-		const char * /*in_szThreadName*/ )				// Opt thread name.
-	{
-	}
-
-	/// Platform Independent Helper
-	inline void AkWaitForSingleThread( AkThread * in_pThread )
-	{
-	}
-
-	/// Returns the calling thread's ID.
-	inline AkThreadID CurrentThread()
-	{
-		return 1;
-	}
-
-#endif // AK_SUPPORT_THREADS
-
 	/// Platform Independent Helper
     inline void AkSleep( AkUInt32 in_ulMilliseconds )
     {
@@ -385,12 +319,6 @@ namespace AKPLATFORM
 	inline void AkMemCpy( void * pDest, const void * pSrc, AkUInt32 uSize )
 	{
 		memcpy( pDest, pSrc, uSize );
-	}
-
-	/// Platform Independent Helper
-	inline void AkMemMove( void* pDest, const void* pSrc, AkUInt32 uSize )
-	{
-		memmove( pDest, pSrc, uSize );
 	}
 
 	/// Platform Independent Helper
@@ -476,24 +404,6 @@ namespace AKPLATFORM
 		size_t iAvailableSize = in_uDestMaxNumChars - strlen( in_pDest ) - 1;
 		strncat( in_pDest, in_pSrc, AkMin( iAvailableSize, strlen( in_pSrc ) ) );
 	}
-
-	inline int SafeStrFormat(wchar_t * in_pDest, size_t in_uDestMaxNumChars, const wchar_t* in_pszFmt, ...)
-	{
-		va_list args;
-		va_start(args, in_pszFmt);
-		int r = vswprintf(in_pDest, in_uDestMaxNumChars, in_pszFmt, args);
-		va_end(args);
-		return r;
-	}
-
-	inline int SafeStrFormat(char * in_pDest, size_t in_uDestMaxNumChars, const char* in_pszFmt, ...)
-	{
-		va_list args;
-		va_start(args, in_pszFmt);
-		int r = vsnprintf(in_pDest, in_uDestMaxNumChars, in_pszFmt, args);
-		va_end(args);
-		return r;
-	}
 	
 	/// Get the length, in characters, of a NULL-terminated AkUtf16 string
 	/// \return The length, in characters, of the specified string (excluding terminating NULL)
@@ -508,7 +418,7 @@ namespace AKPLATFORM
 		return len;
 	}
 
-#if !defined(AK_ANDROID) && !defined(AK_LINUX_AOSP) 
+#ifndef AK_ANDROID
 	#ifndef AK_OPTIMIZED	
 		/// Output a debug message on the console (Unicode string)
 		inline void OutputDebugMsg( const wchar_t* in_pszMsg )
@@ -621,12 +531,6 @@ namespace AKPLATFORM
 		return ( strncmp(in_pszString1, in_pszString2, in_MaxCountSize) );
 	}
 
-	/// Detects whether the string represents an absolute path to a file
-	inline bool IsAbsolutePath(const AkOSChar* in_pszPath, size_t in_pathLen)
-	{
-		return in_pathLen >= 1 && in_pszPath[0] == '/';
-	}
-
 	// Use with AkOSChar.
 #ifndef AK_PATH_SEPARATOR
 	#define AK_PATH_SEPARATOR	("/")
@@ -639,9 +543,6 @@ namespace AKPLATFORM
 #ifndef AK_DYNAMIC_LIBRARY_EXTENSION
 	#define AK_DYNAMIC_LIBRARY_EXTENSION	(".so")
 #endif
-
-	#define AK_FILEHANDLE_TO_UINTPTR(_h) ((AkUIntPtr)_h)
-	#define AK_SET_FILEHANDLE_TO_UINTPTR(_h,_u) _h = (AkFileHandle)_u
 }
 
 #pragma GCC visibility pop

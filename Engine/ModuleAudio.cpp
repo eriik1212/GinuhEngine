@@ -28,17 +28,14 @@ bool ModuleAudio::Init()
 
 	AK::StreamMgr::SetCurrentLanguage(AKTEXT("English(US)"));
 
-	//ReadIDs();
+	GetAudioID();
 
 	AkBankID bankID = 0;
-	for (int i = 0; i < soundBankList.size(); ++i)
+
+	if (AK::SoundEngine::LoadBank(L"Init.bnk", bankID) != AK_Success)
 	{
-		std::string nam = soundBankList[i]->name + ".bnk";
-		if (AK::SoundEngine::LoadBank(soundBankList[i]->name.c_str(), bankID) != AK_Success)
-		{
-			App->menus->info.AddConsoleLog("Couldn't find the bank: %s", soundBankList[i]->name.c_str());
-			return false;
-		}
+		App->menus->info.AddConsoleLog("Couldn't find the bank: Init.bnk");
+		return false;
 	}
 
 	bool ret = true;
@@ -171,24 +168,24 @@ bool ModuleAudio::InitMusicEngine()
 
 	return true;
 }
-//
-//bool ModuleAudio::InitSpatialAudio()
-//{
-//	//
-//	// Initialize Spatial Audio
-//	// Using default initialization parameters
-//	//
-//
-//	AkSpatialAudioInitSettings settings; // The constructor fills AkSpatialAudioInitSettings with the recommended default settings. 
-//	if (AK::SpatialAudio::Init(settings) != AK_Success)
-//	{
-//		assert(!"Could not initialize the Spatial Audio.");
-//		return false;
-//	}
-//
-//	return true;
-//}
-//
+
+bool ModuleAudio::InitSpatialAudio()
+{
+	//
+	// Initialize Spatial Audio
+	// Using default initialization parameters
+	//
+
+	AkSpatialAudioInitSettings settings; // The constructor fills AkSpatialAudioInitSettings with the recommended default settings. 
+	if (AK::SpatialAudio::Init(settings) != AK_Success)
+	{
+		assert(!"Could not initialize the Spatial Audio.");
+		return false;
+	}
+
+	return true;
+}
+
 //bool ModuleAudio::InitCommunications()
 //{
 //#ifndef AK_OPTIMIZED
@@ -225,17 +222,17 @@ void ModuleAudio::ProcessAudio()
 //
 //	return true;
 //}
-//
-//bool ModuleAudio::TermSpatialAudio()
-//{
-//	//
-//	// Terminate Spatial Audio
-//	//
-//
-//	//AK::SpatialAudio::Term();
-//
-//	return true;
-//}
+
+bool ModuleAudio::TermSpatialAudio()
+{
+	//
+	// Terminate Spatial Audio
+	//
+
+	//AK::SpatialAudio::Term();
+
+	return true;
+}
 
 bool ModuleAudio::TermMusicEngine()
 {
@@ -282,6 +279,51 @@ bool ModuleAudio::TermMemoryManager()
 	AK::MemoryMgr::Term();
 
 	return true;
+}
+
+void ModuleAudio::GetAudioID()
+{
+	std::ifstream file("Assets/Wwise/Wwise_IDs.h");
+
+	std::string line;
+
+	while (std::getline(file, line))
+	{
+		if (line.find("EVENTS") != std::string::npos)
+		{
+			while (std::getline(file, line))
+			{
+				if (line.find("}") != std::string::npos)
+				{
+					break;
+				}
+				else if (line.find("AkUniqueID") != std::string::npos)
+				{
+					line = line.substr(0, line.find("=") - 1);
+					line = line.substr(line.find_last_of(" ") + 1, line.length());
+
+					events.push_back(line);
+				}
+			}
+		}
+		else if (line.find("BANKS") != std::string::npos)
+		{
+			while (std::getline(file, line))
+			{
+				if (line.find("}") != std::string::npos)
+				{
+					break;
+				}
+				else if (line.find("AkUniqueID") != std::string::npos)
+				{
+					line = line.substr(0, line.find("=") - 1);
+					line = line.substr(line.find_last_of(" ") + 1, line.length());
+
+					soundBanks.push_back(line);
+				}
+			}
+		}
+	}
 }
 
 void ModuleAudio::RegisterGameObject(unsigned int id)
@@ -371,22 +413,6 @@ bool ModuleAudio::IsSoundBank(string &file)
 		return true;
 
 	return false;
-}
-
-AkBankID ModuleAudio::LoadSoundBnk(const char* bnkPath)
-{
-	AkBankID bankId;
-
-	// Load the corresponding soundbank
-	AKRESULT eResult = AK::SoundEngine::LoadBank(bnkPath, bankId, AK_DEFAULT_POOL_ID);
-
-	if(eResult == AK_Success)
-		App->menus->info.AddConsoleLog("Succesfully Imported BNK!");
-	else
-		assert(eResult == AK_Success);
-
-
-	return bankId;
 }
 
 //unsigned int ModuleAudio::GetBnkInfo(string soundbank_path)

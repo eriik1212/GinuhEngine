@@ -21,7 +21,8 @@ under the Apache License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
 OR CONDITIONS OF ANY KIND, either express or implied. See the Apache License for
 the specific language governing permissions and limitations under the License.
 
-Copyright (c) 2022 Audiokinetic Inc.
+Version: v2021.1.5  Build: 7749
+Copyright (c) 2006-2021 Audiokinetic Inc.
 *******************************************************************************/
 
 /// \file 
@@ -29,6 +30,8 @@ Copyright (c) 2022 Audiokinetic Inc.
 
 #pragma once
 
+#include <AK/Tools/Common/AkKeyArray.h>
+#include <AK/Tools/Common/AkSet.h>
 #include <AK/Tools/Common/AkString.h>
 #include <AK/Tools/Common/AkLock.h>
 
@@ -40,14 +43,17 @@ class AkImageSourcePlane;
 #define AK_MAX_REFLECT_ORDER 4
 #define AK_MAX_REFLECTION_PATH_LENGTH (AK_MAX_REFLECT_ORDER + 4)
 #define AK_MAX_SOUND_PROPAGATION_DEPTH 8
-#define AK_MAX_SOUND_PROPAGATION_WIDTH 8
+#define AK_DEFAULT_DIFFR_SHADOW_DEGREES (30.0f)
+#define AK_DEFAULT_DIFFR_SHADOW_ATTEN (1.0f)
 #define AK_DEFAULT_MOVEMENT_THRESHOLD (1.0f)
+#define AK_DEFAULT_REFLECTIONS_ORDER (1)
 #define AK_SA_EPSILON (0.001f)
 #define AK_SA_DIFFRACTION_EPSILON (0.002f) // Radians
 #define AK_SA_DIFFRACTION_DOT_EPSILON (0.000002) // 1.f - cos(AK_SA_DIFFRACTION_EPSILON)
 #define AK_SA_PLANE_THICKNESS_RATIO (0.005f)
 #define AK_SA_MIN_ENVIRONMENT_ABSORPTION (0.1f)
 #define AK_SA_MIN_ENVIRONMENT_SURFACE_AREA (1.0f)
+const AkReal32 kDefaultMaxPathLength = 100.f;
 
 const AkUInt32 kDefaultDiffractionMaxEdges = 8;
 const AkUInt32 kDefaultDiffractionMaxPaths = 8;
@@ -84,7 +90,6 @@ typedef AkUInt16 AkVertIdx;
 typedef AkUInt16 AkTriIdx;
 typedef AkUInt16 AkSurfIdx;
 typedef AkUInt16 AkEdgeIdx;
-typedef AkUInt16 AkEdgeReceptorIdx;
 
 #define AK_INVALID_VERTEX ((AkVertIdx)(-1))
 #define AK_INVALID_TRIANGLE ((AkTriIdx)(-1))
@@ -95,7 +100,7 @@ typedef AkUInt16 AkEdgeReceptorIdx;
 struct AkSpatialAudioID
 {
 	/// Default constructor.  Creates an invalid ID.
-	constexpr AkSpatialAudioID() : id((AkUInt64)-1) {}
+	AkSpatialAudioID() : id((AkUInt64)-1) {}
 	
 	/// Construct from a 64-bit int.
 	AkSpatialAudioID(AkUInt64 _id) : id(_id) {}
@@ -116,7 +121,7 @@ struct AkSpatialAudioID
 	/// Conversion function used internally to convert from a AkSpatialAudioID to a AkGameObjectID.
 	AkGameObjectID AsGameObjectID() const { return (AkGameObjectID)id; }
 	
-	operator AkUInt64 () const { return id; }
+	operator AkUInt64 () { return id; }
 
 	AkUInt64 id;
 };
@@ -130,7 +135,7 @@ struct AkSpatialAudioID
 struct AkRoomID : public AkSpatialAudioID
 {
 	/// Default constructor.  Creates an invalid ID.
-	constexpr AkRoomID() : AkSpatialAudioID() {}
+	AkRoomID() : AkSpatialAudioID() {}
 
 	/// Construct from a 64-bit int.
 	AkRoomID(AkUInt64 _id) : AkSpatialAudioID(_id) {}
@@ -161,7 +166,7 @@ namespace AK
 	namespace SpatialAudio
 	{
 		/// The outdoor room ID. This room is created automatically and is typically used for outdoors, i.e. when not in a room. 
-		constexpr AkRoomID kOutdoorRoomID;
+		static const AkRoomID kOutdoorRoomID = AkRoomID();
 	}
 }
 
@@ -179,8 +184,3 @@ typedef AkSpatialAudioID AkPortalID;
 ///	- \ref AK::SpatialAudio::RemoveGeometry
 typedef AkSpatialAudioID AkGeometrySetID;
 
-///< Unique ID for identifying geometry set instances.  Chosen by the client using any means desired.  
-/// \sa 
-///	- \ref AK::SpatialAudio::SetGeometry
-///	- \ref AK::SpatialAudio::RemoveGeometry
-typedef AkSpatialAudioID AkGeometryInstanceID;

@@ -202,37 +202,28 @@
     <ClCompile Include="ExternalLibraries\Json\parson.c">
       <Filter>ExternalLibraries\Json</Filter>
     </ClCompile>
-    <ClCompile Include="ExternalLibraries\Wwise\include\Common\AkDefaultLowLevelIODispatcher.cpp">
+    <ClCompile Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Win32\AkDefaultIOHookBlocking.cpp">
       <Filter>ExternalLibraries\Wwise</Filter>
     </ClCompile>
-    <ClCompile Include="ExternalLibraries\Wwise\include\Common\AkFileLocationBase.cpp">
+    <ClCompile Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Win32\AkDefaultIOHookDeferred.cpp">
       <Filter>ExternalLibraries\Wwise</Filter>
     </ClCompile>
-    <ClCompile Include="ExternalLibraries\Wwise\include\Common\AkFilePackage.cpp">
+    <ClCompile Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkDefaultLowLevelIODispatcher.cpp">
       <Filter>ExternalLibraries\Wwise</Filter>
     </ClCompile>
-    <ClCompile Include="ExternalLibraries\Wwise\include\Common\AkFilePackageLUT.cpp">
+    <ClCompile Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkFileLocationBase.cpp">
       <Filter>ExternalLibraries\Wwise</Filter>
     </ClCompile>
-    <ClCompile Include="ExternalLibraries\Wwise\include\Common\AkGeneratedSoundBanksResolver.cpp">
+    <ClCompile Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkFilePackage.cpp">
       <Filter>ExternalLibraries\Wwise</Filter>
     </ClCompile>
-    <ClCompile Include="ExternalLibraries\Wwise\include\Common\AkJobWorkerMgr.cpp">
+    <ClCompile Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Win32\stdafx.cpp">
       <Filter>ExternalLibraries\Wwise</Filter>
     </ClCompile>
-    <ClCompile Include="ExternalLibraries\Wwise\include\Common\AkMultipleFileLocation.cpp">
+    <ClCompile Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkMultipleFileLocation.cpp">
       <Filter>ExternalLibraries\Wwise</Filter>
     </ClCompile>
-    <ClCompile Include="ExternalLibraries\Wwise\include\Win32\AkDefaultIOHookBlocking.cpp">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClCompile>
-    <ClCompile Include="ExternalLibraries\Wwise\include\Win32\AkDefaultIOHookDeferred.cpp">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClCompile>
-    <ClCompile Include="ExternalLibraries\Wwise\include\Win32\AkPlatformProfilerHooks.cpp">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClCompile>
-    <ClCompile Include="ExternalLibraries\Wwise\include\Win32\stdafx.cpp">
+    <ClCompile Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkFilePackageLUT.cpp">
       <Filter>ExternalLibraries\Wwise</Filter>
     </ClCompile>
   </ItemGroup>
@@ -534,55 +525,43 @@
     <ClInclude Include="ExternalLibraries\Json\parson.h">
       <Filter>ExternalLibraries\Json</Filter>
     </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\Common\AkDefaultLowLevelIODispatcher.h">
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Win32\AkDefaultIOHookBlocking.h">
       <Filter>ExternalLibraries\Wwise</Filter>
     </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\Common\AkFileHelpersBase.h">
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Win32\AkDefaultIOHookDeferred.h">
       <Filter>ExternalLibraries\Wwise</Filter>
     </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\Common\AkFileLocationBase.h">
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkDefaultLowLevelIODispatcher.h">
       <Filter>ExternalLibraries\Wwise</Filter>
     </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\Common\AkFilePackage.h">
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Win32\AkFileHelpers.h">
       <Filter>ExternalLibraries\Wwise</Filter>
     </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\Common\AkFilePackageLowLevelIO.h">
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkFileHelpersBase.h">
       <Filter>ExternalLibraries\Wwise</Filter>
     </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\Common\AkFilePackageLUT.h">
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkFileLocationBase.h">
       <Filter>ExternalLibraries\Wwise</Filter>
     </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\Common\AkGeneratedSoundBanksResolver.h">
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkFilePackage.h">
       <Filter>ExternalLibraries\Wwise</Filter>
     </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\Common\AkJobWorkerMgr.h">
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkFilePackageLowLevelIO.h">
       <Filter>ExternalLibraries\Wwise</Filter>
     </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\Common\AkMultipleFileLocation.h">
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Win32\AkFilePackageLowLevelIOBlocking.h">
       <Filter>ExternalLibraries\Wwise</Filter>
     </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\Common\AkPlatformProfilerHooks.h">
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Win32\AkFilePackageLowLevelIODeferred.h">
       <Filter>ExternalLibraries\Wwise</Filter>
     </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\Win32\AkDefaultIOHookBlocking.h">
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Win32\stdafx.h">
       <Filter>ExternalLibraries\Wwise</Filter>
     </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\Win32\AkDefaultIOHookDeferred.h">
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkFilePackageLUT.h">
       <Filter>ExternalLibraries\Wwise</Filter>
     </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\Win32\AkFileHelpers.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\Win32\AkFileHelpersBase.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\Win32\AkFilePackageLowLevelIOBlocking.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\Win32\AkFilePackageLowLevelIODeferred.h">
-      <Filter>ExternalLibraries\Wwise</Filter>
-    </ClInclude>
-    <ClInclude Include="ExternalLibraries\Wwise\include\Win32\stdafx.h">
+    <ClInclude Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkMultipleFileLocation.h">
       <Filter>ExternalLibraries\Wwise</Filter>
     </ClInclude>
   </ItemGroup>
@@ -655,7 +634,7 @@
     <None Include="ExternalLibraries\MathGeoLib\include\Math\Matrix.inl">
       <Filter>ExternalLibraries\MathGeoLib\Math</Filter>
     </None>
-    <None Include="ExternalLibraries\Wwise\include\Common\AkFilePackageLowLevelIO.inl">
+    <None Include="ExternalLibraries\Wwise\include\AK\SoundEngine\Common\AkFilePackageLowLevelIO.inl">
       <Filter>ExternalLibraries\Wwise</Filter>
     </None>
   </ItemGroup>

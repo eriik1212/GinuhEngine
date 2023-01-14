@@ -10,7 +10,7 @@ Ginuh Games is a group made by two videogame design and development students who
 
 David Boces is one of the team members, he developed (...) you can visit his GitHub to check other projects he is involved [here](https://github.com/VoZeS). 
 
-![](https://github.com/eriik1212/GinuhEngine/blob/main/docs/media/Erik.jpeg)
+![](https://github.com/eriik1212/GinuhEngine/blob/main/docs/media/Erik.jpeg?raw=true)
 
 
 The other component of the group is Erik Martin, he took care about display options, bounding boxes, mouse picking and camera movement, hyou canv check his other projects on his GitHub [here](https://github.com/eriik1212).

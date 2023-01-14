@@ -5,15 +5,16 @@ Ginuh engine is a 3d videogame development engine created by two students at [CI
 ## About Us
 Ginuh Games is a group made by two videogame design and development students who love making videogames. 
 
+### David Boces
+
 ![]()
 
 
 David Boces is one of the team members, he developed (...) you can visit his GitHub to check other projects he is involved [here](https://github.com/VoZeS). 
 
+###Erik Martin
 
-![](https://raw.githubusercontent.com/eriik1212/GinuhEngine/main/docs/media/Erik.jpeg)
-
-need a picture
+![](https://github.com/eriik1212/GinuhEngine/blob/main/docs/media/Erik.jpeg?raw=true)
 
 The other component of the group is Erik Martin, he took care about display options, bounding boxes, mouse picking and camera movement, hyou canv check his other projects on his GitHub [here](https://github.com/eriik1212).
 

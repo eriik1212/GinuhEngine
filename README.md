@@ -27,7 +27,7 @@ versions (SDL, OpenGL, DevIL).
 * Engine has an about screen.
 
 ### v0.2
-* User can modify an object usimg inspector:
+* User can modify an object using inspector:
 - Hierarchy: delete, reparent, create empty and create children
 - Transform (translate, scale and rotate).
 - Change the game object texture.

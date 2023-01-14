@@ -22,11 +22,6 @@ C_AudioSource::~C_AudioSource()
 
 void C_AudioSource::Update()
 {
-	if (toPlayEvent)
-	{
-		PlayEvent(toPlayEventId);
-		toPlayEvent = false;
-	}
 }
 
 void C_AudioSource::PrintGui()
@@ -36,37 +31,6 @@ void C_AudioSource::PrintGui()
 		ImGui::TextColored(ImVec4(255, 255, 0, 255), "Enabled: "); ImGui::SameLine(); ImGui::Checkbox("##audioSourceEnabled", &enabled);
 
 		ImGui::Spacing();
-		ImGui::Spacing();
-
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.3f, 0.8f, 0.0f, 1.0f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.3f, 0.8f, 0.5f, 1.0f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.8f, 0.0f, 1.0f));
-
-		// Add new audio source
-		if (ImGui::Button("+"))
-		{
-			eventsList.push_back(emptyEvent);
-		}
-
-		ImGui::SameLine();
-
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 0.5f, 0.0f, 1.0f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(1.0f, 0.5f, 0.5f, 1.0f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1.0f, 0.5f, 0.0f, 1.0f));
-
-		// Remove last audio source added
-		if (ImGui::Button("-") && !eventsList.empty())
-		{
-			if (eventsList.back() != nullptr)
-			{
-				StopEvent(eventsList.size() - 1);
-				//eventsList.back()->Unload();       // Unload Resource
-			}
-			eventsList.pop_back(); // Pop Back Event
-		}
-
-		ImGui::PopStyleColor(6);
-
 		ImGui::Spacing();
 
 		PrintAudioList();
@@ -88,60 +52,51 @@ void C_AudioSource::PrintGui()
 	}
 }
 
-void C_AudioSource::PlayEvent(unsigned int index) const
+void C_AudioSource::PlayEvent()
 {
-	AppExtern->audio->PostEvent(eventsList[index], source_id);
+	playID = AppExtern->audio->PostEvent(audio.c_str(), source_id);
 
 }
 
-void C_AudioSource::StopEvent(unsigned int index) const
+void C_AudioSource::StopEvent() const
 {
-	AppExtern->audio->StopEvent(eventsList[index], source_id);
+	AppExtern->audio->StopEvent(audio.c_str(), source_id);
 
-}
-
-void C_AudioSource::StopAllEvents() const
-{
-	for (int i = 0; i < eventsList.size(); ++i)
-	{
-		StopEvent(i);
-
-	}
-}
-
-void C_AudioSource::PlayAudio(unsigned int audioId)
-{
-	if (audioId < eventsList.size())
-	{
-		toPlayEvent = true;
-		toPlayEventId = audioId;
-	}
 }
 
 void C_AudioSource::PrintAudioList()
 {
-	std::vector<AudioEvent*> events;
 
-	// List of different events
-	unsigned int index = 0;
+	if (ImGui::BeginCombo("##AudioClip", audio.c_str()))
+	{
+		if (ImGui::Selectable("None"))
+		{
+			audio = "None";
+		}
+		
+		std::vector<std::string> events = AppExtern->audio->events;
+		for (int i = 0; i < events.size(); i++)
+		{
+			if (ImGui::Selectable(events[i].c_str()))
+			{
+				audio = events[i];
+				
+			}
+		}
 
+		ImGui::EndCombo();
+	}
 
 	ImGui::Spacing();
 
-	// Play and stop buttons for each event entry on Component
-	string playButton = "PLAY##" + to_string(index);
-	string stopButton = "STOP##" + to_string(index);
-
-	if (ImGui::Button(playButton.c_str()))
-		PlayEvent(index);
+	if (ImGui::Button("Play"))
+		AppExtern->audio->PostEvent(audio.c_str(), source_id);
 
 	ImGui::SameLine();
 
-	if (ImGui::Button(stopButton.c_str()))
-		StopEvent(index);
+	if (ImGui::Button("Stop"))
+		StopEvent();
 
 	ImGui::Spacing();
 	ImGui::Separator();
-
-	++index;
 }

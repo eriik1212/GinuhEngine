@@ -51,8 +51,8 @@ public:
 	void SetListenerPos(GameObject* listener, unsigned int id);
 
 	// Events
-	void PostEvent(AudioEvent* event, unsigned int id);
-	void StopEvent(const AudioEvent* event, unsigned int id);
+	AkPlayingID PostEvent(const char* eventName, unsigned int source_id);
+	void StopEvent(const char* eventName, unsigned int id);
 
 	// SoundBanks
 	bool IsSoundBankInit();

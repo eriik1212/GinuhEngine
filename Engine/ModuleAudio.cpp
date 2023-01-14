@@ -38,6 +38,11 @@ bool ModuleAudio::Init()
 		return false;
 	}
 
+	if (AK::SoundEngine::LoadBank(L"Demo.bnk", bankID) != AK_Success)
+	{
+		App->menus->info.AddConsoleLog("Couldn't find the bank: Init.bnk");
+		return false;
+	}
 	bool ret = true;
 
 	return ret;
@@ -351,49 +356,36 @@ void ModuleAudio::AddListeners(unsigned int emitter_id, const AkGameObjectID lis
 
 void ModuleAudio::SetListenerPos(GameObject* listener, unsigned int id)
 {
-	// Orientation of the listener
-	AkVector front;
-	front.X = listener->transform->GetFrontVec().x;  
-	front.Y = listener->transform->GetFrontVec().y;
-	front.Z = listener->transform->GetFrontVec().z;
-
-	// Top orientation of the listener
-	AkVector top;
-	top.X = listener->transform->GetTopVec().x;
-	top.Y = listener->transform->GetTopVec().y;
-	top.Z = listener->transform->GetTopVec().z;
-
 	// Position of the listener
-	AkVector pos;
-	pos.X = listener->transform->transform.position.x;
-	pos.Y = listener->transform->transform.position.y;
-	pos.Z = listener->transform->transform.position.z;
+	float3 pos;
+	pos.x = listener->transform->transform.position.x;
+	pos.y = listener->transform->transform.position.y;
+	pos.z = listener->transform->transform.position.z;
 
 	/*AkTransform listenerTransform;
 	listenerTransform.Set(pos, front, top);*/
 
 	// Bc we only want to know pos and orientation, we use "AkSoundPosition". "AkTransform" is more 'complex' (scale..., etc)
 	AkSoundPosition listenerPosition;
-	listenerPosition.Set(pos, front, top);
+	listenerPosition.SetPosition(pos.x, pos.y, pos.z);
 
 	AK::SoundEngine::SetPosition(id, listenerPosition);
 }
 
-void ModuleAudio::PostEvent(AudioEvent* event, unsigned int id)
+AkPlayingID ModuleAudio::PostEvent(const char* eventName, unsigned int source_id)
 {
-	if (event != nullptr)
+	AkPlayingID playingID = AK::SoundEngine::PostEvent(eventName, source_id);
+	if (playingID == AK_INVALID_PLAYING_ID)
 	{
-		event->event_id = AK::SoundEngine::PostEvent(event->name.c_str(), id);
+		App->menus->info.AddConsoleLog("Post event %s failed", eventName);
+		return -1;
 	}
+	return playingID;
 }
 
-void ModuleAudio::StopEvent(const AudioEvent* event, unsigned int id)
+void ModuleAudio::StopEvent(const char* eventName, unsigned int id)
 {
-	if (event != nullptr)
-	{
-		AK::SoundEngine::ExecuteActionOnEvent(event->name.c_str(), AK::SoundEngine::AkActionOnEventType_Stop, id);
-
-	}
+	AK::SoundEngine::ExecuteActionOnEvent(eventName, AK::SoundEngine::AkActionOnEventType_Stop, id);
 }
 
 bool ModuleAudio::IsSoundBankInit()

@@ -34,14 +34,15 @@ public:
 
 private:
 
-	void PlayEvent(unsigned int index) const;
-	void StopEvent(unsigned int index) const;
-	void StopAllEvents() const;
-
-	void PlayAudio(unsigned int audioId);
+	void PlayEvent();
+	void StopEvent() const;
 
 	bool toPlayEvent = false;
 	unsigned toPlayEventId = 0;
 
 	void PrintAudioList();
+
+	string audio;
+	unsigned int playID;
+
 };

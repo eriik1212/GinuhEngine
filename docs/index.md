@@ -18,9 +18,13 @@ The other component of the group is Erik Martin, he took care about display opti
 Ginuh Engine was a very exigent project, but also was a perfect way to improve our coding level and skills a lot. 
 
 ## Core Sub-Systems
+* ### Editor Docking
+* ### GameObject and Component System
+* ### Multi-viewport Rendering
+* ### Memory Managment
+* ### Editor Camera Movement
 
-
-## Audio Sub-System
+## WWise audio Sub-System
 
 
 ## Workflow Video

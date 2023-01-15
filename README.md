@@ -38,8 +38,8 @@ versions (SDL, OpenGL, DevIL).
 gameobject with a camera component(main game camera).
 
 ### v1.0
-* + Audio Listener Component
-* + Audio Source Component
+* Audio Listener Component
+* Audio Source Component
 * User can import SoundBanks to play its events:
 - Play
 - Stop
@@ -55,6 +55,7 @@ gameobject with a camera component(main game camera).
 * [Assimp](https://github.com/assimp/assimp) 3.1.1
 * [DevIL](https://github.com/DentonW/DevIL) 1.8.0
 * [Physfs](https://github.com/devkitPro/physfs) 3.0.2
+* [Wwise](https://www.audiokinetic.com/fr/library/2021.1.11_7933/?source=Help&id=welcome_to_wwise) 2021.1.11
 
 ## MIT License
 

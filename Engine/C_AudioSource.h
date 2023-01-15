@@ -29,20 +29,24 @@ public:
 	GameObject* SourceGameObject;
 	unsigned int source_id;
 
-	vector<AudioEvent*> eventsList;
-	AudioEvent* emptyEvent = nullptr;
+	string audio;
+
+	void PlayEvent();
 
 private:
 
-	void PlayEvent();
 	void StopEvent() const;
+	void PauseEvent() const;
+	void ResumeEvent() const;
 
 	bool toPlayEvent = false;
 	unsigned toPlayEventId = 0;
 
 	void PrintAudioList();
 
-	string audio;
 	unsigned int playID;
+	float volume;
+	bool playOnAwake;
+	bool isPlaying = false;
 
 };

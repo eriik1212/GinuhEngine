@@ -16,23 +16,31 @@
     "Id": "1842718300",
     "GUID": "{C2AECE2F-B8F1-41D0-94FC-5BC71E611FC0}",
     "Language": "SFX",
-    "Hash": "884751606",
+    "Hash": "2256212448",
     "ObjectPath": "\\SoundBanks\\Default Work Unit\\Demo",
     "ShortName": "Demo",
     "Path": "Demo.bnk",
     "IncludedEvents": [
      {
-      "Id": "1529754339",
-      "Name": "Cowabunga_Loop",
-      "ObjectPath": "\\Events\\Default Work Unit\\Cowabunga_Loop",
-      "GUID": "{EC8CDCC3-CC31-4732-808F-F80370C07A62}",
-      "DurationType": "Infinite",
+      "Id": "626769978",
+      "Name": "BackgroundMusic",
+      "ObjectPath": "\\Events\\Default Work Unit\\BackgroundMusic",
+      "GUID": "{7F87A041-45B0-489E-B7A3-044F64D018A7}",
+      "DurationType": "OneShot",
+      "DurationMin": "30.743999",
+      "DurationMax": "30.743999",
       "IncludedMemoryFiles": [
        {
-        "Id": "972568859",
+        "Id": "66774293",
         "Language": "SFX",
-        "ShortName": "01Cowabunga.wav",
-        "Path": "SFX\\01Cowabunga_D79FB2B7.wem"
+        "ShortName": "cat-2-30-sec-110543.wav",
+        "Path": "SFX\\cat-2-30-sec-110543_96D980F5.wem"
+       },
+       {
+        "Id": "305910736",
+        "Language": "SFX",
+        "ShortName": "an-epic-30-sec-16063.wav",
+        "Path": "SFX\\an-epic-30-sec-16063_E0DA7CF5.wem"
        }
       ]
      }

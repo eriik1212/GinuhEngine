@@ -12,11 +12,17 @@ C_AudioListener::C_AudioListener(GameObject* gameObject) : Component(gameObject,
 
 	AppExtern->audio->RegisterGameObject(listener_id);
 	AppExtern->audio->SetDefaultListener(listener_id);
+
 }
 
 C_AudioListener::~C_AudioListener()
 {
+	AppExtern->audio->RemoveDefaultListener(listener_id);
+
 	AppExtern->audio->UnregisterGameObject(listener_id);
+
+	AppExtern->menus->info.AddConsoleLog("Destroying AudioListener");
+
 }
 
 void C_AudioListener::Update()
@@ -34,9 +40,17 @@ void C_AudioListener::PrintGui()
 		ImGui::Spacing();
 
 		if(enabled)
+		{
 			ImGui::TextColored(ImVec4(0, 255, 0, 255), "'%s' is now a LISTENER", go->name.c_str());
+			AppExtern->audio->SetDefaultListener(listener_id);
+
+		}
 		else
+		{
 			ImGui::TextColored(ImVec4(255, 0, 0, 255), "'%s' is NOT a LISTENER", go->name.c_str());
+			AppExtern->audio->RemoveDefaultListener(listener_id);
+
+		}
 
 		ImGui::Spacing();
 		ImGui::Spacing();

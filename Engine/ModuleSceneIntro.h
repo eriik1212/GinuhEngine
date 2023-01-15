@@ -13,6 +13,7 @@ public:
 	bool Init();
 	bool Start();
 	update_status Update(float dt);
+	update_status PostUpdate(float dt);
 	bool CleanUp();
 
 	bool wireframe = false;
@@ -33,4 +34,10 @@ private:
 	void RecursiveUpdate(GameObject* goToUpdate);
 
 	GameObject* mainCam;
+
+	GameObject* emptyGO;
+
+	float timer = 0;
+	bool changeDir;
+
 };

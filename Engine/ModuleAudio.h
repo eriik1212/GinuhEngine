@@ -47,20 +47,23 @@ public:
 
 	// Listeners 
 	void SetDefaultListener(const AkGameObjectID id);
+	void RemoveDefaultListener(const AkGameObjectID id);
 	void AddListeners(unsigned int emitter_id, const AkGameObjectID listener_id);
 	void SetListenerPos(GameObject* listener, unsigned int id);
+
+	void SetSourcePos(GameObject* source, unsigned int id);
 
 	// Events
 	AkPlayingID PostEvent(const char* eventName, unsigned int source_id);
 	void StopEvent(const char* eventName, unsigned int id);
+	void PauseEvent(const char* eventName, unsigned int id);
+	void ResumeEvent(const char* eventName, unsigned int id);
 
 	// SoundBanks
 	bool IsSoundBankInit();
 	void InitSoundBank();
 
 	bool IsSoundBank(string &file);
-
-	//unsigned int GetBnkInfo(string soundbank_path);
 
 	vector<string> events;
 	vector<string> soundBanks;
@@ -95,9 +98,6 @@ private:
 
 	//SoundBank
 	bool initSoundBank = false;
-
-	vector<SoundBank*> soundBankList;
-	SoundBank* initSoundBnk = nullptr;
 
 	void GetAudioID();
 

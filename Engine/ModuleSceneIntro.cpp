@@ -3,6 +3,10 @@
 #include "ModuleSceneIntro.h"
 #include "Primitive.h"
 #include "GameObject.h"
+#include "C_AudioListener.h"
+#include "C_AudioSource.h"
+
+#include "MeshImporter.h"
 
 #include "Glew/include/glew.h"
 #include "SDL/include/SDL_opengl.h"
@@ -31,7 +35,12 @@ bool ModuleSceneIntro::Init()
 
 	//------------------------------------------------------------------------- Create & Set the Camera
 	mainCam = new GameObject(gameObjects[0], "Main Camera");
-	mainCam->transform->transform.position = float3(0, 10, 0);
+	mainCam->transform->transform.position = float3(0, 0, -7.0f);
+
+	//------------------------------------------------------------------------- Create Empty GO with BG Music
+	emptyGO = new GameObject(gameObjects[0], "Background Music");
+	emptyGO->transform->transform.position = float3(0, 0, 0);
+
 
 	return true;
 }
@@ -47,8 +56,37 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(float3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(float3(0, 0, 0));
 
+	//--------------------------------------------------------------------------------------------------------------- Camera Components
+
 	C_Camera* camComp = dynamic_cast<C_Camera*>(mainCam->CreateComponent(Component::C_TYPE::CAMERA));
 	camComp->SetGameCamera();
+
+	C_AudioListener* listComp = dynamic_cast<C_AudioListener*>(mainCam->CreateComponent(Component::C_TYPE::AUDIO_LISTENER));
+
+	//---------------------------------------------------------------------------------------------------------------
+	// 
+	//--------------------------------------------------------------------------------------------------------------- EmptyGO Components
+
+	C_AudioSource* sourceComp = dynamic_cast<C_AudioSource*>(emptyGO->CreateComponent(Component::C_TYPE::AUDIO_SOURCE));
+	sourceComp->audio = "BACKGROUNDMUSIC";
+	sourceComp->PlayEvent();
+
+	//---------------------------------------------------------------------------------------------------------------
+	// 
+	//--------------------------------------------------------------------------------------------------------------- Cube GO
+
+	MeshImporter::ImportMesh("Assets/Primitives/cube.fbx");
+	gameObjects[3]->transform->transform.position = float3(4, 0, -6);
+
+	//---------------------------------------------------------------------------------------------------------------
+	// 
+	//--------------------------------------------------------------------------------------------------------------- Sphere GO
+
+	MeshImporter::ImportMesh("Assets/Primitives/sphere.fbx");
+	gameObjects[5]->transform->transform.position = float3(-4, 0, -10);
+
+	timer = 0;
+	changeDir = false;
 
 	return ret;
 }
@@ -72,8 +110,29 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update(float dt)
 {
-
 	UpdateGO();
+
+	return UPDATE_CONTINUE;
+}
+
+update_status ModuleSceneIntro::PostUpdate(float dt)
+{
+	timer++;
+
+	if (timer >= 100.0f)
+	{
+		changeDir = !changeDir;
+		timer = 0;
+	}
+
+	if (changeDir)
+	{
+		gameObjects[5]->transform->transform.position += float3(0, 0, -0.1f);
+	}
+	else if (!changeDir)
+	{
+		gameObjects[5]->transform->transform.position += float3(0, 0, 0.1f);
+	}
 
 	return UPDATE_CONTINUE;
 }

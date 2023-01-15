@@ -11,17 +11,20 @@ C_AudioSource::C_AudioSource(GameObject* gameObject) : Component(gameObject, C_T
 	source_id = gameObject->id;
 
 	AppExtern->audio->RegisterGameObject(source_id);
-
 }
 
 C_AudioSource::~C_AudioSource()
 {
+	StopEvent();
+
 	AppExtern->audio->UnregisterGameObject(source_id);
 
+	AppExtern->menus->info.AddConsoleLog("Destroying AudioSource");
 }
 
 void C_AudioSource::Update()
 {
+	AppExtern->audio->SetSourcePos(SourceGameObject, source_id);
 }
 
 void C_AudioSource::PrintGui()
@@ -64,22 +67,28 @@ void C_AudioSource::StopEvent() const
 
 }
 
+void C_AudioSource::ResumeEvent() const
+{
+	AppExtern->audio->ResumeEvent(audio.c_str(), source_id);
+
+}
+
+void C_AudioSource::PauseEvent() const
+{
+	AppExtern->audio->PauseEvent(audio.c_str(), source_id);
+
+}
+
 void C_AudioSource::PrintAudioList()
 {
 
 	if (ImGui::BeginCombo("##AudioClip", audio.c_str()))
-	{
-		if (ImGui::Selectable("None"))
+	{	
+		for (int i = 0; i < AppExtern->audio->events.size(); i++)
 		{
-			audio = "None";
-		}
-		
-		std::vector<std::string> events = AppExtern->audio->events;
-		for (int i = 0; i < events.size(); i++)
-		{
-			if (ImGui::Selectable(events[i].c_str()))
+			if (ImGui::Selectable(AppExtern->audio->events[i].c_str()))
 			{
-				audio = events[i];
+				audio = AppExtern->audio->events[i];
 				
 			}
 		}
@@ -90,12 +99,38 @@ void C_AudioSource::PrintAudioList()
 	ImGui::Spacing();
 
 	if (ImGui::Button("Play"))
-		AppExtern->audio->PostEvent(audio.c_str(), source_id);
+	{
+		if(!isPlaying)
+		{
+			PlayEvent();
+			isPlaying = true;
+		}
+
+	}
 
 	ImGui::SameLine();
 
 	if (ImGui::Button("Stop"))
+	{
 		StopEvent();
+		isPlaying = false;
+	}
+
+	ImGui::SameLine();
+
+	if (ImGui::Button("Pause"))
+	{
+		PauseEvent();
+		isPlaying = false;
+	}
+
+	ImGui::SameLine();
+
+	if (ImGui::Button("Resume"))
+	{
+		ResumeEvent();
+		isPlaying = true;
+	}
 
 	ImGui::Spacing();
 	ImGui::Separator();

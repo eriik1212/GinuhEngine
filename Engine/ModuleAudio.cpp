@@ -345,7 +345,17 @@ void ModuleAudio::UnregisterGameObject(unsigned int id)
 
 void ModuleAudio::SetDefaultListener(const AkGameObjectID id)
 {
+	AK::SpatialAudio::RegisterListener(id);
 	AK::SoundEngine::SetDefaultListeners(&id, MAX_LISTENERS);
+
+
+}
+
+void ModuleAudio::RemoveDefaultListener(const AkGameObjectID id)
+{
+	AK::SpatialAudio::UnregisterListener(id);
+	AK::SoundEngine::RemoveDefaultListener(id);
+
 }
 
 void ModuleAudio::AddListeners(unsigned int emitter_id, const AkGameObjectID listener_id)
@@ -357,19 +367,27 @@ void ModuleAudio::AddListeners(unsigned int emitter_id, const AkGameObjectID lis
 void ModuleAudio::SetListenerPos(GameObject* listener, unsigned int id)
 {
 	// Position of the listener
-	float3 pos;
-	pos.x = listener->transform->transform.position.x;
-	pos.y = listener->transform->transform.position.y;
-	pos.z = listener->transform->transform.position.z;
-
-	/*AkTransform listenerTransform;
-	listenerTransform.Set(pos, front, top);*/
+	float3 pos = listener->transform->transform.position;
 
 	// Bc we only want to know pos and orientation, we use "AkSoundPosition". "AkTransform" is more 'complex' (scale..., etc)
 	AkSoundPosition listenerPosition;
+	listenerPosition.SetOrientation({ 0,0,-1 }, { 0,1,0 });
 	listenerPosition.SetPosition(pos.x, pos.y, pos.z);
 
 	AK::SoundEngine::SetPosition(id, listenerPosition);
+}
+
+void ModuleAudio::SetSourcePos(GameObject* source, unsigned int id)
+{
+	// Position of the listener
+	float3 pos = source->transform->transform.position;
+
+	// Bc we only want to know pos and orientation, we use "AkSoundPosition". "AkTransform" is more 'complex' (scale..., etc)
+	AkSoundPosition sourcePosition;
+	sourcePosition.SetOrientation({ 0,0,-1 }, { 0,1,0 });
+	sourcePosition.SetPosition(pos.x, pos.y, pos.z);
+
+	AK::SoundEngine::SetPosition(id, sourcePosition);
 }
 
 AkPlayingID ModuleAudio::PostEvent(const char* eventName, unsigned int source_id)
@@ -386,6 +404,16 @@ AkPlayingID ModuleAudio::PostEvent(const char* eventName, unsigned int source_id
 void ModuleAudio::StopEvent(const char* eventName, unsigned int id)
 {
 	AK::SoundEngine::ExecuteActionOnEvent(eventName, AK::SoundEngine::AkActionOnEventType_Stop, id);
+}
+
+void ModuleAudio::PauseEvent(const char* eventName, unsigned int id)
+{
+	AK::SoundEngine::ExecuteActionOnEvent(eventName, AK::SoundEngine::AkActionOnEventType_Pause, id);
+}
+
+void ModuleAudio::ResumeEvent(const char* eventName, unsigned int id)
+{
+	AK::SoundEngine::ExecuteActionOnEvent(eventName, AK::SoundEngine::AkActionOnEventType_Resume, id);
 }
 
 bool ModuleAudio::IsSoundBankInit()
@@ -406,54 +434,3 @@ bool ModuleAudio::IsSoundBank(string &file)
 
 	return false;
 }
-
-//unsigned int ModuleAudio::GetBnkInfo(string soundbank_path)
-//{
-//	char* buf;
-//	AkUInt32 ret = 0;
-//
-//	string json_file = soundbank_path.substr(0, soundbank_path.find_last_of('.')) + ".json"; // Changing .bnk with .json
-//	if (App->files_manager->LoadFile(json_file.c_str(), &buf))
-//	{
-//		Data general_info(buf);
-//		Data sb_info = general_info.GetJObject("SoundBanksInfo").GetArray("SoundBanks", 0);
-//
-//		// Soundbank Information
-//		SoundBank* soundbank = new SoundBank();
-//		soundBankList.push_back(soundbank);
-//
-//		ret = soundbank->id = stoul(sb_info.GetString("Id"));
-//		soundbank->name = sb_info.GetString("ShortName");
-//		soundbank->path = soundbank_path;
-//
-//		// Is Init Soundbank?
-//		if (soundbank->name.compare("Init") == 0)
-//			initSoundBnk = soundbank;
-//
-//		// Events Information
-//		uint num_events = sb_info.GetArraySize("IncludedEvents");
-//		for (uint i = 0; i < num_events; ++i)
-//		{
-//			Data events_info = sb_info.GetArray("IncludedEvents", i);
-//
-//			AudioEvent* a_event = new AudioEvent();
-//			soundbank->events.push_back(a_event);
-//			a_event->soundBnk = soundbank;
-//
-//			a_event->id = stoul(events_info.GetString("Id"));
-//			a_event->name = events_info.GetString("Name");
-//
-//			const char* attenuation = events_info.GetString("MaxAttenuation");
-//			if (attenuation != nullptr)
-//			{
-//				a_event->maxAttenuation = stof(attenuation);
-//				if (a_event->maxAttenuation != 0.0f)
-//					a_event->isSound3D = true;
-//			}
-//		}
-//
-//		delete buf; // Freeing memory
-//	}
-//
-//	return ret;
-//}

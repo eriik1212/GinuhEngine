@@ -1,6 +1,10 @@
 Event	ID	Name			Wwise Object Path	Notes
-	1529754339	Cowabunga_Loop			\Default Work Unit\Cowabunga_Loop	
+	626769978	BackgroundMusic			\Default Work Unit\BackgroundMusic	
+
+Modulator Time	ID	Name			Wwise Object Path	Notes
+	69270765	Modulator Time (Custom)				
 
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
-	972568859	01Cowabunga	C:\Users\david\OneDrive\Escritorio\UNI\A3\S5\Motors\SoundBankCreation\.cache\Windows\SFX\01Cowabunga_D79FB2B7.wem		\Actor-Mixer Hierarchy\Default Work Unit\01Cowabunga		288348
+	66774293	cat-2-30-sec-110543	C:\Users\david\OneDrive\Escritorio\UNI\A3\S5\Motors\SoundBankCreation\.cache\Windows\SFX\cat-2-30-sec-110543_96D980F5.wem		\Actor-Mixer Hierarchy\Default Work Unit\MusicBackground\cat-2-30-sec-110543		5902912
+	305910736	an-epic-30-sec-16063	C:\Users\david\OneDrive\Escritorio\UNI\A3\S5\Motors\SoundBankCreation\.cache\Windows\SFX\an-epic-30-sec-16063_E0DA7CF5.wem		\Actor-Mixer Hierarchy\Default Work Unit\MusicBackground\an-epic-30-sec-16063		4442176
 

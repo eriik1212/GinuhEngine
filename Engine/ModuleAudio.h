@@ -3,8 +3,6 @@
 
 #include "Module.h"
 #include "Globals.h"
-#include "AudioEvent.h"
-#include "SoundBank.h"
 
 //#include <AK/SoundEngine/Common/AkMemoryMgr.h>         // Memory Manager
 #include <AK/SoundEngine/Common/AkModule.h>            // Default memory and stream managers  
@@ -59,12 +57,6 @@ public:
 	void PauseEvent(const char* eventName, unsigned int id);
 	void ResumeEvent(const char* eventName, unsigned int id);
 
-	// SoundBanks
-	bool IsSoundBankInit();
-	void InitSoundBank();
-
-	bool IsSoundBank(string &file);
-
 	vector<string> events;
 	vector<string> soundBanks;
 
@@ -95,9 +87,6 @@ private:
 	bool TermSoundEngine();
 	bool TermStreamingManager();
 	bool TermMemoryManager();
-
-	//SoundBank
-	bool initSoundBank = false;
 
 	void GetAudioID();
 

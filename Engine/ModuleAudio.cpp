@@ -288,21 +288,21 @@ bool ModuleAudio::TermMemoryManager()
 
 void ModuleAudio::GetAudioID()
 {
-	std::ifstream file("Assets/Wwise/Wwise_IDs.h");
+	std::ifstream filePath("Assets/Wwise/Wwise_IDs.h");
 
-	std::string line;
+	string line;
 
-	while (std::getline(file, line))
+	while (std::getline(filePath, line))
 	{
-		if (line.find("EVENTS") != std::string::npos)
+		if (line.find("EVENTS") != string::npos)
 		{
-			while (std::getline(file, line))
+			while (std::getline(filePath, line))
 			{
 				if (line.find("}") != std::string::npos)
 				{
 					break;
 				}
-				else if (line.find("AkUniqueID") != std::string::npos)
+				else if (line.find("AkUniqueID") != string::npos)
 				{
 					line = line.substr(0, line.find("=") - 1);
 					line = line.substr(line.find_last_of(" ") + 1, line.length());
@@ -311,15 +311,15 @@ void ModuleAudio::GetAudioID()
 				}
 			}
 		}
-		else if (line.find("BANKS") != std::string::npos)
+		else if (line.find("BANKS") != string::npos)
 		{
-			while (std::getline(file, line))
+			while (std::getline(filePath, line))
 			{
-				if (line.find("}") != std::string::npos)
+				if (line.find("}") != string::npos)
 				{
 					break;
 				}
-				else if (line.find("AkUniqueID") != std::string::npos)
+				else if (line.find("AkUniqueID") != string::npos)
 				{
 					line = line.substr(0, line.find("=") - 1);
 					line = line.substr(line.find_last_of(" ") + 1, line.length());
@@ -414,23 +414,4 @@ void ModuleAudio::PauseEvent(const char* eventName, unsigned int id)
 void ModuleAudio::ResumeEvent(const char* eventName, unsigned int id)
 {
 	AK::SoundEngine::ExecuteActionOnEvent(eventName, AK::SoundEngine::AkActionOnEventType_Resume, id);
-}
-
-bool ModuleAudio::IsSoundBankInit()
-{
-	return initSoundBank;
-}
-
-void ModuleAudio::InitSoundBank()
-{
-	initSoundBank = true;
-}
-
-bool ModuleAudio::IsSoundBank(string &file)
-{
-	size_t extension = file.find_last_of('.');
-	if (extension != string::npos && file.substr(extension + 1).compare("bnk") == 0)
-		return true;
-
-	return false;
 }

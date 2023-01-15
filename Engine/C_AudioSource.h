@@ -5,7 +5,6 @@
 #include "Component.h"
 #include "ModuleFilesManager.h"
 #include "ModuleAudio.h"
-#include "AudioEvent.h"
 
 #include <iostream>
 #include <string>

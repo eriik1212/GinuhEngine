@@ -196,9 +196,6 @@
     <ClCompile Include="C_AudioSource.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="AudioEvent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ExternalLibraries\Json\parson.c">
       <Filter>ExternalLibraries\Json</Filter>
     </ClCompile>
@@ -515,12 +512,6 @@
     </ClInclude>
     <ClInclude Include="C_AudioSource.h">
       <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="AudioEvent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SoundBank.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ExternalLibraries\Json\parson.h">
       <Filter>ExternalLibraries\Json</Filter>

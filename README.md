@@ -37,6 +37,14 @@ versions (SDL, OpenGL, DevIL).
 * The editor has 2 windows one with the scene(editor view) and another captured from a
 gameobject with a camera component(main game camera).
 
+### v1.0
+* + Audio Listener Component
+* + Audio Source Component
+* User can import SoundBanks to play its events:
+- Play
+- Stop
+- Pause
+- Resume
 
 ## Third party Libraries Used:
 * [SDL](https://github.com/libsdl-org/SDLS) 2.24.0.0

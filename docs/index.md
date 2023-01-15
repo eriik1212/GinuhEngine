@@ -1,6 +1,6 @@
 # Ginuh Engine
 ## About Engine
-Ginuh engine is a 3d videogame development engine created by two students at [CITM](https://www.citm.upc.edu/). This project was made as part of a subject assignement. (...)
+Ginuh engine is a 3d videogame development engine created by two students at [CITM](https://www.citm.upc.edu/). This project was made as part of a subject assignement. With our engine you can create, eliminate, modify and parent GameObjects, you can change textures, charge and play audios and import meshes.
 
 ## About Us
 Ginuh Games is a group made by two videogame design and development students who love making videogames. 
@@ -9,7 +9,7 @@ Ginuh Games is a group made by two videogame design and development students who
 
 ![](https://github.com/eriik1212/GinuhEngine/blob/main/docs/media/David.jpeg?raw=true)
 
-David Boces is one of the team members, he developed (...) you can visit his GitHub to check other projects he is involved [here](https://github.com/VoZeS). 
+David Boces is one of the team members, he worked on configuration screen, console, camera settings, file managment, drag and drop, memory leaks, game objects logic, viewports and audio integration. You can visit his GitHub to check other projects he is involved [here](https://github.com/VoZeS). 
 
 ### Erik Martin
 
@@ -27,10 +27,14 @@ Ginuh Engine was a very exigent project, but also was a perfect way to improve o
 * ### Editor Camera Movement
 
 ## WWise audio Sub-System
-
+* ### Audio Listener
+* ### Audio Source
+* ### You can read BNK and extract events from there
+* ### Play/stop/pause buttons
 
 ## Workflow Video
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/BH_09yU7h3U" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 ## License
 

@@ -38,7 +38,7 @@ Ginuh Engine was a very exigent project, but also was a perfect way to improve o
 
 ## Dowload GinuhEngine
 
-Last version released: [GinuhEngine_1.0](https://github.com/eriik1212/GinuhEngine/releases/tag/v1.0).
+Last version released: [GinuhEngine_1.0](https://github.com/eriik1212/GinuhEngine/releases/tag/v1.0)
 
 ## License
 

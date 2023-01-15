@@ -7,8 +7,7 @@ Ginuh Games is a group made by two videogame design and development students who
 
 ### David Boces
 
-![]()
-
+![](https://github.com/eriik1212/GinuhEngine/blob/main/docs/media/David.jpeg?raw=true)
 
 David Boces is one of the team members, he developed (...) you can visit his GitHub to check other projects he is involved [here](https://github.com/VoZeS). 
 

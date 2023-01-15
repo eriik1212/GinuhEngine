@@ -41,10 +41,10 @@ gameobject with a camera component(main game camera).
 * Audio Listener Component
 * Audio Source Component
 * User can import SoundBanks to play its events:
-- Play
-- Stop
-- Pause
-- Resume
+  - Play
+  - Stop
+  - Pause
+  - Resume
 
 ## Third party Libraries Used:
 * [SDL](https://github.com/libsdl-org/SDLS) 2.24.0.0
